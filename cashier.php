@@ -449,6 +449,10 @@ function cetakStruk(){
 								html+='\n';
 								html+='\n';
 								html+='\n';
+								html+='\n';
+								html+='\n';
+								html+='\n';
+								html+='\n';
 								print_text(html);
 								console.log(html);
 							}
@@ -714,6 +718,9 @@ function cetakStrukDetail(id){
 								html+='\n';
 								html+='___________________________';
 							
+								html+='\n';
+								html+='\n';
+								html+='\n';
 								html+='\n';
 								html+='\n';
 								html+='\n';
