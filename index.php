@@ -514,6 +514,23 @@ function updateVersion(){
 	
 }
 
+function runPhp(){
+	$.ajax({
+		url: "update.php",
+		type: "GET",
+		success: function(dataResult){
+			// console.log(dataResult);
+			// $('#notif1').html("<font style='color: green'>"+dataResult+"</font>");
+			location.reload();
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+	
+}
+
 function syncUser(){
 	
 
