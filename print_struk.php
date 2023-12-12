@@ -1,13 +1,16 @@
 <?php
+$html = "PRINT PRINT
+PRINT
+PRINTPRINT
+PRINT
+PRINT
+PRINT";
 
-$html = $_POST['html'];
+
+
+// $html = $_POST['html'];
 $ip_printer = $_POST['ip_printer'];
-// $html = "PRINT PRINT
-// PRINT
-// PRINTPRINT
-// PRINT
-// PRINT
-// PRINT";
+
 
 require __DIR__ . '/vendor/escpos-php/vendor/autoload.php';
 use Mike42\Escpos\Printer;
@@ -16,7 +19,8 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 try {
 	
-	$connector = new FilePrintConnector("//".$ip_printer."/pos");
+	// $connector = new FilePrintConnector("//".$ip_printer."/pos");
+	$connector = new FilePrintConnector("//10.0.47.2/pos");
 
     $printer = new Printer($connector);
 	$printer -> initialize();
@@ -27,7 +31,6 @@ try {
 	$printer -> text($html);
 	
 
-    // $printer -> text("test lorem ipsum hahahahaha \n dwdwdwadwa");
     $printer -> cut();
     
     $printer -> close();
@@ -37,17 +40,5 @@ try {
 } catch (Exception $e) {
     echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
 }
-
-
-// $tmpdir = sys_get_temp_dir();
-// $file =  tempnam($tmpdir, 'ctk');  
-// $handle = fopen($file, 'w');
-
-// fwrite($handle, $html);
-// fwrite($handle, "lorem ipsum hahahahaha \n dwdwdwadwa");
-// fclose($handle);
-// copy($file, "//localhost/".$json_data['nama_printer']);
-// unlink($file);
-
 
 ?>
