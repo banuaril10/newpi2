@@ -1,14 +1,14 @@
 <?php
-$html = "PRINT PRINT
-PRINT
-PRINTPRINT
-PRINT
-PRINT
-PRINT";
+// $html = "PRINT PRINT
+// PRINT
+// PRINTPRINT
+// PRINT
+// PRINT
+// PRINT";
 
 
 
-// $html = $_POST['html'];
+$html = $_POST['html'];
 $ip_printer = $_POST['ip_printer'];
 
 
