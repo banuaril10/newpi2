@@ -1,6 +1,7 @@
 <?php
 
 $html = $_POST['html'];
+$ip_printer = $_POST['ip_printer'];
 // $html = "PRINT PRINT
 // PRINT
 // PRINTPRINT
@@ -15,7 +16,7 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 try {
 	
-	$connector = new FilePrintConnector("//localhost/pos");
+	$connector = new FilePrintConnector("//".$ip_printer."/pos");
 
     $printer = new Printer($connector);
 	$printer -> initialize();
