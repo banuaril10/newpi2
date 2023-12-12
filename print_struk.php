@@ -19,8 +19,8 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 try {
 	
-	// $connector = new FilePrintConnector("//".$ip_printer."/pos");
-	$connector = new FilePrintConnector("//10.0.47.2/pos");
+	$connector = new FilePrintConnector("//".$ip_printer."/pos");
+	// $connector = new FilePrintConnector("//10.0.47.2/pos");
 
     $printer = new Printer($connector);
 	$printer -> initialize();
