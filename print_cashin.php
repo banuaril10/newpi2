@@ -1,15 +1,15 @@
 <?php
-$html = "PRINT PRINT
-PRINT
-PRINTPRINT
-PRINT
-PRINT
-PRINT";
+// $html = "PRINT PRINT
+// PRINT
+// PRINTPRINT
+// PRINT
+// PRINT
+// PRINT";
 
 
 
-// $html = $_POST['html'];
-$ip_printer = $_GET['ip_printer'];
+$html = $_POST['html'];
+$ip_printer = $_POST['ip_printer'];
 
 
 require __DIR__ . '/vendor/autoload.php';
@@ -19,11 +19,7 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 try {
 	
-	// $connector = new FilePrintConnector("//".$ip_printer."/pos");
-	$connector = new FilePrintConnector("//".$ip_printer."/pos");
-	// $connector = new WindowsPrintConnector("smb://".$ip_printer."/pos"); 
-	// $connector = new WindowsPrintConnector("smb://".$ip_printer."/POS-58");
-	
+	$connector = new FilePrintConnector("//localhost/pos");
 	// $connector = new FilePrintConnector("//10.0.47.2/pos");
 
     $printer = new Printer($connector);
