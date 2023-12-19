@@ -173,8 +173,9 @@
 								<th>No</th>
 								<th>SKU</th>
 								<th>Name</th>
+								<th>Beli 1</th>
 								<th>Beli 3</th>
-								<th>Beli 6</th>
+								<!--<th>Beli 6/12</th>-->
 								<th>Beli 12</th>
 								<th>Rack</th>
 							</tr>
@@ -245,9 +246,10 @@
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $name; ?></td>
+								<td><?php echo $price; ?></td>
 								<td><?php echo $row['price1']; ?></td>
 								<td><?php echo $row['price2']; ?></td>
-								<td><?php echo $row['price3']; ?></td>
+								<!--<td><?php echo $row['price3']; ?></td>-->
 								<td><?php echo $row['rack']; ?></td>
 								
 							</tr>
@@ -265,9 +267,10 @@
 								<td scope="row"><?php echo $no; ?></td>
 								<td><?php echo $row['sku']; ?></td>
 								<td><?php echo $name; ?></td>
+								<td><?php echo $price; ?></td>
 								<td><?php echo $row['price1']; ?></td>
 								<td><?php echo $row['price2']; ?></td>
-								<td><?php echo $row['price3']; ?></td>
+								<!--<td><?php echo $row['price3']; ?></td>-->
 								<td><?php echo $row['rack']; ?></td>
 								
 							</tr>
