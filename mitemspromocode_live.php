@@ -222,6 +222,11 @@
 							$price = $row1['price'];
 						}
 						
+						if($row['afterdiscount'] != '0'){
+							
+							$price = $row['afterdiscount'];
+						}
+						
 						if($_GET['stock'] && !empty($_GET['stock'])){ 
 							$q_stock = 1;
 							$stock = $_GET['stock'];
