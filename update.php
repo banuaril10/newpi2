@@ -48,8 +48,12 @@ function get_version(){
 		$cv_web = $j_hasil['version'];
 	}
 	
+	if($cv_web != ''){
+		
+		$connec->query("update m_piversion set value = '".$cv_web."'"); //klo udah ada update
+	}
 	
-	$connec->query("update m_piversion set value = '".$cv_web."'"); //klo udah ada update
+	
 			
 	
 
