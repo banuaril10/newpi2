@@ -135,11 +135,6 @@ function syncPromo(){
 			location.reload();
 		}
 		});
-		
-	
-	
-	
-	
 }
 
 // function onScanSuccess(decodedText, decodedResult) {

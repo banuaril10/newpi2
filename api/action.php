@@ -4802,13 +4802,13 @@ locator_name) VALUES (
              
         if(empty($_POST['search']['value']))
         {
-         $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir a left join pos_mproduct b on a.sku = b.sku order by $order $dir
+         $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir a inner join pos_mproduct b on a.sku = b.sku order by $order $dir
                                                       LIMIT $limit
                                                       OFFSET $start");
         }
         else {
             $search = $_POST['search']['value']; 
-            $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
+            $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
                                                          or a.discountname ILIKE  '%$search%'
                                                          or b.name ILIKE  '%$search%'
                                                          order by $order $dir
@@ -4816,7 +4816,7 @@ locator_name) VALUES (
                                                          OFFSET $start");
  
  
-         $querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscountgrosir a left join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
+         $querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscountgrosir a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
                                                          or a.discountname ILIKE  '%$search%'");
         foreach($querycount as $rr){
 			$datacount = $rr['jumlah'];
