@@ -56,14 +56,16 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 						
 						// <br style='line-height: 70%;'>
 						
-						var logo_babydoll = "<table style='width: 100%; height: 30px'><tr><td style='width: 70%; vertical-align: top;'><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div></td><td rowspan='2' style='width: 30%; vertical-align: top;' align ='right'><font style='text-align: right'><img style='width: 55px' src='assets/images/babydoll.jpg'></img></font></td></tr><tr><td><label style='margin: -10px 0 0 0; float: left; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label><label style='text-align: left; font-size: 7px; width: 100%'>"+newStr+"</label></td></tr></table>";
-						// var logo_babydoll = "";
-			
-
 						var newStr = rack.replace('-', '_');
 						var tgl_cetak = res[8];
 						
-							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 220px; height: 121px; font-family: Calibri; '>"+logo_babydoll+"<center><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0;'><label style='text-align: center; font-size: 9px; margin-top: 10px'>LENGKAP, MURAH DAN NYAMAN</label></center></div></td>";
+						var logo_babydoll = "<table style='width: 100%; height: 30px'><tr><td style='width: 70%; vertical-align: top;'><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div></td><td rowspan='2' style='width: 30%; vertical-align: top;' align ='right'><font style='text-align: right'><img style='width: 55px' src='assets/images/babydoll.jpg'></img></font></td></tr><tr><td><label style='margin: -10px 0 0 0; float: left; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label></td></tr></table>";
+						// var logo_babydoll = "";
+			
+
+						
+						
+							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 220px; height: 121px; font-family: Calibri; '>"+logo_babydoll+"<label style='text-align: left; font-size: 7px; width: 100%'>"+newStr+"</label><center><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0;'><label style='text-align: center; font-size: 9px; margin-top: 10px'>LENGKAP, MURAH DAN NYAMAN</label></center></div></td>";
 							
 						
 						
