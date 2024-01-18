@@ -228,12 +228,12 @@
 						<li class="submenu-item ">
 							<a href="mitems_alt_baby.php">Harga Reguler Per Rack</a>
 						</li>
-						<li class="submenu-item ">
+						<!--<li class="submenu-item ">
 							<a href="mitemspromo_baby.php">Harga Promo</a>
 						</li>
 						<li class="submenu-item ">
 							<a href="mitemspromocode_live_baby.php">Harga Bertingkat</a>
-						</li>
+						</li>-->
 					</ul>
 				</li>
 				
