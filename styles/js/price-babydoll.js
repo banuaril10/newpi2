@@ -65,7 +65,7 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 
 						
 						
-							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 220px; height: 121px; font-family: Calibri; '>"+logo_babydoll+"<label style='text-align: left; font-size: 7px; width: 100%'>"+newStr+"</label><center><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0;'><label style='text-align: center; font-size: 9px; margin-top: 10px'>LENGKAP, MURAH DAN NYAMAN</label></center></div></td>";
+							text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 220px; height: 121px; font-family: Calibri; '>"+logo_babydoll+"<label style='text-align: left; font-size: 9px; width: 100%'>"+newStr+"</label><center><hr style='border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:5px 0 5px 0;'><label style='text-align: center; font-size: 9px; margin-top: 10px'>LENGKAP, MURAH DAN NYAMAN</label></center></div></td>";
 							
 						
 						
