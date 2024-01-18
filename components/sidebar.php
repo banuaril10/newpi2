@@ -215,6 +215,30 @@
 				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Price Tag Baby Doll</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="mitems_baby.php">Harga Reguler</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemsold_baby.php">Harga Reguler Format Lama</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitems_alt_baby.php">Harga Reguler Per Rack</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromo_baby.php">Harga Promo</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromocode_live_baby.php">Harga Bertingkat</a>
+						</li>
+					</ul>
+				</li>
+				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
 						<i class="bi bi-shop"></i>
 						<span>Sewa Tenant</span>
 					</a>
@@ -304,6 +328,31 @@
 						</li>
 						<li class="submenu-item ">
 							<a href="mitemspromocode_live.php">Harga Bertingkat</a>
+						</li>
+					</ul>
+				</li>
+				
+				
+				<li class="sidebar-item  has-sub">
+					<a href="#" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Price Tag Baby Doll</span>
+					</a>
+					<ul class="submenu ">
+						<li class="submenu-item ">
+							<a href="mitems_baby.php">Harga Reguler</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemsold_baby.php">Harga Reguler Format Lama</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitems_alt_baby.php">Harga Reguler Per Rack</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromo_baby.php">Harga Promo</a>
+						</li>
+						<li class="submenu-item ">
+							<a href="mitemspromocode_live_baby.php">Harga Bertingkat</a>
 						</li>
 					</ul>
 				</li>
