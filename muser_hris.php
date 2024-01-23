@@ -41,7 +41,7 @@
 					
 						
 						<?php 
-						$sql_list = "select * from m_pi_hris order by username asc";
+						$sql_list = "select * from m_pi_hris order by nama asc";
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
 						
