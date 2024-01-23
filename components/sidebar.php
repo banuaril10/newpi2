@@ -133,6 +133,9 @@
 						<li class="submenu-item ">
 							<a href="muser.php">Master Users</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="muser_hris.php">Master Users HRIS</a>
+						</li>
 						
 						<li class="submenu-item ">
 							<a href="mproduct.php">Master Rack Price Tag</a>
