@@ -34,14 +34,14 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 						var panjangharga = parseInt(res[2]);
 	
 						
-						var sizeprice = "40px";
+						var sizeprice = "39px";
 						if(lengthh > 33){
 							
-							 sizeprice = "40px";
+							 sizeprice = "39px";
 						}
 						
 						if(panjangharga > 999999){
-							sizeprice = "40px";
+							sizeprice = "39px";
 							
 						}
 						
@@ -59,7 +59,7 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 						var newStr = rack.replace('-', '_');
 						var tgl_cetak = res[8];
 						
-						var logo_babydoll = "<table style='width: 100%; height: 30px'><tr><td style='width: 70%; vertical-align: top;'><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div></td><td rowspan='2' style='width: 30%; vertical-align: top;' align ='right'><font style='text-align: right'><img style='width: 55px' src='assets/images/babydoll.jpg'></img></font></td></tr><tr><td><label style='margin: -10px 0 0 0; float: left; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label></td></tr></table>";
+						var logo_babydoll = "<table style='width: 100%; height: 30px'><tr><td rowspan='2' style='width: 31%; vertical-align: middle;border-right: 2px solid #000;' align ='left'><font style='text-align: left'><img style='width: 63px' src='assets/images/babydoll.jpg'></img></font></td><td style='width: 69%; vertical-align: top;'><div style='height:30px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div></td></tr><tr><td><label style='margin: -10px 0 0 0; float: left; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[2], '')+"</b></label></td></tr></table>";
 						// var logo_babydoll = "";
 			
 
