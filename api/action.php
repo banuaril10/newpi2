@@ -6596,7 +6596,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		
 		$billno = $_POST['billno'];
 		$referal = $_POST['referal'];
-		$update = $connec->query("update pos_dsales set referalstruk = '".$referal."' where billno = '".$billno."'");
+		$update = $connec->query("update pos_dsalesline set postby = '".$referal."' where billno = '".$billno."'");
 						
 		if($update){
 			$json = array('result'=>'1');
