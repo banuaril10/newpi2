@@ -2641,7 +2641,7 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else{
 		
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json = array('result'=>'1', 'msg'=>'Promo reguler tidak ditemukan');
 				$json_string = json_encode($json);	
 		
 	}
@@ -2723,7 +2723,7 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else{
 		
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json = array('result'=>'1', 'msg'=>'Promo code tidak ditemukan');
 				$json_string = json_encode($json);	
 		
 	}
