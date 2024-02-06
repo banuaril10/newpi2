@@ -2801,7 +2801,7 @@ if($_GET['modul'] == 'inventory'){
 			
 	}else{
 		
-				$json = array('result'=>'1', 'msg'=>'Gagal sync, data blm ditemukan');
+				$json = array('result'=>'1', 'msg'=>'Promo tebus murah tidak ditemukan');
 				$json_string = json_encode($json);	
 		
 	}
