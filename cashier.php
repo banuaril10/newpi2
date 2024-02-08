@@ -706,6 +706,7 @@ function cetakStrukDetail(id){
 								html+='\n';
 								html+='\n';
 								html+='==========================';
+								html+='\n';
 					
 								print_text(html);
 								console.log(html);

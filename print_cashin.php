@@ -26,7 +26,7 @@ try {
 	$printer -> initialize();
 
 
-	$printer -> setFont(Printer::FONT_A);
+	$printer -> setFont(Printer::FONT_B);
 	$printer -> setTextSize(1, 1);
 	$printer -> text($html);
 	
