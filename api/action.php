@@ -2549,11 +2549,6 @@ if($_GET['modul'] == 'inventory'){
 				
 			}
 			
-			
-			
-			
-				
-			
 		}	
 			
 	}else{

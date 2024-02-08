@@ -442,12 +442,6 @@ function cetakStruk(){
 				
 				if(number == panjangkasir){
 							
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
 								print_text(html);
 								console.log(html);
 							}
@@ -712,13 +706,7 @@ function cetakStrukDetail(id){
 								html+='\n';
 								html+='\n';
 								html+='==========================';
-							
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
-								html+='\n';
+					
 								print_text(html);
 								console.log(html);
 							}
