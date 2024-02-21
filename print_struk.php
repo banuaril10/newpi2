@@ -29,6 +29,7 @@ if($data == 'vsc'){
 	$html = str_replace("       ".$address2, $address2, $html);
 	
 	$html = str_replace("Nama Barang", "Nm Brg", $html);
+	$html = str_replace("Disc  ", "Disc", $html);
 	
 	for ($x = 0; $x <= 30; $x++) {
 	$html = str_replace("     ".$x." ", $x." ", $html);
