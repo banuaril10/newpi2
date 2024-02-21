@@ -45,7 +45,9 @@ if($data == 'vsc'){
 	$html = str_replace("KEMBALI       ", "KEMBALI", $html);
 	$html = str_replace("MEMBER       ", "MEMBER", $html);
 	$html = str_replace("POINT       ", "POINT", $html);
+	$html = str_replace("  SELAMAT ANDA MENDAPATKAN POINT", "SELAMAT ANDA MENDAPATKAN POINT", $html);
 	$html = str_replace("     NPWP", "NPWP", $html);
+	
 	$html = str_replace(":31.188.370.6-407.000    ", ":31.188.370.6-407.000", $html);
 	$html = str_replace("     IDOLMART Group   ", "IDOLMART Group", $html);
 	$html = str_replace("     #TERIMA KASIH#   ", "  #TERIMA KASIH#", $html);
@@ -54,6 +56,11 @@ if($data == 'vsc'){
           TIDAK DAPAT", $html);
 	$html = str_replace("=======================================", "================================", $html);
 	$html = str_replace("***************************************", "********************************", $html);
+	
+	
+	
+	$html = str_replace(" :        ", " : ", $html);
+	
 	
 }
 
