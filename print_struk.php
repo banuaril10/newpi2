@@ -14,7 +14,7 @@ $html = $_POST['html'];
 
 $data = file_get_contents('http://localhost/pi/api/cek_printer.php');
 // echo $data;
-// if($data == 'vsc'){
+if($data == 'vsc'){
 	
 	$address1 = file_get_contents('http://localhost/pi/api/cek_address1.php');
 	$address2 = file_get_contents('http://localhost/pi/api/cek_address2.php');
@@ -62,7 +62,7 @@ $data = file_get_contents('http://localhost/pi/api/cek_printer.php');
 	$html = str_replace(" :        ", " : ", $html);
 	
 	
-// }
+}
 
 $ip_printer = $_POST['ip_printer'];
 
