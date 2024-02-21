@@ -55,9 +55,8 @@
                 
                 <th scope="col">SKU</th>
                 <th scope="col">Harga Reguler</th>
-                <th scope="col">Beli 3</th>
-                <th scope="col">Beli 6</th>
-                <th scope="col">Beli 12</th>
+                <th scope="col">Minimal Beli</th>
+                <th scope="col">Setelah Diskon</th>
                 <th scope="col">Nama Items</th>
 				<th scope="col">Nama Promo</th>
                 <th scope="col">Tgl Mulai</th>
@@ -98,9 +97,8 @@
                   
                   { "data": "sku" },
 				  { "data": "hargareguler" },
-                  { "data": "beli3" },
-                  { "data": "beli6" },
-                  { "data": "beli12" },
+                  { "data": "minbuy" },
+                  { "data": "discount" },
                   { "data": "name" },
 				  { "data": "discountname" },
                   { "data": "fromdate" },

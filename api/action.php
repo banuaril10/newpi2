@@ -128,7 +128,7 @@ function get_data_promo_grosir($org){
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_grosir&org_id=".$org,
+	CURLOPT_URL => "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=sync_promo_grosir_new&org_id=".$org,
 	CURLOPT_RETURNTRANSFER => true,
 	CURLOPT_ENCODING => '',
 	CURLOPT_MAXREDIRS => 10,
@@ -2820,7 +2820,7 @@ if($_GET['modul'] == 'inventory'){
 		$jum = count($arr);
 		$s = array();
 		if($jum > 0){
-		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountgrosir");
+		$truncate = $connec->query("TRUNCATE TABLE pos_mproductdiscountgrosir_new");
 		if($truncate){
 			
 		
@@ -2837,14 +2837,15 @@ if($_GET['modul'] == 'inventory'){
 				$postdate = $item['postdate']; //etc
 				$discountname = str_replace("'", "\'", $item['discountname']); //etc
 				$sku = $item['sku']; //etc
-				$discount_1 = $item['discount_1']; //etc
-				$discount_2 = $item['discount_2']; //etc
-				$discount_3 = $item['discount_3']; //etc
+				$minbuy = $item['minbuy']; //etc
+				$discount = $item['discount']; //etc
+				// $discount_2 = $item['discount_2']; //etc
+				// $discount_3 = $item['discount_3']; //etc
 				$fromdate = $item['fromdate']; //etc
 				$todate = $item['todate']; //etc
 				 
 				$s[] = "('".$ad_mclient_key."', '".$ad_morg_key."', '".$isactived."', '".$insertdate."', '".$insertby."', '".$postby."', 
-				'".$postdate."','".$discountname."', '".$sku."', '".$discount_1."', '".$discount_2."', '".$discount_3."', '".$fromdate."', '".$todate."')";	 
+				'".$postdate."','".$discountname."', '".$sku."', '".$minbuy."', '".$discount."', '".$fromdate."', '".$todate."')";	 
 					 
 				
 									
@@ -2857,8 +2858,8 @@ if($_GET['modul'] == 'inventory'){
 			if($jum_s > 0){
 				$values = implode(", ",$s);
 
-				$qqq = "insert into pos_mproductdiscountgrosir (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, 
-				postdate, discountname, sku, discount_1, discount_2, discount_3, fromdate, todate) 
+				$qqq = "insert into pos_mproductdiscountgrosir_new (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, 
+				postdate, discountname, sku, minbuy, discount, fromdate, todate) 
 						VALUES ".$values.";";
 						
 				$suc = $connec->query($qqq);
@@ -4828,16 +4829,15 @@ locator_name) VALUES (
                                0 =>'postdate', 
                                1 =>'sku',
                                2=> 'hargareguler',
-                               3=> 'beli3',
-                               4=> 'beli6',
-                               5=> 'beli12',
-                               6=> 'name',
-                               7=> 'discountname',
-                               8=> 'fromdate',
-                               9=> 'todate',
+                               3=> 'minbuy',
+                               4=> 'diskon',
+                               5=> 'name',
+                               6=> 'discountname',
+                               7=> 'fromdate',
+                               8=> 'todate',
                            );
  
-      $querycount =  $connec->query("SELECT count(*) as jumlah FROM pos_mproductdiscountgrosir");
+      $querycount =  $connec->query("SELECT count(*) as jumlah FROM pos_mproductdiscountgrosir_new");
     
 		foreach($querycount as $r){
 			$datacount = $r['jumlah'];
@@ -4855,13 +4855,13 @@ locator_name) VALUES (
              
         if(empty($_POST['search']['value']))
         {
-         $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir a inner join pos_mproduct b on a.sku = b.sku order by $order $dir
+         $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku order by $order $dir
                                                       LIMIT $limit
                                                       OFFSET $start");
         }
         else {
             $search = $_POST['search']['value']; 
-            $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
+            $query = $connec->query("select a.*, b.name, b.price from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
                                                          or a.discountname ILIKE  '%$search%'
                                                          or b.name ILIKE  '%$search%'
                                                          order by $order $dir
@@ -4869,7 +4869,7 @@ locator_name) VALUES (
                                                          OFFSET $start");
  
  
-         $querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscountgrosir a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
+         $querycount = $connec->query("select count(*) as jumlah from pos_mproductdiscountgrosir_new a inner join pos_mproduct b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%' or b.name ILIKE  '%$search%'
                                                          or a.discountname ILIKE  '%$search%'");
         foreach($querycount as $rr){
 			$datacount = $rr['jumlah'];
@@ -4894,10 +4894,12 @@ locator_name) VALUES (
 				
 				
 				
-				$pd1 = $r['price'] - $r['discount_1'];
-				$pd2 = $r['price'] - $r['discount_2'];
-				$pd3 = $r['price'] - $r['discount_3'];
+				// $pd1 = $r['price'] - $r['discount_1'];
+				// $pd2 = $r['price'] - $r['discount_2'];
+				// $pd3 = $r['price'] - $r['discount_3'];
 				
+				
+				$pd = $r['price'] - $r['discount'];
 
 				
 				$nestedData['no'] = $no;
@@ -4907,9 +4909,8 @@ locator_name) VALUES (
                 $nestedData['name'] = $r['name'];
                 $nestedData['hargareguler'] = '<font style="color: blue;font-weight: bold">Rp. '.rupiah($r['price']).'</font>';
                 // $nestedData['potongan'] = '<font style="color: red;font-weight: bold">Rp. '.rupiah($r['discount']).'</font>';
-                $nestedData['beli3'] = '<font style="color: green;font-weight: bold">Rp. '.rupiah($pd1).'</font>';
-                $nestedData['beli6'] = '<font style="color: green;font-weight: bold">Rp. '.rupiah($pd2).'</font>';
-                $nestedData['beli12'] = '<font style="color: green;font-weight: bold">Rp. '.rupiah($pd3).'</font>';
+                $nestedData['discount'] = '<font style="color: green;font-weight: bold">Rp. '.rupiah($pd).'</font>';
+                $nestedData['minbuy'] = $r['minbuy'];
                 $nestedData['discountname'] = $discname;
                 $nestedData['fromdate'] = $r['fromdate'];
                 $nestedData['todate'] = $r['todate'];
