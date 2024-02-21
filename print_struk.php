@@ -7,7 +7,7 @@
 // PRINT";
 
 
-$str = file_get_contents('http://example.com/example.json/');
+// $str = file_get_contents('http://example.com/example.json/');
 
 
 $html = $_POST['html'];
