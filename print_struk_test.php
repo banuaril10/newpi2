@@ -1,16 +1,50 @@
 <?php
-// $html = "PRINT PRINT
-// PRINT
-// PRINTPRINT
-// PRINT
-// PRINT
-// PRINT";
+$html = "               Idolmart               
+              Jalan Caman              
+                Bekasi                
+STRUK   :BOSOL-00010I4DUQ      10:18:47
+TANGGAL :22-Jul-22                 asp
+=======================================
+Nama Barang Qty  Harga  Disc      Total
+=======================================
+Paket Hanasui Flawless Glow 10 Set + Pouch
+            1  99,500      0     99,500
+=======================================
+TOTAL                            99,500
+DISKON                                0
+GRAND TOTAL                      99,500
+BAYAR D/C                             0
+BAYAR CASH                      100,000
+INFAK                                 0
+KEMBALI                             500
+=======================================
+DPP :     90,455    PPN :      9,045
+=======================================
+    SELAMAT ANDA MENDAPATKAN POINT    
+MEMBER                          Irham
+POINT                             498
+***************************************
+      NPWP :31.188.370.6-407.000      
+            IDOLMART Group            
+***************************************
+            #TERIMA KASIH#            
+ BARANG YANG SUDAH DIBELI TIDAK DAPAT 
+         DITUKAR/DIKEMBALIKAN         
+***************************************
+";
 
+
+$html = "
+            #TERIMA KASIH#            
+ BARANG YANG SUDAH DIBELI TIDAK DAPAT 
+         DITUKAR/DIKEMBALIKAN         
+***************************************
+";
 
 // $str = file_get_contents('http://example.com/example.json/');
 
 
-$html = $_POST['html'];
+// $html = $_POST['html'];
 
 $data = file_get_contents('http://localhost/pi/api/cek_printer.php');
 // echo $data;
@@ -72,7 +106,7 @@ try {
 	
 	
 	
-	$connector = new FilePrintConnector("//".$ip_printer."/pos");
+	$connector = new FilePrintConnector("//localhost/pos");
 
     $printer = new Printer($connector);
 	$printer -> initialize();
