@@ -4512,6 +4512,47 @@ locator_name) VALUES (
 		
 		$json_string = json_encode($jj);	
 		echo $json_string;
+	}else if($_GET['act'] == 'total_pickup_perkasir'){
+		$userid = $_GET['userid'];
+		$tanggal = $_GET['tanggal'];
+	
+		$html = "<table>";
+		$jj = array();
+		$haha = array();
+		
+	if($_SESSION['name'] == 'Ka. Toko' || $_SESSION['name'] == 'Wk. Ka Toko'){
+		
+		if($userid == 'all'){
+			
+			$list_line = "select sum(cash) as total, userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' group by userid";
+		}else{
+			
+			$list_line = "select sum(cash) as total, userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$userid."' group by userid";
+		}
+		
+	}else{
+		
+		
+		$list_line = "select sum(cash) as total, userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$useridcuy."' group by userid";
+		
+	}
+		
+		
+		
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+			$html .= "<tr><td><b>".$row1['userid']." (Approved): </b></td><td><b>Rp ".rupiah($row1['total'])."</b></td></tr>";
+		}
+		
+		$html .= "</table>";
+		
+		$jj = array(
+				"total"=> $html
+		);
+		
+		
+		$json_string = json_encode($jj);	
+		echo $json_string;
 	}else if($_GET['act'] == 'cek_session'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
