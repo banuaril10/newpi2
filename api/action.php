@@ -4524,16 +4524,16 @@ locator_name) VALUES (
 		
 		if($userid == 'all'){
 			
-			$list_line = "select sum(cash) as total, userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' group by userid";
+			$list_line = "select sum(cash) as total, nama_insert as userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' group by userid";
 		}else{
 			
-			$list_line = "select sum(cash) as total, userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$userid."' group by userid";
+			$list_line = "select sum(cash) as total, nama_insert as userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$userid."' group by userid";
 		}
 		
 	}else{
 		
 		
-		$list_line = "select sum(cash) as total, userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$useridcuy."' group by userid";
+		$list_line = "select sum(cash) as total, nama_insert as userid from cash_in where status = '1' and date(insertdate) = '".$tanggal."' and userid = '".$useridcuy."' group by userid";
 		
 	}
 		
