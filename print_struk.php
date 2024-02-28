@@ -1,4 +1,8 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 // $html = "PRINT PRINT
 // PRINT
 // PRINTPRINT
@@ -15,16 +19,9 @@ $html = $_POST['html'];
 $ip_printer = $_POST['ip_printer'];
 
 
-require __DIR__ . '/vendor/autoload.php';
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+
 
 try {
-	
-	
-	
-	
 	
 	
 	$connector = new FilePrintConnector("//".$ip_printer."/pos");
