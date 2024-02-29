@@ -401,7 +401,12 @@
 						<span>Cek Promo</span>
 					</a>
 				</li>
-				
+				<li class="sidebar-item">
+					<a href="cek_promo_grosir.php" class='sidebar-link'>
+						<i class="bi bi-gift"></i>
+						<span>Cek Promo Grosir</span>
+					</a>
+				</li>
 			<?php }else if($_SESSION['name'] == 'BAC'){ ?>	
 			
 				<li class="sidebar-item">
