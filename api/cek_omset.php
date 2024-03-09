@@ -45,7 +45,8 @@ foreach ($gs as $r) {
 // $hasil = get_version('https://apipos.idolmart.co.id/pos-api/omset_pembanding.php?id=814672C74A544E5B996A90C5B07B58FB&ad_org_id='.$ad_morg_key.'&std='.$std); //php curl
 // $hasil = get_version('https://apipos.idolmart.co.id/pos-api/omset_pembanding.php?id=814672C74A544E5B996A90C5B07B58FB&ad_org_id='.$ad_morg_key.'&std=2'); //php curl
 
-$hasil = get_version('https://pi.idolmartidolaku.com/api/omset_pembanding.php?id=814672C74A544E5B996A90C5B07B58FB&ad_org_id='.$ad_morg_key.'&std='.$std); //php curl
+// $hasil = get_version('https://pi.idolmartidolaku.com/api/omset_pembanding.php?id=814672C74A544E5B996A90C5B07B58FB&ad_org_id='.$ad_morg_key.'&std='.$std); //php curl
 // $hasil = get_version('https://pi.idolmartidolaku.com/api/omset_pembanding.php?id=814672C74A544E5B996A90C5B07B58FB&ad_org_id='.$ad_morg_key.'&std=2'); //php curl
 
-echo $hasil;
+// echo $hasil;
+echo 1;
