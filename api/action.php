@@ -4,8 +4,6 @@ if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
   
 }else{
 	$json = array('result'=>'3', 'msg'=>'Session telah habis, reload dulu halamannya');	
-	
-	// header("Location: ../index.php");
 }
 
 
@@ -6576,6 +6574,7 @@ ELSE 'Belum Sesuai' END AS status from pos_mproduct a WHERE a.sku ILIKE  '%$sear
 		
 		$json_string = json_encode($data);	
 		echo $json_string;
+		// echo $j_hasil['edc'];
 	}								
 
 
