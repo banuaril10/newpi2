@@ -2057,12 +2057,12 @@ if($_GET['modul'] == 'inventory'){
 								// select sku from m_piline where m_pi_key = '".$pi_key."'
 							// )");
 				
-				if($statement2){
-					$json = array('result'=>'1');
+				// if($statement2){
+					// $json = array('result'=>'1');
 					
-				}else{
+				// }else{
 					$json = array('result'=>'1');
-				}
+				// }
 				
 				
 					
