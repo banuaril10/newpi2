@@ -131,10 +131,6 @@ function sync_price(){
 			
 		}
 		});
-		
-	
-	
-	
 	
 }
 
