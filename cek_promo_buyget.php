@@ -1,8 +1,13 @@
 <?php include "config/koneksi.php"; ?>
 <?php include "components/main.php"; ?>
-<?php include "components/sidebar.php";
+<?php include "components/sidebar.php"; ?>
 
-?>
+<style>
+td {
+	vertical-align:top;
+}
+</style>
+
 <div id="overlay">
 			<div class="cv-spinner">
 				<span class="spinner"></span>
@@ -47,14 +52,13 @@
 				
 				<!--<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search">-->
 				
-			<table class="table table-striped table-bordered table-sm server" style="width:100%">
+			<table class="table table-striped table-bordered table-sm server" style="width:100%; font-size:20px">
             <thead>
               <tr>
                <!-- <th scope="col">No</th>-->
                 <th scope="col">Postdate</th>
-                <th scope="col">Nama Diskon</th>
-				<th scope="col">SKU Beli</th>
-				<th scope="col">SKU Dapat</th>
+				<th scope="col">Items Beli</th>
+				<th scope="col">Items Dapat</th>
                 <th scope="col">Tgl Mulai</th>
                 <th scope="col">Tgl Berakhir</th>
                 <!--<th scope="col">Harga</th>
@@ -62,6 +66,49 @@
               </tr>
             </thead>
             <tbody>
+				<?php
+				function rupiah($angka){
+	
+					$hasil_rupiah = number_format($angka,0,',','.');
+					return $hasil_rupiah;
+				
+				}
+				$querycount =  $connec->query("select * from pos_mproductbuyget where skubuy != 'DUMMY'");
+				foreach($querycount as $r){ 
+					$np_buy = "-";
+					$np_get = "-";
+					$price_get = "-";
+					$price_buy = "-";
+					
+					$gp_buy =  $connec->query("select * from pos_mproduct where sku = '".$r['skubuy']."'");
+					foreach($gp_buy as $r1){
+						$np_buy = $r1['name'];
+						$price_buy = $r1['price'];
+					}
+					
+					$gp_get =  $connec->query("select * from pos_mproduct where sku = '".$r['skuget']."'");
+					foreach($gp_get as $r1){
+						$np_get = $r1['name'];
+						$price_get = $r1['price'];
+					}
+					$after_disc = $price_get - $r['discount'];
+				
+				?>
+				
+			<tr>	
+				<td><?php echo $r['postdate']; ?></td>
+				<td><b><?php echo $r['skubuy']; ?></b><br><?php echo $np_buy; ?><br>Qty Beli : <b><?php echo $r['qtybuy']; ?></b><br> Normal : <font style="color:blue"><b><?php echo rupiah($price_buy); ?></b></font></td>
+				<td><b><?php echo $r['skuget']; ?></b><br><?php echo $np_get; ?><br>Qty Dapat : <b><?php echo $r['qtyget']; ?></b><br> Normal : <font style="color:blue"><b><?php echo rupiah($price_get); ?></b></font>
+				<br> Diskon : <font style="color:red"><b><?php echo rupiah($r['discount']); ?></b></font><br> Akhir : <font style="color:green"><b><?php echo rupiah($after_disc); ?></b></font></td>
+                <td><?php echo $r['fromdate']; ?></td>
+                <td><?php echo $r['todate']; ?></td>
+					
+			 </tr>		
+					
+					
+				<?php } ?>
+			
+			
               <!-- List Data Menggunakan DataTable -->             
             </tbody>
           </table>
@@ -79,29 +126,28 @@
 <script type="text/javascript">
   $(function(){
  
-           $('.server').DataTable({
-              "processing": true,
-              "serverSide": true,
-              "ajax":{
-                       "url": "api/action.php?modul=inventory&act=api_datatable_promo_buyget",
-                       "dataType": "json",
-                       "type": "POST"
-                     },
-              "columns": [
-                  // { "data": "no" },
-                  { "data": "postdate" },
-                  { "data": "discountname" },
-				  { "data": "skubuy" },
-                  { "data": "skuget" },
-                  { "data": "fromdate" },
-                  { "data": "todate" },
-                  // { "data": "price" },
-                  // { "data": "price_discount" },
-              ]  
+           // $('.server').DataTable({
+              // "processing": true,
+              // "serverSide": true,
+              // "ajax":{
+                       // "url": "api/action.php?modul=inventory&act=api_datatable_promo_buyget",
+                       // "dataType": "json",
+                       // "type": "POST"
+                     // },
+              // "columns": [
+         
+                  // { "data": "postdate" },
+                  // { "data": "discountname" },
+				  // { "data": "skubuy" },
+                  // { "data": "skuget" },
+                  // { "data": "fromdate" },
+                  // { "data": "todate" },
+
+              // ]  
  
-          });
+          // });
 		  
-		  
+		  $('.server').DataTable();
 		  
 		 
 		  
