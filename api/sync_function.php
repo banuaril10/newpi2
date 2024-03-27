@@ -2,11 +2,21 @@
 include "../config/koneksi.php";
 
 $text = file_get_contents('https://pi.idolmartidolaku.com/api/function.txt');
+$text1 = file_get_contents('https://pi.idolmartidolaku.com/api/function1.txt');
+$text2 = file_get_contents('https://pi.idolmartidolaku.com/api/function2.txt');
+$text3 = file_get_contents('https://pi.idolmartidolaku.com/api/function3.txt');
+$text4 = file_get_contents('https://pi.idolmartidolaku.com/api/function4.txt');
+$text5 = file_get_contents('https://pi.idolmartidolaku.com/api/function5.txt');
 // echo $text;
 
 
 
 $cp = $connec->query($text);
+$cp1 = $connec->query($text1);
+$cp2 = $connec->query($text2);
+$cp3 = $connec->query($text3);
+$cp4 = $connec->query($text4);
+$cp5 = $connec->query($text5);
 
 if($cp){
 	$json = array('result'=>'1', 'msg'=>'Berhasil sync function');
