@@ -96,12 +96,12 @@ td {
 				?>
 				
 			<tr>	
-				<td><?php echo $r['postdate']; ?></td>
-				<td><b><?php echo $r['skubuy']; ?></b><br><?php echo $np_buy; ?><br>Qty Beli : <b><?php echo $r['qtybuy']; ?></b><br> Normal : <font style="color:blue"><b><?php echo rupiah($price_buy); ?></b></font></td>
-				<td><b><?php echo $r['skuget']; ?></b><br><?php echo $np_get; ?><br>Qty Dapat : <b><?php echo $r['qtyget']; ?></b><br> Normal : <font style="color:blue"><b><?php echo rupiah($price_get); ?></b></font>
+				<td style="vertical-align:top;"><?php echo $r['postdate']; ?></td>
+				<td style="vertical-align:top;"><b><?php echo $r['skubuy']; ?></b><br><?php echo $np_buy; ?><br>Qty Beli : <b><?php echo $r['qtybuy']; ?></b><br> Normal : <font style="color:blue"><b><?php echo rupiah($price_buy); ?></b></font></td>
+				<td style="vertical-align:top;"><b><?php echo $r['skuget']; ?></b><br><?php echo $np_get; ?><br>Qty Dapat : <b><?php echo $r['qtyget']; ?></b><br> Normal : <font style="color:blue"><b><?php echo rupiah($price_get); ?></b></font>
 				<br> Diskon : <font style="color:red"><b><?php echo rupiah($r['discount']); ?></b></font><br> Akhir : <font style="color:green"><b><?php echo rupiah($after_disc); ?></b></font></td>
-                <td><?php echo $r['fromdate']; ?></td>
-                <td><?php echo $r['todate']; ?></td>
+                <td style="vertical-align:top;"><?php echo $r['fromdate']; ?></td>
+                <td style="vertical-align:top;"><?php echo $r['todate']; ?></td>
 					
 			 </tr>		
 					
