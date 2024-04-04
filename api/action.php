@@ -4776,7 +4776,7 @@ locator_name) VALUES (
              
         if(empty($_POST['search']['value']))
         {
-         $query = $connec->query("SELECT a.sku,a.name,a.price,a.shortcut,a.barcode, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname FROM 
+         $query = $connec->query("SELECT a.sku,a.name,a.price,a.shortcut,a.barcode, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname, a.stockqty FROM 
 		 pos_mproduct a left join (select * from pos_mproductdiscount where todate >= '".date('Y-m-d')."') b on a.sku = b.sku
 		 
 		 order by $order $dir
@@ -4785,7 +4785,7 @@ locator_name) VALUES (
         }
         else {
             $search = $_POST['search']['value']; 
-            $query = $connec->query("SELECT a.sku,a.name,a.price,a.shortcut,a.barcode, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname FROM 
+            $query = $connec->query("SELECT a.sku,a.name,a.price,a.shortcut,a.barcode, (coalesce(a.price,0) - coalesce(b.discount,0)) price_discount, b.discountname, a.stockqty FROM 
 		 pos_mproduct a left join (select * from pos_mproductdiscount where todate >= '".date('Y-m-d')."') b on a.sku = b.sku WHERE a.sku ILIKE  '%$search%'
                                                          or a.name ILIKE  '%$search%'
                                                          or a.shortcut ILIKE  '%$search%'
@@ -4906,6 +4906,7 @@ locator_name) VALUES (
 				
                 $nestedData['name'] = $r['name'];
                 $nestedData['shortcut'] = $sc;
+                $nestedData['stock'] = $r['stockqty'];
                 $nestedData['price'] = rupiah($r['price']);
                 $nestedData['price_discount'] = rupiah($r['price_discount']);
                 $data[] = $nestedData;

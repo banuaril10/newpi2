@@ -65,6 +65,7 @@
                <!-- <th scope="col">No</th>-->
                 <th scope="col">SKU</th>
                 <th scope="col">Nama</th>
+                <th scope="col">Stock</th>
                 <th scope="col">Barcode</th>
                 <!--<th scope="col">Harga</th>
                 <th scope="col">Harga Diskon</th>-->
@@ -351,6 +352,7 @@ function getItems(sku){
                   // { "data": "no" },
                   { "data": "sku" },
                   { "data": "name" },
+                  { "data": "stock" },
                   { "data": "shortcut" },
                   // { "data": "price" },
                   // { "data": "price_discount" },
