@@ -6,6 +6,7 @@
 <script src="styles/js/bootstrap.bundle.min.js"></script>
 <script src="styles/js/main.js"></script>
 
+
 <script type="text/javascript">
 $(document).ready(function () {
 	$('.selectize').selectize({
