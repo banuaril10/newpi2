@@ -3531,8 +3531,14 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 				}
 				
 			if($haha > 0){
+				$price = $r['price'];
+				if($r['price'] == ""){
+					
+					$price = 0;
+				}
 				
-				$upcount = $connec->query("update pos_mproduct set stockqty='".$totqty."', name = '".substr($r['namaitem'], 0, 49)."', price = '".$r['price']."' where sku='".$r['sku']."'");
+				$sql = "update pos_mproduct set stockqty='".$totqty."', name = '".substr($r['namaitem'], 0, 49)."', price = '".$price."' where sku='".$r['sku']."'";
+				$upcount = $connec->query($sql);
 			}else{
 				
 				$sql = "insert into pos_mproduct (
@@ -3585,7 +3591,8 @@ locator_name) VALUES (
 				
 				$data = array(
 					"result"=>1,
-					'msg'=>'Gagal update stock'
+					'msg'=>'Gagal update stock',
+					'q'=>'Gagal update stock '.$sql
 				);
 			}
 				
