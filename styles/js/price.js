@@ -56,14 +56,14 @@ document.getElementById("btn-cetak-tinta").addEventListener("click", function() 
 						
 						if(res[4] != ""){
 							var rack = res[8]+"/"+res[4]+"/"+res[7];
-							var rack2 = res[0]+"/"+barcode;
 							
 							
 						}else{
 							
 							var rack = res[8]+"/NO_RACK/"+res[7];
-							var rack2 = res[0]+"/"+barcode;
+							
 						}
+						var rack2 = res[0]+"/"+barcode;
 						
 						// <br style='line-height: 70%;'>
 			
