@@ -38,6 +38,20 @@ foreach ($resultss as $r) {
 	$brand = strtoupper($r["address3"]);	
 }
 
+function guid($data = null) {
+    // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+    $data = $data ?? random_bytes(16);
+    assert(strlen($data) == 16);
+
+    // Set version to 0100
+    $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+    // Set bits 6-7 to 10
+    $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+
+    // Output the 36 character UUID.
+    return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+}
+
 function rupiah($angka){
 	
 	$hasil_rupiah = number_format($angka,0,',','.');
@@ -1780,12 +1794,6 @@ if($_GET['modul'] == 'inventory'){
 				
 				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
 			}
-			
-			
-			
-			
-			
-			
 		}
 		$json_string = json_encode($json);
 		echo $json_string;
@@ -1949,6 +1957,63 @@ if($_GET['modul'] == 'inventory'){
 		}
 		$json_string = json_encode($json);
 		echo $json_string;
+	}else if($_GET['act'] == 'listinvscan'){
+		$html = "";
+		$list_line = "select * from inv_temp_nasional where status != '1' order by tanggal desc limit 100 ";
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+		$nama_product = "-";
+		$pr = $connec->query("select * from pos_mproduct where sku = '".$row1['sku']."'");
+			foreach ($pr as $rows) {
+				$nama_product = $rows['name'];
+			}
+							$html .= '<tr>
+								<td>'.$no.'</td>
+								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal'.$row1['id'].'"><i class="fa fa-times"></i></button>
+								<br><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold"><?php echo $nama_product; ?></font></td>
+	
+								<td>
+								
+								<div class="form-inline"> 
+								<input type="number" onchange="changeQty(\''.$row1['id'].'\');" id="qty'.$row1['id'].'" class="form-control" value="'.$row1['qty'].'"> <br>
+									<button type="button" style="display: inline-block; background: blue; color: white" onclick="changeQtyPlus(\''.$row1['id'].'\');" class=""><i class="fa fa-plus"></i></button>
+									&nbsp
+									<button type="button" style="display: inline-block; background: #ba3737; color: white" onclick="changeQtyMinus(\''.$row1['id'].'\');" class=""><i class="fa fa-minus"></i></button>
+								</div>		
+										
+								
+								</td>
+								<td>'.$row1['status'].'</td>
+								<td>'.$row1['user_input'].'</td>
+							</tr>
+							
+							<div class="modal fade" id="exampleModal'.$row1['id'].'" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin delete items?</h5>
+								
+									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									SKU : <b>'.$row1['sku'].'</b><br>
+									Nama : <b>'.$nama_product.'</b>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+									<button type="button" class="btn btn-danger" onclick="deleteLine(\''.$row1['id'].'\');" class="">YAKIN</button>
+								</div>
+								</div>
+							</div>
+							</div>';
+			
+			
+		}
+		
+		echo $html;
+		
 	}else if($_GET['act'] == 'updatecounter'){
 		
 		$sku = $_POST['sku'];
@@ -1990,18 +2055,25 @@ if($_GET['modul'] == 'inventory'){
 	}else if($_GET['act'] == 'updatecounterinvnasional'){
 		
 			$sku = $_POST['sku'];
+			$id = $_POST['id'];
+			$quan = $_POST['quan'];
 
 		
 			if($sku != ""){
-				$statement1 = $connec->query("");
+				$quan = 1;
+				$statement1 = $connec->query("INSERT INTO inv_temp_nasional
+				(id, sku, qty, tanggal, status, user_input)
+				VALUES('".guid()."', '".$sku."', ".$quan.", '".date('Y-m-d H:i:s')."', '0', '".$_SESSION['username']."');");
 			}else{
-				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
+				$statement1 = $connec->query("update inv_temp_nasional set qty = '".$quan."' where id = '".$id."'");
+				$getsku = $connec->query("select sku from inv_temp_nasional where id = '".$id."'");
+				foreach ($getsku as $gs) {
+					
+					$sku = $gs['sku'];
+				}
 			}
-			
-			
-			
 			if($statement1){
-				$json = array('result'=>'1', 'msg'=>$sku .' ('.$nama.') QUANTITY = <font style="color: red">'.$qtyon.'</font>');	
+				$json = array('result'=>'1', 'msg'=>$sku .' | QUANTITY = <font style="color: red">'.$quan.'</font>');	
 			}else{
 				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
 				
@@ -2010,6 +2082,55 @@ if($_GET['modul'] == 'inventory'){
 
 		$json_string = json_encode($json);
 		echo $json_string;
+	}else if($_GET['act'] == 'prosesdatanasional'){
+		$cekqty = "select * from inv_temp_nasional where status != 1 order by sku asc";
+		$result = $connec->query($cekqty);
+		$count = $result->rowCount();
+		$qqq ="";
+		$no = 0;
+		$nox = 0;
+		if($count > 0){
+			foreach ($result as $tot) {
+				if($tot['sku'] != ""){
+					$jum = 0;
+					$cekjum = "select count(m_piline_key) jum from m_piline where (sku='".$tot['sku']."' or barcode='".$tot['sku']."') ";
+					$result_jum = $connec->query($cekjum);
+					foreach($result_jum as $rrr){
+						$jum = $rrr['jum'];
+					}
+
+					if($jum > 0){
+						$upcount = $connec->query("update m_piline set qtycount = qtycount + ".$tot['qty']." where (sku='".$tot['sku']."' or barcode='".$tot['sku']."') ");
+						if($upcount){
+							$qqq = "update inv_temp_nasional set status = 1 where id = '".$tot['id']."' ";
+							$connec->query($qqq);
+							$no++;
+						}else{
+							$nox++;	
+						}
+					}else{
+						$nox++;	
+					}
+				}		
+			}
+			$json = array('result'=>'1', 'msg'=>'Berhasil proses '.$no.', Belum ada header '.$nox);
+		}else{
+			$json = array('result'=>'1', 'msg'=>'Tidak ada items yg diproses');
+			
+		}
+		$json_string = json_encode($json);	
+		echo $json_string;	
+	
+	}else if($_GET['act'] == 'loopall'){
+		$result = $connec->query("select * from pos_mproduct ");
+		foreach ($result as $tot) {
+			$connec->query("INSERT INTO inv_temp_nasional
+			(id, sku, qty, tanggal, status, user_input)
+			VALUES('".guid()."', '".$tot['sku']."', 1, '".date('Y-m-d H:i:s')."', '0', '".$_SESSION['username']."');");
+			
+		}
+		
+
 	}else if($_GET['act'] == 'deleteline'){
 		
 			$m_piline_key = $_POST['m_piline_key'];

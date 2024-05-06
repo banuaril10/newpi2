@@ -16,8 +16,32 @@
 		<div class="card">
 			<div class="card-header">
 				
-
+			
+			
 			<h4>INVENTORY COUNTING ALL</h4>
+			
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalProses">Proses Data</button>
+			
+						
+			<div class="modal fade" id="exampleModalProses" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin proses data?</h5>
+								
+									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+									<button type="button" class="btn btn-danger" onclick="prosesData();" class="">YAKIN</button>
+								</div>
+								</div>
+							</div>
+						</div>
 
 			</div>
 			<div class="card-body">
@@ -35,13 +59,15 @@
 					<input style="margin-bottom: 10px" type="text" id="sku" class="form-control" id="exampleInputName2" placeholder="SKU / Barcode International" autofocus>
 					
 					<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search">
+					
+					
 					<input type="hidden" id="search1">
 					</div> 
 
 					</div>
 					  
 			
-					<table class="table table-bordered" id="example1">
+					<table class="table table-striped" id="example1">
 						<thead>
 							<tr>
 								<th>No</th>
@@ -52,62 +78,9 @@
 
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="load_data">
 			
-						<?php $list_line = "select * from inv_temp_nasional where status != '1'";
-						$no = 1;
-						foreach ($connec->query($list_line) as $row1) {	
-						$nama_product = "-";
-						$pr = $connec->query("select * from pos_mproduct where sku = '".$row1['sku']."'");
-							foreach ($pr as $rows) {
-								$nama_product = $rows['name'];
-							}
 						
-						?>
-			
-							<tr>
-								<td><?php echo $no; ?></td>
-								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal<?php echo $row1['id']; ?>"><i class="fa fa-times"></i></button>
-								<br><font style="font-weight: bold"><?php echo $row1['sku']; ?></font><br> <font style="color: green;font-weight: bold"><?php echo $nama_product; ?></font></td>
-	
-								<td>
-								
-								<div class="form-inline"> 
-								<input type="number" onchange="changeQty('<?php echo $row1['id']; ?>');" id="qtycount<?php echo $row1['id']; ?>" class="form-control" value="<?php echo $row1['qty']; ?>"> <br>
-									<button type="button" style="display: inline-block; background: blue; color: white" onclick="changeQtyPlus('<?php echo $row1['id']; ?>');" class=""><i class="fa fa-plus"></i></button>
-									&nbsp
-									<button type="button" style="display: inline-block; background: #ba3737; color: white" onclick="changeQtyMinus('<?php echo $row1['id']; ?>');" class=""><i class="fa fa-minus"></i></button>
-								</div>		
-										
-								
-								</td>
-
-							</tr>
-							
-							<div class="modal fade" id="exampleModal<?php echo $row1['id']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin delete items?</h5>
-								
-									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									SKU : <b><?php echo $row1['sku']; ?></b><br>
-									Nama : <b><?php echo $nama_product; ?></b>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-									<button type="button" class="btn btn-danger" onclick="deleteLine('<?php echo $row1['id']; ?>');" class="">YAKIN</button>
-								</div>
-								</div>
-							</div>
-							</div>
-			
-		<?php $no++;} ?>
-			
 				</tbody>
 			</table>
 				</div>
@@ -119,15 +92,16 @@
 </div>
 
 <script type="text/javascript">
-$(window).bind('beforeunload', function(){
-  myFunction();
-  return 'Apakah kamu yakin?';
-});
+getData();
+// $(window).bind('beforeunload', function(){
+  // myFunction();
+  // return 'Apakah kamu yakin?';
+// });
 
-function myFunction(){
-     // Write your business logic here
-     alert('Bye');
-}
+// function myFunction(){
+
+     // alert('Bye');
+// }
 
 $(document).ready(function () {
 	// $('#example1').DataTable();
@@ -137,31 +111,31 @@ $(document).ready(function () {
 });
 
 
-document.getElementById("search").addEventListener("keyup", function() {
-var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("search");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("example1");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    td1 = tr[i].getElementsByTagName("td")[2];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      txtValue1 = td1.textContent || td1.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      }else if(txtValue1.toUpperCase().indexOf(filter) > -1){
-		tr[i].style.display = "";  
-	  } else {
-        tr[i].style.display = "none";
-      }
-    }       
-  }
+// document.getElementById("search").addEventListener("keyup", function() {
+// var input, filter, table, tr, td, i, txtValue;
+  // input = document.getElementById("search");
+  // filter = input.value.toUpperCase();
+  // table = document.getElementById("example1");
+  // tr = table.getElementsByTagName("tr");
+  // for (i = 0; i < tr.length; i++) {
+    // td = tr[i].getElementsByTagName("td")[1];
+    // td1 = tr[i].getElementsByTagName("td")[2];
+    // if (td) {
+      // txtValue = td.textContent || td.innerText;
+      // txtValue1 = td1.textContent || td1.innerText;
+      // if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        // tr[i].style.display = "";
+      // }else if(txtValue1.toUpperCase().indexOf(filter) > -1){
+		// tr[i].style.display = "";  
+	  // } else {
+        // tr[i].style.display = "none";
+      // }
+    // }       
+  // }
 	
 	
 	
-});
+// });
 
 function changeQtyPlus(id){
 	var quan = document.getElementById("qty"+id).value;
@@ -233,6 +207,53 @@ function deleteLine(m_piline_key){
 	
 }
 
+function getData(){
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=listinvscan",
+		type: "GET",
+		beforeSend: function(){
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			
+			
+			
+		}
+	});
+	
+}
+
+function prosesData(){
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=prosesdatanasional",
+		type: "POST",
+		beforeSend: function(){
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			var dataResult = JSON.parse(dataResult);
+			console.log(dataResult);
+			if(dataResult.result=='0'){
+				$('#notif').html(dataResult.msg);
+				$("#overlay").fadeOut(300);
+			}else if(dataResult.result=='1'){
+				$("#overlay").fadeOut(300);
+				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+				$("#example1").load(" #example1");
+				$(".modal").modal('hide');
+				
+			}
+			else {
+				$("#overlay").fadeOut(300);
+				$('#notif').html("Gagal sync coba lagi nanti!");
+			}
+			
+		}
+	});
+	
+}
 
 var input = document.getElementById("sku");
 
