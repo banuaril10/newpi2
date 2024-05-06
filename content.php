@@ -4,6 +4,7 @@
 
 
 <?php
+		// $sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
 		$sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
 		
 		$rsa = $connec->query($sql_sales);
@@ -65,6 +66,7 @@
 				<h4>INVENTORY LIST</h4>
 				
 				<button type="button" onclick="resetPI();" class="btn btn-danger" name="reset">Active Product</button>
+				<button type="button" onclick="cleansingData();" class="btn btn-dark" name="clean">Cleansing Data PI Lama</button>
 				
 				<p>Note : Proses input header sekaligus sync dari ERP, mohon tunggu</p>
 				
@@ -110,8 +112,12 @@
 						<tbody>
 						
 						<?php 
+						// $sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
+						// where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						
 						$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
-						where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						where status = '1' and inventorytype = '".$_SESSION['role']."' order by insertdate desc";
+						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
 						if($row['status'] == 1){
@@ -296,6 +302,7 @@
 			<select name="it" id="it" class="selectize" required>
 				
 				<option value="<?php echo $_SESSION['role']; ?>"><?php echo $_SESSION['role']; ?></option>
+				<option value="Nasional">Nasional</option>
 			</select>
 			
 			<select name="sl" id="sl" class="selectize">
@@ -349,10 +356,6 @@
 					echo '<option value="'.$row['rack_name'].'">'.$row['rack_name'].'</option>';	    
 				}
 				?>
-				
-				
-				
-				
 			</select>
 			
 		</div>	
@@ -383,6 +386,34 @@ function resetPI(){
 			var dataResult = JSON.parse(dataResult);
 			if(dataResult.result=='1'){
 				$('#notif1').html("<font style='color: green'>Berhasil active product!</font>");
+				$("#overlay").fadeOut(300);
+			}
+			$("#overlay").fadeOut(300);
+			
+			// else {
+				// $('#notif').html(dataResult.msg);
+			// }
+			
+		}
+	});
+}
+
+
+
+function cleansingData(){ 
+	
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=cleansing_data",
+		type: "GET",
+		beforeSend: function(){
+			$('#notif1').html("Proses active kembali product..");
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			if(dataResult.result=='1'){
+				$('#notif1').html("<font style='color: green'>Berhasil cleansing data!</font>");
 				$("#overlay").fadeOut(300);
 			}
 			$("#overlay").fadeOut(300);

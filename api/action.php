@@ -1208,6 +1208,11 @@ if($_GET['modul'] == 'inventory'){
 	$rack = $_POST['rack'];
 	$pc = $_POST['pc'];
 	$ss = $_POST['sso'];
+	if($it == 'Nasional'){
+		$ss = '0';
+	}
+	
+	
 	
 	// $it = 'Global';
 	// $sl = '4DC01BB67AB148C9A02C4F5DB39AF969';
@@ -1223,15 +1228,13 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and status != '3' and status != '5' and date(insertdate) = date(now())";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$rack."' and (status != '3' or status != '5') and date(insertdate) = date(now())";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
 					$countrak = $ra['jum'];
 				}
-				
-				
-		
+
 			if($countrak > 0){
 				$json = array('result'=>'0', 'msg'=>'Rack sudah ada');
 				
@@ -1240,7 +1243,7 @@ if($_GET['modul'] == 'inventory'){
 			
 				
 				
-				$statement = $connec->query("insert into m_pi (
+			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
 			movementdate, approvedby, status, rack_name, postby, postdate, category
 			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."','".$kode_toko."-".date('YmdHis')."','PI-".$rack."', 
@@ -1435,7 +1438,7 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '3' and status != '5' and date(insertdate) = date(now())";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and (status != '3' or status != '5') and date(insertdate) = date(now())";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
@@ -1452,7 +1455,7 @@ if($_GET['modul'] == 'inventory'){
 			
 				
 				
-				$statement = $connec->query("insert into m_pi (
+			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
 			movementdate, approvedby, status, rack_name, postby, postdate, category
 			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."','".$kode_toko."-".date('YmdHis')."','PI-".$namakat."', 
@@ -2138,6 +2141,23 @@ if($_GET['modul'] == 'inventory'){
 			where date(b.insertdate) = date(now()) and b.status in ('1','2'))");
 			
 		if($statement1){
+			$json = array('result'=>'1');
+		}else{
+		
+			$json = array('result'=>'0');	
+		}
+		
+		$json_string = json_encode($json);
+		echo $json_string;
+		
+	}else if($_GET['act'] == 'cleansing_data'){
+		
+		$yd = date('Y-m-d', strtotime("-2 days"));
+		
+		$delete_header = $connec->query("delete from m_pi where date(insertdate) < '".$yd."' ");
+		$delete_line = $connec->query("delete from m_piline where date(insertdate) < '".$yd."' ");
+			
+		if($delete_line){
 			$json = array('result'=>'1');
 		}else{
 		
@@ -3091,9 +3111,6 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 			$ss = $_GET['status_sales'];
 
-		
-		
-			
 			
 			$cek = $connec->query("select * from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'");
 			$count = $cek->rowCount();
