@@ -191,7 +191,7 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 						filename varchar NULL,
 						tanggal timestamp NULL,
 						status numeric NULL
-					);'
+						);'
 					];
 					
 					$cmd_stock = ['CREATE TABLE public.m_pi_stock (tanggal TIMESTAMP,
@@ -493,5 +493,26 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 						}
 						
 					}
+					
+					$inv_temp_nasional = ['CREATE TABLE public.inv_temp_nasional (
+						id varchar not null primary key,
+						sku varchar NULL,
+						qty numeric NULL,
+						tanggal timestamp NULL,
+						status numeric NULL,
+						user_input varchar NULL
+						);', 'CREATE INDEX inv_temp_nasional_idx ON public.inv_temp_nasional USING btree (sku)'
+					];
+					
+					$result_inv = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'inv_temp_nasional'" );
+					if($result_inv->rowCount() == 0) {
+						foreach ($inv_temp_nasional as $rr){
+					
+								$connec->exec($rr);
+						}
+					}
+				
+					
+					
 					
 ?>

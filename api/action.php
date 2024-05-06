@@ -1949,8 +1949,7 @@ if($_GET['modul'] == 'inventory'){
 		}
 		$json_string = json_encode($json);
 		echo $json_string;
-	}
-	else if($_GET['act'] == 'updatecounter'){
+	}else if($_GET['act'] == 'updatecounter'){
 		
 		$sku = $_POST['sku'];
 		$qtyon = $_POST['quan'];
@@ -1973,6 +1972,29 @@ if($_GET['modul'] == 'inventory'){
 				$statement1 = $connec->query("update m_piline set qtycount = '".$qtyon."' where sku = '".$sku."' and date(insertdate) = '".date('Y-m-d')."'");
 			}else{
 				
+				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
+			}
+			
+			
+			
+			if($statement1){
+				$json = array('result'=>'1', 'msg'=>$sku .' ('.$nama.') QUANTITY = <font style="color: red">'.$qtyon.'</font>');	
+			}else{
+				$json = array('result'=>'0', 'msg'=>'Gagal ,coba lagi nanti');	
+				
+			}				
+			
+
+		$json_string = json_encode($json);
+		echo $json_string;
+	}else if($_GET['act'] == 'updatecounterinvnasional'){
+		
+			$sku = $_POST['sku'];
+
+		
+			if($sku != ""){
+				$statement1 = $connec->query("");
+			}else{
 				$json = array('result'=>'0', 'msg'=>'SKU tidak boleh kosong');	
 			}
 			
