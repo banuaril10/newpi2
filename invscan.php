@@ -1,6 +1,13 @@
 <?php include "config/koneksi.php"; ?>
 <?php include "components/main.php"; ?>
 <?php include "components/sidebar.php"; ?>
+
+<div id="overlay">
+			<div class="cv-spinner">
+				<span class="spinner"></span>
+			</div>
+		</div>
+
 <div id="app">
 <div id="main">
 <header class="mb-3">
@@ -81,7 +88,7 @@
 						<tbody id="load_data">
 			
 						
-				</tbody>
+						</tbody>
 			</table>
 				</div>
 			</div>
@@ -92,7 +99,7 @@
 </div>
 
 <script type="text/javascript">
-getData();
+getData("");
 // $(window).bind('beforeunload', function(){
   // myFunction();
   // return 'Apakah kamu yakin?';
@@ -207,18 +214,17 @@ function deleteLine(m_piline_key){
 	
 }
 
-function getData(){
+function getData(sku){
 	
 	$.ajax({
-		url: "api/action.php?modul=inventory&act=listinvscan",
+		url: "api/action.php?modul=inventory&act=listinvscan&sku="+sku,
 		type: "GET",
 		beforeSend: function(){
 			$("#overlay").fadeIn(300);
 		},
 		success: function(dataResult){
-			
-			
-			
+			$("#overlay").fadeOut(300);
+			$("#load_data").html(dataResult);
 		}
 	});
 	
@@ -230,6 +236,7 @@ function prosesData(){
 		url: "api/action.php?modul=inventory&act=prosesdatanasional",
 		type: "POST",
 		beforeSend: function(){
+			$(".modal").modal('hide');
 			$("#overlay").fadeIn(300);
 		},
 		success: function(dataResult){
@@ -239,10 +246,11 @@ function prosesData(){
 				$('#notif').html(dataResult.msg);
 				$("#overlay").fadeOut(300);
 			}else if(dataResult.result=='1'){
+				
 				$("#overlay").fadeOut(300);
 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 				$("#example1").load(" #example1");
-				$(".modal").modal('hide');
+				
 				
 			}
 			else {
@@ -256,6 +264,17 @@ function prosesData(){
 }
 
 var input = document.getElementById("sku");
+var search = document.getElementById("search");
+
+
+
+search.addEventListener("keypress", function(event) {
+	if (event.key === "Enter") {
+		
+		getData(search.value);
+		
+	}
+});
 
 input.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {

@@ -1959,7 +1959,20 @@ if($_GET['modul'] == 'inventory'){
 		echo $json_string;
 	}else if($_GET['act'] == 'listinvscan'){
 		$html = "";
-		$list_line = "select * from inv_temp_nasional where status != '1' order by tanggal desc limit 100 ";
+		$sku = $_GET['sku'];
+		if($sku != ""){
+			
+			$list_line = "select * from inv_temp_nasional where status != '1' and sku = '".$sku."' order by sku desc limit 100";
+			
+		}else{
+			
+			$list_line = "select * from inv_temp_nasional where status != '1' order by sku desc limit 100";
+			
+		}
+		
+		
+		
+		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
 		$nama_product = "-";
@@ -1970,7 +1983,7 @@ if($_GET['modul'] == 'inventory'){
 							$html .= '<tr>
 								<td>'.$no.'</td>
 								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal'.$row1['id'].'"><i class="fa fa-times"></i></button>
-								<br><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold"><?php echo $nama_product; ?></font></td>
+								<br><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$nama_product.'</font></td>
 	
 								<td>
 								
@@ -2008,7 +2021,7 @@ if($_GET['modul'] == 'inventory'){
 								</div>
 							</div>
 							</div>';
-			
+			$no++;
 			
 		}
 		

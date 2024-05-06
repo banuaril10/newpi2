@@ -62,6 +62,9 @@
 						<li class="submenu-item ">
 							<a href="pigantung.php">List PI Expired</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="invscanheader.php">Inventory All</a>
+						</li>
 					<?php if($_SESSION['role'] == 'Global'){ ?>
 						
 						<li class="submenu-item ">

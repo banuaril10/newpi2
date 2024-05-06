@@ -511,6 +511,23 @@ $cmd_hris = ['CREATE TABLE m_pi_hris (
 								$connec->exec($rr);
 						}
 					}
+					
+					$inv_temp_nasional_header = ['CREATE TABLE public.inv_temp_nasional_header (
+						id varchar not null primary key,
+						name varchar null,
+						tanggal timestamp NULL,
+						toko varchar NULL,
+						user_input varchar NULL
+						);', 'CREATE INDEX inv_temp_nasional_header_idx ON public.inv_temp_nasional_header USING btree (sku)'
+					];
+					
+					$result_inv = $connec->query("SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'inv_temp_nasional_header'" );
+					if($result_inv->rowCount() == 0) {
+						foreach ($inv_temp_nasional_header as $rr){
+					
+								$connec->exec($rr);
+						}
+					}
 				
 					
 					
