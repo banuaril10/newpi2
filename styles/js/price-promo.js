@@ -43,7 +43,7 @@
 							sizeprice = "40px";
 							
 						}
-						
+						var barcode = res[9];
 						if(res[4] != ""){
 							var rack = res[8]+"/"+res[4]+"/"+res[7];
 							
