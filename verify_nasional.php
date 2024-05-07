@@ -151,7 +151,7 @@
 								<td><?php echo rupiah($selisih); ?></td>
 								
 						
-								<td><?php echo $jum_active; ?></td>
+								<td><p id="ce" style="color: green; font-weight: bold !important"><?php echo $jum_active; ?></p></td>
 								<td style="color: <?php echo $colorr; ?>; font-weight: bold">
 								<?php echo $jumrelease; ?><br>
 								
