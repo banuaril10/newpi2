@@ -116,7 +116,7 @@
 						// where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$sql_list = "select m_pi_key, name ,insertdate, rack_name, insertby, status, m_locator_id, inventorytype, category from m_pi 
-						where status = '1' and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						where status = '1' and inventorytype = 'Nasional' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
@@ -179,7 +179,7 @@
 								<td><?php echo $row['name']; ?><br>
 								
 								
-									<a href="invlist.php?m_pi=<?php echo $row['m_pi_key']; ?>&kat=<?php echo $row['category']; ?>" class="btn btn-primary">Counting</a>
+									<a href="invlist_nasional.php?m_pi=<?php echo $row['m_pi_key']; ?>&kat=<?php echo $row['category']; ?>" class="btn btn-primary">Counting</a>
 						
 								
 								</td>
@@ -301,7 +301,7 @@
 			
 			<select name="it" id="it" class="selectize" required>
 				
-				<option value="<?php echo $_SESSION['role']; ?>"><?php echo $_SESSION['role']; ?></option>
+				<option value="Nasional">Nasional</option>
 				
 			</select>
 			
@@ -325,13 +325,7 @@
 			</select>
 			<select name="kat" id="kat" onchange="selectKat();" class="selectize">
 				<option value="">Kategori PI</option>
-				
-				
-			<?php //if($_SESSION['role'] == 'Global'){ ?>	
-				<option value="1">Product Category</option>
-			<?php //} ?>	
-				
-				<option value="2">Rack</option>
+
 				<option value="3">Items</option>
 			</select>
 		<div id="pc" style="display: none">

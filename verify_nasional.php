@@ -20,7 +20,7 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h4>VERIFIKASI LIST</h4>
+				<h4>VERIFIKASI LIST PI NASIONAL</h4>
 				 <button type="button" class="btn btn-primary" onclick="loopingLine();">Sync Approval</button>
 			</div>
 			<div class="card-body">
@@ -62,7 +62,7 @@
 						// from m_pi where m_pi.status in ('2','3') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
 						
 						$sql_list = "select m_pi_key, m_pi.name ,m_pi.insertdate, m_pi.rack_name, m_pi.insertby, m_pi.status,m_pi. m_locator_id, m_pi.inventorytype
-						from m_pi where m_pi.status in ('2','3') and inventorytype = '".$_SESSION['role']."' and date(insertdate) = date(now()) order by insertdate desc";
+						from m_pi where m_pi.status in ('2','3') and inventorytype = 'Nasional' order by insertdate desc";
 						
 						$no = 1;
 						foreach ($connec->query($sql_list) as $row) {
@@ -131,7 +131,7 @@
 								<th scope="row"><?php echo $no; ?></th>
 								<td><?php echo $row['name']; ?><br>
 								<?php if($row['status'] == 2){ ?>
-									<a href="invverif.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-danger">Proses</a>
+									<a href="invverif_nasional.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-danger">Proses</a>
 								<?php }else if($row['status'] == 3){ ?>
 									<a href="detail.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-warning">Detail</a>
 								<?php } ?>
