@@ -1510,7 +1510,7 @@ if($_GET['modul'] == 'inventory'){
 		
 		if(isset($_SESSION['username']) && !empty($_SESSION['username'])) {
 				
-				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and (status != '3' or status != '5') and date(insertdate) = date(now())";
+				$cekrak = "select count(m_pi_key) jum from m_pi where rack_name='".$namakat."' and status != '5' and date(insertdate) = date(now())";
 				$cr = $connec->query($cekrak);
 				foreach ($cr as $ra) {
 				
