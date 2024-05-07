@@ -3003,6 +3003,8 @@ if($_GET['modul'] == 'inventory'){
 								$items_json = json_encode($allarray);
 								$hasil = piline_semua_nasional($items_json);
 								$j_hasil = json_decode($hasil, true);
+								print_r($j_hasil);
+								
 								if(!empty($j_hasil)){
 									
 									get_spv($kode_toko, $ff, $selisih);
