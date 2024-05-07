@@ -119,85 +119,10 @@
 							
 								
 						</thead>
-						<tbody>
-			
-		<?php $list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-		where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' order by variant asc";
-		$no = 1;
-		foreach ($connec->query($list_line) as $row1) {	
-		// $variant = ($row1['qtycount'] + $row1['qtysales']) - ($row1['qtyerp'] - $row1['qtysalesout']);
-		$variant = (int)$row1['variant'];
-		$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
-		if($row1['verifiedcount'] == ''){
-			
-			$vc = 0;
-		}else{
-			
-			$vc = $row1['verifiedcount'];
-		}
-		
-		
-		if($vc > 0){
-			
-			$color = 'style="background-color: #ffa597"';
-			
-		}else{
-			$color = '';
-			
-		}
-		
-		if($row1['barcode'] != ""){
-			
-			$barc = '('.$row1['barcode'].')';
-		}else{
-			$barc = "";
-			
-		}
-		
-		
-		?>
-		
-		
-							
-				
-							<tr class="header" style="background: #e1e5fa">
-				
-								<td colspan="5"><font style="font-weight: bold"><?php echo $row1['sku']; ?> <?php echo $barc; ?></font> (<?php echo $row1['name']; ?>)</td>
-							</tr>
-	
-							<tr class="header1" style="background: #f0f1f2">
-								<td style="width: 150px">Counter</td>
-								<td>ERP</td>
-								<td>Sales</td>
-								<td>Varian</td>
-								<td>Verif</td>
-								
-								
+						<tbody id="load_data">
 
-							</tr>
-							<tr class="header2" <?php echo $color; ?> style="font-size: 16px">
-	
-								<td>
-								
-								<div class="form-inline"> 
-								<input type="number" onkeydown="enterKey(this, event, '<?php echo $row1['sku']; ?>', '<?php echo str_replace("'", "",$row1['name']); ?>','<?php echo $_GET['m_pi']; ?>');" name="qtycount<?php echo $row1['sku']; ?>" id="qtycount<?php echo $row1['sku']; ?>" class="form-control" value="<?php echo $row1['qtycount']; ?>"> 
-								<!--<button type="button" id="btn-verifikasi" style="background: green; color: white" onclick="changeQty('<?php echo $row1['sku']; ?>', '<?php echo $row1['name']; ?>');" class="">Verifikasi</button>-->
-										
-								</div>		
-										
-								
-								</td>
-								<td><?php echo $qtyerpreal; ?></td>
-								<td><?php echo $row1['qtysales']; ?></td>
-								<td><?php echo $variant; ?></td>
-								<td><?php echo $vc; ?></td>
-							</tr>
-					
-				
-					
-		<?php $no++;} ?>
 			
-				</tbody>
+						</tbody>
 			</table>
 				</div>
 			</div>
@@ -209,17 +134,43 @@
 
 
 
-
+<input type="hidden" id="m_pi" value="<?php echo $_GET['m_pi']; ?>">
 <script type="text/javascript">
-$(window).bind('beforeunload', function(){
-  myFunction();
-  return 'Apakah kamu yakin?';
-});
-
-function myFunction(){
-     // Write your business logic here
-     alert('Bye');
+getData("");
+function getData(sku){
+	
+	var m_pi = document.getElementById("m_pi").value;
+	$.ajax({
+		url: "api/action.php?modul=inventory&act=verifinvnasional&sku="+sku+"&m_pi="+m_pi,
+		type: "GET",
+		beforeSend: function(){
+			$("#overlay").fadeIn(300);
+		},
+		success: function(dataResult){
+			$("#overlay").fadeOut(300);
+			$("#load_data").html(dataResult);
+		}
+	});
+	
 }
+
+var search = document.getElementById("search");
+search.addEventListener("keypress", function(event) {
+	if (event.key === "Enter") {
+		
+		getData(search.value);
+		
+	}
+});
+// $(window).bind('beforeunload', function(){
+  // myFunction();
+  // return 'Apakah kamu yakin?';
+// });
+
+// function myFunction(){
+
+     // alert('Bye');
+// }
 
 
 function enterKey(obj, e, sku, name, mpi) {
@@ -281,38 +232,38 @@ function print_text(html){
 	});
 }
 
-var search = document.getElementById("search");
-search.addEventListener("keypress", function(event) {
-	if (event.key === "Enter") {
+// var search = document.getElementById("search");
+// search.addEventListener("keypress", function(event) {
+	// if (event.key === "Enter") {
 		
-		var input, filter, table, tr, td, i, txtValue;
-		input = document.getElementById("search");
-		filter = input.value.toUpperCase();
-		table = document.getElementById("example1");
-		tr = table.getElementsByClassName("header");
-		trr = table.getElementsByClassName("header1");
-		trrr = table.getElementsByClassName("header2");
+		// var input, filter, table, tr, td, i, txtValue;
+		// input = document.getElementById("search");
+		// filter = input.value.toUpperCase();
+		// table = document.getElementById("example1");
+		// tr = table.getElementsByClassName("header");
+		// trr = table.getElementsByClassName("header1");
+		// trrr = table.getElementsByClassName("header2");
 		
-		for (i = 0; i < tr.length; i++) {
-			td = tr[i].getElementsByTagName("td")[0];
+		// for (i = 0; i < tr.length; i++) {
+			// td = tr[i].getElementsByTagName("td")[0];
 		
-			if (td) {
-			txtValue = td.textContent || td.innerText;
+			// if (td) {
+			// txtValue = td.textContent || td.innerText;
 			
-			if (txtValue.toUpperCase().indexOf(filter) > -1) {
-				tr[i].style.display = "";
-				trr[i].style.display = "";
-				trrr[i].style.display = "";
-			} else {
-				tr[i].style.display = "none";
-				trr[i].style.display = "none";
-				trrr[i].style.display = "none";
-			}
-			}       
-		}
+			// if (txtValue.toUpperCase().indexOf(filter) > -1) {
+				// tr[i].style.display = "";
+				// trr[i].style.display = "";
+				// trrr[i].style.display = "";
+			// } else {
+				// tr[i].style.display = "none";
+				// trr[i].style.display = "none";
+				// trrr[i].style.display = "none";
+			// }
+			// }       
+		// }
 		
-	}
-});
+	// }
+// });
 
 // document.getElementById("search").addEventListener("change", function() {
 // var input, filter, table, tr, td, i, txtValue;
@@ -372,34 +323,33 @@ search.addEventListener("keypress", function(event) {
 // });
 
 
-function filterTable(sku){
-	var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("search1");
-  filter = sku.toUpperCase();
-  table = document.getElementById("example1");
-  tr = table.getElementsByClassName("header");
-  trr = table.getElementsByClassName("header1");
-  trrr = table.getElementsByClassName("header2");
-   // tr.style.display = "none";
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
+// function filterTable(sku){
+	// var input, filter, table, tr, td, i, txtValue;
+  // input = document.getElementById("search1");
+  // filter = sku.toUpperCase();
+  // table = document.getElementById("example1");
+  // tr = table.getElementsByClassName("header");
+  // trr = table.getElementsByClassName("header1");
+  // trrr = table.getElementsByClassName("header2");
+  // for (i = 0; i < tr.length; i++) {
+    // td = tr[i].getElementsByTagName("td")[0];
   
-    if (td) {
-      txtValue = td.textContent || td.innerText;
+    // if (td) {
+      // txtValue = td.textContent || td.innerText;
      
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-        trr[i].style.display = "";
-        trrr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-        trr[i].style.display = "none";
-        trrr[i].style.display = "none";
-      }
-    }       
-  }
+      // if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        // tr[i].style.display = "";
+        // trr[i].style.display = "";
+        // trrr[i].style.display = "";
+      // } else {
+        // tr[i].style.display = "none";
+        // trr[i].style.display = "none";
+        // trrr[i].style.display = "none";
+      // }
+    // }       
+  // }
 	
-}
+// }
 
 
 function syncErp(mpi){
@@ -454,13 +404,13 @@ function changeQty(sku, nama, mpi){
 				
 				
 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-				$("#example1").load(" #example1");
+				// $("#example1").load(" #example1");
 				
 				$("#info").load(location.href + " #info");
 				search.value = '';
 				search.focus();
 				// $('#search1').val(sku);
-				filterTable(sku);
+				getData(sku);
 			}
 			else {
 				$('#notif').html("Gagal sync coba lagi nanti!");

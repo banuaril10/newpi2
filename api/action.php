@@ -649,6 +649,34 @@ function piline_semua($a){
 	return $response;
 }
 
+function piline_semua_nasional($a){
+
+			
+	$postData = array(
+		"data_line" => $a,
+    );				
+	$fields_string = http_build_query($postData);
+
+	$curl = curl_init();
+
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => 'https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=piline_semua_new_nasional',
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => '',
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 0,
+	CURLOPT_FOLLOWLOCATION => true,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_POSTFIELDS => $fields_string,
+	));
+	
+	$response = curl_exec($curl);
+	
+	curl_close($curl);
+	return $response;
+}
+
 function get_data_erp_borongan($a,$b,$c,$d,$e,$f){
 			
 	$postData = array(
@@ -2269,6 +2297,92 @@ if($_GET['modul'] == 'inventory'){
 		
 		echo $html;
 		
+	}else if($_GET['act'] == 'verifinvnasional'){
+		$html = "";
+		$sku = str_replace(' ', '', $_GET['sku']);
+								
+		
+		if($sku != ""){
+			
+			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and m_piline.sku like '%".$sku."%' order by variant asc limit 50";
+		}else{
+			
+			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2'  order by variant asc limit 50";
+			
+		}	
+		
+		
+		$no = 1;
+		foreach ($connec->query($list_line) as $row1) {	
+		$variant = (int)$row1['variant'];
+		$qtyerpreal = $row1['qtyerp'] - $row1['qtysalesout'];
+		if($row1['verifiedcount'] == ''){
+			
+			$vc = 0;
+		}else{
+			
+			$vc = $row1['verifiedcount'];
+		}
+		
+		
+		if($vc > 0){
+			
+			$color = 'style="background-color: #ffa597"';
+			
+		}else{
+			$color = '';
+			
+		}
+		
+		if($row1['barcode'] != ""){
+			
+			$barc = '('.$row1['barcode'].')';
+		}else{
+			$barc = "";
+			
+		}
+
+							$html .= '<tr class="header" style="background: #e1e5fa">
+				
+							<td colspan="5"><font style="font-weight: bold">'.$row1['sku'].' '.$barc.'</font> ('.$row1['name'].')</td>
+							</tr>
+	
+							<tr class="header1" style="background: #f0f1f2">
+								<td style="width: 150px">Counter</td>
+								<td>ERP</td>
+								<td>Sales</td>
+								<td>Varian</td>
+								<td>Verif</td>
+								
+								
+
+							</tr>
+							<tr class="header2" '.$color.' style="font-size: 16px">
+	
+								<td>
+								
+								<div class="form-inline"> 
+								<input type="number" onkeydown="enterKey(this, event, \''.$row1['sku'].'\', \''.str_replace("'", "",$row1['name']).'\',\''.$_GET['m_pi'].'\');" name="qtycount'.$row1['sku'].'" id="qtycount'.$row1['sku'].'" class="form-control" value="'.$row1['qtycount'].'"> 
+								</div>		
+										
+								
+								</td>
+								<td>'.$qtyerpreal.'</td>
+								<td>'.$row1['qtysales'].'</td>
+								<td>'.$variant.'</td>
+								<td>'.$vc.'</td>
+							</tr>';
+					
+				
+					
+		$no++; 
+			
+		}
+		
+		echo $html;
+		
 	}else if($_GET['act'] == 'updatecounter'){
 		
 		$sku = $_POST['sku'];
@@ -2793,6 +2907,109 @@ if($_GET['modul'] == 'inventory'){
 
 		
 
+	}else if($_GET['act'] == 'release_all_nasional'){
+
+			$no = 0;
+			$items = array();
+			$pi_key = $_POST['m_pi'];
+			$sql = "select * from m_pi where m_pi_key ='".$pi_key."'";
+			$result = $connec->query($sql);
+			foreach ($result as $row) {
+				
+						$a = $row['ad_client_id'];
+						$b = $row['ad_org_id'];
+						$c = $row['insertdate'];
+						$d = $row['insertby'];
+						$e = $row['m_locator_id'];
+						$f = $row['inventorytype'];
+						$ff = $row['name'];
+						$g = $row['description'];
+						$h = $row['movementdate'];
+						$i = $row['approvedby'];
+						$j = $row['status'];
+						$k = $row['rack_name'];
+						$l = $row['postby'];
+						$m = $row['postdate'];
+						$cat = $row['category'];
+						$n = $row['isactived'];
+						$o = $row['insertfrommobile'];
+						$p = $row['insertfromweb'];
+						
+						
+						
+						$pi_cuy = array(
+							"pi_key"=>$pi_key,
+							"ad_client_id"=>$a,
+							"ad_org_id"=>$b,
+							"insertdate"=>$c,
+							"insertby"=>$d,
+							"m_locator_id"=>$e,
+							"inventorytype"=>$f,
+							"name"=>$ff,
+							"description"=>$g,
+							"movementdate"=>$h,
+							"approvedby"=>$i,
+							"status"=>$j,
+							"rack_name"=>$k,
+							"postby"=>$l,
+							"postdate"=>$m,
+							"category"=>$cat,
+							"isactived"=>$n,
+							"insertfrommobile"=>$o,
+							"insertfromweb"=>$p,
+							
+						);
+							
+							$sql_line = "select m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='".$pi_key."' and m_piline.issync = 0 
+							and (m_piline.qtycount != 0 or m_piline.qtyerp != 0) ";
+
+							foreach ($connec->query($sql_line) as $rline) {
+								$items[] = array(
+									'm_piline_key'	=>$rline['m_piline_key'], 
+									'm_pi_key' 		=>$rline['m_pi_key'], 
+									'ad_client_id' 	=>$rline['ad_client_id'], 
+									'ad_org_id' 	=>$rline['ad_org_id'], 
+									'isactived' 	=>$rline['isactived'], 
+									'insertdate' 	=>$rline['insertdate'], 
+									'insertby' 		=>$rline['insertby'], 
+									'postby' 		=>$rline['postby'], 
+									'postdate' 		=>$rline['postdate'], 
+									'm_storage_id' 	=>$rline['m_storage_id'], 
+									'm_product_id' 	=>$rline['m_product_id'], 
+									'sku' 			=>$rline['sku'], 
+									'name' 			=>$rline['name'], 
+									'qtyerp' 		=>$rline['qtyerp'], 
+									'qtycount' 		=>$rline['qtycount'], 
+									'issync' 		=>$rline['issync'], 
+									'status' 		=>$rline['status'], 
+									'verifiedcount' =>$rline['verifiedcount'], 
+									'qtysales' 		=>$rline['qtysales'], 
+									'price' 		=>$rline['price'], 
+									'qtysalesout' 	=>$rline['qtysalesout'],
+									'hargabeli' 	=>$rline['hargabeli']
+								);
+								
+							}	
+							
+								$allarray = array("pi"=>$pi_cuy, "piline"=>$items);
+							
+							
+								$items_json = json_encode($allarray);
+								$hasil = piline_semua_nasional($items_json);
+								$j_hasil = json_decode($hasil, true);
+								if(!empty($j_hasil)){
+									$connec->query("update m_piline set issync = '1' where m_pi_key = '".$pi_key."'");
+									$json = array('result'=>'1', 'msg'=>'Berhasil release document..');			
+									
+								}else{
+									$json = array('result'=>'0', 'msg'=>'Gagal release document..');			
+									
+									
+								}
+				$json_string = json_encode($json);
+				echo $json_string;		
+						
+			}
 	}else if($_GET['act'] == 'release'){
 
 			$no = 0;

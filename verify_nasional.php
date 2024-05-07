@@ -468,7 +468,7 @@ function releasePI(m_pi){
 	var formData = new FormData();
 	formData.append('m_pi', m_pi);
 	$.ajax({
-		url: "api/action.php?modul=inventory&act=release_all",
+		url: "api/action.php?modul=inventory&act=release_all_nasional",
 		type: "POST",
 		data : formData,
 		processData: false,
@@ -481,55 +481,47 @@ function releasePI(m_pi){
 		success: function(dataResult){
 			console.log(dataResult);
 			var dataResult = JSON.parse(dataResult);
-			if(dataResult.result=='1'){
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#example").load(" #example");
+			$("#overlay").fadeOut(300);
+
+		}
+	});
+	
+	
+}
+
+
+// function updateStatusRelease(m_pi){
+	// var formData = new FormData();
+	// formData.append('m_pi', m_pi);
+	// $.ajax({
+		// url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=updatepi",
+		// type: "POST",
+		// data : formData,
+		// processData: false,
+		// contentType: false,
+		// beforeSend: function(){
+			// $('#notif').html("Proses update status di server, jangan close halaman ini sampai selesai..");
+
+		// },
+		// success: function(dataResult){
+			// console.log(dataResult);
+			// var dataResult = JSON.parse(dataResult);
+			// if(dataResult.result=='1'){
+				
+				// sendWa(m_pi);
+				
 				// $('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-				updateStatusRelease(m_pi);
 				// $("#example").load(" #example");
+				// $("#overlay").fadeOut(300);
 				
-			}
-			// else {
-				// $('#notif').html(dataResult.msg);
 			// }
-			
-		}
-	});
-	
-	
-}
 
-
-function updateStatusRelease(m_pi){
-	var formData = new FormData();
-	formData.append('m_pi', m_pi);
-	$.ajax({
-		url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=updatepi",
-		type: "POST",
-		data : formData,
-		processData: false,
-		contentType: false,
-		beforeSend: function(){
-			$('#notif').html("Proses update status di server, jangan close halaman ini sampai selesai..");
-			// $(".modal").modal('hide');
-		},
-		success: function(dataResult){
-			console.log(dataResult);
-			var dataResult = JSON.parse(dataResult);
-			if(dataResult.result=='1'){
-				
-				sendWa(m_pi);
-				
-				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-				$("#example").load(" #example");
-				$("#overlay").fadeOut(300);
-				
-			}
-			// else {
-				// $('#notif').html(dataResult.msg);
-			// }
 			
-		}
-	});
-}
+		// }
+	// });
+// }
 
 
 function releasePIGantung(m_pi){
