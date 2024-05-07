@@ -2238,7 +2238,8 @@ if($_GET['modul'] == 'inventory'){
 		$sku = str_replace(' ', '', $_GET['sku']);
 		if($sku != ""){
 			
-			$list_line = "select distinct m_piline.insertdate, m_piline.m_piline_key, m_piline.barcode, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' and m_piline.sku like '%".$sku."%' order by m_piline.insertdate desc limit 50";
+			$list_line = "select distinct m_piline.insertdate, m_piline.m_piline_key, m_piline.barcode, m_piline.sku ,m_piline.qtyerp, m_piline.qtycount, pos_mproduct.name, m_pi.status from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '1' and 
+			(m_piline.sku like '%".$sku."%' or pos_mproduct.name like '%".$sku."%') order by m_piline.insertdate desc limit 50";
 			
 		}else{
 			
@@ -2305,7 +2306,7 @@ if($_GET['modul'] == 'inventory'){
 		if($sku != ""){
 			
 			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and m_piline.sku like '%".$sku."%' order by variant asc limit 50";
+			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and (m_piline.sku like '%".$sku."%' or pos_mproduct.name like '%".$sku."%') order by variant asc limit 50";
 		}else{
 			
 			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 

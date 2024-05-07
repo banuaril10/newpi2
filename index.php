@@ -101,7 +101,8 @@ function cekVersion(){
 				}
 				
 				$('#notif1').html(msg+" <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp <button type='button' onclick='updateVersion();' class='btn btn-danger'>Update</button>");
-				$(':input[type="submit"]').prop('disabled', true);
+				// $(':input[type="submit"]').prop('disabled', true);
+				$(':input[type="submit"]').prop('disabled', false);
 			}
 			// else {
 				// $('#notif').html(dataResult.msg);
