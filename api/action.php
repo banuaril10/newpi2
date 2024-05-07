@@ -2959,10 +2959,17 @@ if($_GET['modul'] == 'inventory'){
 							"insertfromweb"=>$p,
 							
 						);
+							$selisih = 0;
 							
+							$sql_selisih = "select sum((qtycount-qtyerp)*price) selisih from m_piline where m_piline.m_pi_key ='".$pi_key."' and m_piline.issync = 0 and (m_piline.qtycount != 0 or m_piline.qtyerp != 0)";
+							foreach ($connec->query($sql_selisih) as $rline) {
+								
+								$selisih = $rline['selisih'];
+								
+							}
 							$sql_line = "select m_piline.*, pos_mproduct.name from m_piline left join pos_mproduct on m_piline.sku = pos_mproduct.sku where m_piline.m_pi_key ='".$pi_key."' and m_piline.issync = 0 
 							and (m_piline.qtycount != 0 or m_piline.qtyerp != 0) ";
-
+							
 							foreach ($connec->query($sql_line) as $rline) {
 								$items[] = array(
 									'm_piline_key'	=>$rline['m_piline_key'], 
@@ -2998,6 +3005,9 @@ if($_GET['modul'] == 'inventory'){
 								$hasil = piline_semua_nasional($items_json);
 								$j_hasil = json_decode($hasil, true);
 								if(!empty($j_hasil)){
+									
+									get_spv($kode_toko, $ff, $selisih);
+									$connec->query("update m_pi set status = '3' where m_pi_key ='".$pi_key."'");
 									$connec->query("update m_piline set issync = '1' where m_pi_key = '".$pi_key."'");
 									$json = array('result'=>'1', 'msg'=>'Berhasil release document..');			
 									
@@ -3847,17 +3857,9 @@ VALUES('".$item['ad_client_id']."', '".$item['ad_org_id']."', '1', '".date('Y-m-
 	}else if($_GET['act'] == 'nohp_spv'){
 		$kode_toko = $_SESSION['kode_toko'];
 		$m_pi = $_GET['m_pi'];	
-		// $m_pi = '0AA0C1F01AC64ED6BC6FD7C556495255';	
-		// sendWa('0AA0C1F01AC64ED6BC6FD7C556495255')
-		
 		$cek = $connec->query("select * from m_pi where m_pi_key = '".$m_pi."'");
-		
 		foreach ($cek as $row) {
-				
 			$doc_no = $row['name'];
-				
-				
-				
 		}
 		
 		$sql_amount = "select SUM(CASE WHEN issync=1 THEN 1 ELSE 0 END) jumsync, sum(qtysales * price) hargasales, sum(qtysalesout * price) hargagantung,  sum(qtyerp * price) hargaerp, sum(qtycount * price) hargafisik, count(sku) jumline from m_piline where m_pi_key = '".$m_pi."'";
