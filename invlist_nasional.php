@@ -27,16 +27,19 @@
 				<?php 
 				$sql_list = "select m_pi_key, name ,insertdate, rack_name from m_pi where status = '1' and m_pi_key = '".$_GET['m_pi']."' order by insertdate desc"; 
 				foreach ($connec->query($sql_list) as $tot) { ?>
-						<h4>INVENTORY COUNTING NASIONAL <?php echo $tot['rack_name']; ?></h4>
+						<h4>INVENTORY COUNTING NASIONAL </h4>
 						
 					
-					<!--DOCUMENT NO : <b><?php echo $tot['name']; ?> -->
+	
 				<?php } ?>
 				
 			<button type="button" class="btn btn-warning" id="generate" onclick="cetakExcel()">Generate Excel</button>
 			<a id="test" onclick="showGenerate();" class="btn btn-warning" style="display: none" href="">Download</a>
 			</div>
 			<div class="card-body">
+			
+			<p>Hanya muncul 50 items terakhir, jika ingin mencari items scan pada kolom search</p>
+			
 			<div class="tables">
 						
 				<div class="table-responsive bs-example widget-shadow">				

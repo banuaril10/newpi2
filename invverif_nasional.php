@@ -104,7 +104,10 @@
 					<button onclick="testPrint();" class="btn btn-success">Test Print</button>	
 					<br>
 					<br>
-					<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search" autofocus>
+					
+					
+					
+					<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Scan barcode/sku, atau ketik lalu enter" autofocus>
 					<input type="hidden" id="search1">
 					</div> 
 
@@ -278,70 +281,95 @@ function print_text(html){
 	});
 }
 
-
-
-document.getElementById("search").addEventListener("change", function() {
-var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("search");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("example1");
-  tr = table.getElementsByClassName("header");
-  trr = table.getElementsByClassName("header1");
-  trrr = table.getElementsByClassName("header2");
-   // tr.style.display = "none";
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-  
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-     
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-        trr[i].style.display = "";
-        trrr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-        trr[i].style.display = "none";
-        trrr[i].style.display = "none";
-      }
-    }       
-  }
-	
-	
-	
+var search = document.getElementById("search");
+search.addEventListener("keypress", function(event) {
+	if (event.key === "Enter") {
+		
+		var input, filter, table, tr, td, i, txtValue;
+		input = document.getElementById("search");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("example1");
+		tr = table.getElementsByClassName("header");
+		trr = table.getElementsByClassName("header1");
+		trrr = table.getElementsByClassName("header2");
+		
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[0];
+		
+			if (td) {
+			txtValue = td.textContent || td.innerText;
+			
+			if (txtValue.toUpperCase().indexOf(filter) > -1) {
+				tr[i].style.display = "";
+				trr[i].style.display = "";
+				trrr[i].style.display = "";
+			} else {
+				tr[i].style.display = "none";
+				trr[i].style.display = "none";
+				trrr[i].style.display = "none";
+			}
+			}       
+		}
+		
+	}
 });
 
+// document.getElementById("search").addEventListener("change", function() {
+// var input, filter, table, tr, td, i, txtValue;
+  // input = document.getElementById("search");
+  // filter = input.value.toUpperCase();
+  // table = document.getElementById("example1");
+  // tr = table.getElementsByClassName("header");
+  // trr = table.getElementsByClassName("header1");
+  // trrr = table.getElementsByClassName("header2");
 
-document.getElementById("search").addEventListener("keyup", function() {
-var input, filter, table, tr, td, i, txtValue;
-  input = document.getElementById("search");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("example1");
-  tr = table.getElementsByClassName("header");
-  trr = table.getElementsByClassName("header1");
-  trrr = table.getElementsByClassName("header2");
-   // tr.style.display = "none";
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
+  // for (i = 0; i < tr.length; i++) {
+    // td = tr[i].getElementsByTagName("td")[0];
   
-    if (td) {
-      txtValue = td.textContent || td.innerText;
+    // if (td) {
+      // txtValue = td.textContent || td.innerText;
      
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-        trr[i].style.display = "";
-        trrr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-        trr[i].style.display = "none";
-        trrr[i].style.display = "none";
-      }
-    }       
-  }
-	
-	
-	
-});
+      // if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        // tr[i].style.display = "";
+        // trr[i].style.display = "";
+        // trrr[i].style.display = "";
+      // } else {
+        // tr[i].style.display = "none";
+        // trr[i].style.display = "none";
+        // trrr[i].style.display = "none";
+      // }
+    // }       
+  // }
+// });
+
+
+// document.getElementById("search").addEventListener("keyup", function() {
+// var input, filter, table, tr, td, i, txtValue;
+  // input = document.getElementById("search");
+  // filter = input.value.toUpperCase();
+  // table = document.getElementById("example1");
+  // tr = table.getElementsByClassName("header");
+  // trr = table.getElementsByClassName("header1");
+  // trrr = table.getElementsByClassName("header2");
+
+  // for (i = 0; i < tr.length; i++) {
+    // td = tr[i].getElementsByTagName("td")[0];
+  
+    // if (td) {
+      // txtValue = td.textContent || td.innerText;
+     
+      // if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        // tr[i].style.display = "";
+        // trr[i].style.display = "";
+        // trrr[i].style.display = "";
+      // } else {
+        // tr[i].style.display = "none";
+        // trr[i].style.display = "none";
+        // trrr[i].style.display = "none";
+      // }
+    // }       
+  // }
+// });
 
 
 function filterTable(sku){
