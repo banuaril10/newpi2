@@ -27,6 +27,7 @@
 			<div class="tables">		
 				<div class="table-responsive bs-example widget-shadow">	
 				<p id="notif" style="color: red; font-weight: bold"></p>
+				<p id="ce" style="color: red; font-weight: bold">Items Active adalah Items yg QTY Sistem dan QTY Fisik nya tidak sama dengan 0</p>
 				
 					<table class="table table-bordered" id="example">
 						<thead>
@@ -35,14 +36,10 @@
 								<th>Document No</th>
 								<th>GR Area</th>
 								<th>Tanggal / Rack Name</th>
-							
 								<th>Total Sistem</th>
 								<th>Total Fisik</th>
-								
 								<th>Selisih</th>
-								
-								
-								<th>Type</th>
+								<th>Items Active</th>
 								<th>Status</th>
 								<th>Aksi</th>
 								
@@ -123,6 +120,15 @@
 							
 						}
 						
+						$jum_active = 0;
+						$get_active = "select count(*) jum from m_piline where m_piline.m_pi_key ='".$row['m_pi_key']."' and (m_piline.qtycount != 0 or m_piline.qtyerp != 0)";
+						foreach ($connec->query($get_active) as $rrr) {
+							
+							$jum_active = $rrr['jum'];
+							
+						}
+						
+						
 						
 						?>
 						
@@ -136,7 +142,7 @@
 									<a href="detail.php?m_pi=<?php echo $row['m_pi_key']; ?>" class="btn btn-warning">Detail</a>
 								<?php } ?>
 								</td>
-								<td><b><?php echo $m_locator; ?></b></td>
+								<td><b><?php echo $m_locator; ?></b><br><?php echo $row['inventorytype']; ?></td>
 								<td><?php echo $row['insertdate']; ?><br>RACK : <b><?php echo $row['rack_name']; ?></b></td>
 					
 								<td><?php echo rupiah($qtyerp); ?></td>
@@ -145,7 +151,7 @@
 								<td><?php echo rupiah($selisih); ?></td>
 								
 						
-								<td><?php echo $row['inventorytype']; ?></td>
+								<td><?php echo $jum_active; ?></td>
 								<td style="color: <?php echo $colorr; ?>; font-weight: bold">
 								<?php echo $jumrelease; ?><br>
 								
