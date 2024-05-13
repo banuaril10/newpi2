@@ -36,9 +36,8 @@ $useridcuy = $_SESSION['userid'];
     if (!empty($_FILES['import']['name']) && in_array($_FILES['import']['type'], $fileMimes))
     {
             $csvFile = fopen($_FILES['import']['tmp_name'], 'r');
-            fgetcsv($csvFile);
-
-				
+            //fgetcsv($csvFile);
+			
 					while (($getData = fgetcsv($csvFile, 100000, ";")) !== FALSE)
 					{
 						$sku = str_replace(' ', '', $getData[0]);
