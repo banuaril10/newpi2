@@ -27,7 +27,7 @@ $useridcuy = $_SESSION['userid'];
 $org_key = $_SESSION['org_key'];
 $ss = $_SESSION['status_sales'];
 $kode_toko = $_SESSION['kode_toko'];
-
+$rand_no = rand(1,100);
 
 $get_nama_toko = "select * from ad_morg where postby = 'SYSTEM'";
 $resultss = $connec->query($get_nama_toko);
@@ -1714,7 +1714,7 @@ if($_GET['modul'] == 'inventory'){
 			$statement = $connec->query("insert into m_pi (
 			ad_client_id, ad_org_id, isactived, insertdate, insertby, m_locator_id, inventorytype, name, description, 
 			movementdate, approvedby, status, rack_name, postby, postdate, category
-			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."','".$kode_toko."-".date('YmdHis')."','PI-".$namakat."', 
+			) VALUES ('','".$org_key."','1','".date('Y-m-d H:i:s')."','".$username."', '".$sl."', '".$it."', '".$kode_toko."-".date('YmdHis').$rand_no."','PI-".$namakat."', 
 			'".date('Y-m-d H:i:s')."','user spv','1','".$namakat."','".$username."','".date('Y-m-d H:i:s')."', '2') RETURNING m_pi_key");
 			
 			
@@ -2299,9 +2299,6 @@ if($_GET['modul'] == 'inventory'){
 			
 		}
 		
-		
-		
-		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
 		$nama_product = "-";
@@ -2311,21 +2308,16 @@ if($_GET['modul'] == 'inventory'){
 			}
 							$html .= '<tr>
 								<td>'.$no.'</td>
-								<td><button type="button" style="display: inline-block; background: red; color: white" data-toggle="modal" data-target="#exampleModal'.$row1['id'].'"><i class="fa fa-times"></i></button>
-								<br><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$nama_product.'</font></td>
+								<td><font style="font-weight: bold">'.$row1['sku'].'</font><br> <font style="color: green;font-weight: bold">'.$nama_product.'</font></td>
 	
 								<td>
 								
 								<div class="form-inline"> 
-								<input type="number" onchange="changeQty(\''.$row1['id'].'\');" id="qty'.$row1['id'].'" class="form-control" value="'.$row1['qty'].'"> <br>
-									<button type="button" style="display: inline-block; background: blue; color: white" onclick="changeQtyPlus(\''.$row1['id'].'\');" class=""><i class="fa fa-plus"></i></button>
-									&nbsp
-									<button type="button" style="display: inline-block; background: #ba3737; color: white" onclick="changeQtyMinus(\''.$row1['id'].'\');" class=""><i class="fa fa-minus"></i></button>
+									'.$row1['qty'].' <br>
 								</div>		
 										
 								
 								</td>
-								<td>'.$row1['status'].'</td>
 								<td>'.$row1['user_input'].'</td>
 							</tr>
 							
@@ -2432,7 +2424,7 @@ if($_GET['modul'] == 'inventory'){
 		if($sku != ""){
 			
 			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
-			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and (m_piline.sku like '%".$sku."%' or m_piline.barcode like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by variant asc limit 50";
+			where m_pi.m_pi_key = '".$_GET['m_pi']."' and m_pi.status = '2' and (m_piline.sku like '%".$sku."%' or m_piline.barcode like '%".$sku."%' or LOWER(pos_mproduct.name) like LOWER('%".$sku."%')) order by variant asc ";
 		}else{
 			
 			$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
@@ -2612,6 +2604,18 @@ if($_GET['modul'] == 'inventory'){
 			$json = array('result'=>'1', 'msg'=>'Berhasil proses '.$no.', Belum ada header '.$nox);
 		}else{
 			$json = array('result'=>'1', 'msg'=>'Tidak ada items yg diproses');
+			
+		}
+		$json_string = json_encode($json);	
+		echo $json_string;	
+	
+	}else if($_GET['act'] == 'hapusdatanasional'){
+		$cekqty = "delete from inv_temp_nasional where user_input = '".$useridcuy."'";
+		$result = $connec->query($cekqty);
+		if($result){
+			$json = array('result'=>'1', 'msg'=>'Berhasil hapus items');
+		}else{
+			$json = array('result'=>'1', 'msg'=>'Tidak ada items yg dihapus');
 			
 		}
 		$json_string = json_encode($json);	

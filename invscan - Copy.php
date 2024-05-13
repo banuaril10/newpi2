@@ -26,7 +26,11 @@
 			
 			
 			<h4>INVENTORY IMPORTER</h4>
-			<form method="post" enctype="multipart/form-data" action="import_nasional.php">
+			
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalProses">Proses Data</button>
+			
+			
+				<form method="post" enctype="multipart/form-data" action="import.php">
 
                   <div class="form-group">
                     <label><b>Upload File</b></label>
@@ -39,16 +43,25 @@
                     </div>
                   </div>
                   <button class="btn btn-primary" id="btn-form" type="submit">Import</button>
+				  <!--<button type="button" class="btn btn-success" type="button" id="checkallinv">Check All</button>
+				<button type="button" class="btn btn-danger" id="prosesall" onclick="prosesAll();" >Process Selected</button>-->
+				
+				<br>
+				<select id="filename">
+					<?php $fn = "select filename from inv_temp where date(tanggal) = date(now()) and status = '0' group by filename,status ";
+						$no = 1;
+						foreach ($connec->query($fn) as $rows) { ?>
+							
+							<option value="<?php echo $rows['filename']; ?>"><?php echo $rows['filename']; ?></option>
+							
+						<?php } ?>
+						
+					 </select>
+				
+					 <button class="btn btn-danger" onclick="prosesInv();" id="button-proses" type="button">Proses File</button>
+				
 				
                 </form>
-				<br>
-				<br>
-			
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalProses">Proses Data</button>
-			<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalClear">Clear Data</button>
-			
-			
-				
 			
 						
 			<div class="modal fade" id="exampleModalProses" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -70,26 +83,6 @@
 								</div>
 							</div>
 			</div>
-			
-			<div class="modal fade" id="exampleModalClear" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							<div class="modal-dialog">
-								<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Apakah anda yakin hapus semua importan user <?php echo $_SESSION['userid']; ?>?</h5>
-								
-									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-									<button type="button" class="btn btn-danger" onclick="hapusData();" class="">YAKIN</button>
-								</div>
-								</div>
-							</div>
-			</div>
 
 			</div>
 			<div class="card-body">
@@ -103,7 +96,8 @@
 					<div class="form-inline"> 
 
 					<div class="form-group"> 
-				
+					
+					<input style="margin-bottom: 10px" type="text" id="sku" class="form-control" id="exampleInputName2" placeholder="SKU / Barcode International" autofocus>
 					
 					<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search">
 					
@@ -120,6 +114,7 @@
 								<th>No</th>
 								<th>SKU / Barcode Int.</th>
 								<th>QTY</th>
+								<th>Status</th>
 								<th>User Input</th>
 
 							</tr>
@@ -268,41 +263,6 @@ function getData(sku){
 	});
 	
 }
-
-
-function hapusData(){
-	$.ajax({
-		url: "api/action.php?modul=inventory&act=hapusdatanasional",
-		type: "POST",
-		beforeSend: function(){
-			$(".modal").modal('hide');
-			$("#overlay").fadeIn(300);
-		},
-		success: function(dataResult){
-			var dataResult = JSON.parse(dataResult);
-			console.log(dataResult);
-			if(dataResult.result=='0'){
-				$('#notif').html(dataResult.msg);
-				$("#overlay").fadeOut(300);
-			}else if(dataResult.result=='1'){
-				
-				$("#overlay").fadeOut(300);
-				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-				$("#example1").load(" #example1");
-				
-				
-			}
-			else {
-				$("#overlay").fadeOut(300);
-				$('#notif').html("Gagal sync coba lagi nanti!");
-			}
-			
-		}
-	});
-	
-}
-
-
 
 function prosesData(){
 	
