@@ -88,9 +88,9 @@
 						<li class="submenu-item ">
 							<a href="verify_nasional.php">Inventory Verify</a>
 						</li>
-						<!--<li class="submenu-item ">
+						<li class="submenu-item ">
 							<a href="invscan.php">Importer</a>
-						</li>-->
+						</li>
 					</ul>
 				</li>
 				
