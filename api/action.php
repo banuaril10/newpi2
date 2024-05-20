@@ -2301,6 +2301,10 @@ if($_GET['modul'] == 'inventory'){
 		
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1) {	
+		$status = "<font style='color: red'>NOT YET</font>";
+		if($row1['status'] == '1'){
+			$status = "<font style='color: red'>IMPORTED</font>";
+		}
 		$nama_product = "-";
 		$pr = $connec->query("select * from pos_mproduct where (sku = '".$row1['sku']."' or barcode = '".$row1['sku']."') ");
 			foreach ($pr as $rows) {
@@ -2319,6 +2323,7 @@ if($_GET['modul'] == 'inventory'){
 								
 								</td>
 								<td>'.$row1['user_input'].'</td>
+								<td>'.$status.'</td>
 							</tr>
 							
 							<div class="modal fade" id="exampleModal'.$row1['id'].'" aria-labelledby="exampleModalLabel" aria-hidden="true">
