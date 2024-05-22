@@ -255,7 +255,6 @@ function deleteLine(m_piline_key){
 }
 
 function getData(sku){
-	
 	$.ajax({
 		url: "api/action.php?modul=inventory&act=listinvscan&sku="+sku,
 		type: "GET",
@@ -267,7 +266,6 @@ function getData(sku){
 			$("#load_data").html(dataResult);
 		}
 	});
-	
 }
 
 
