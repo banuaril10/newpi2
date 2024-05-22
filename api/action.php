@@ -2299,9 +2299,9 @@ if($_GET['modul'] == 'inventory'){
 
 		$no = 1;
 		foreach ($connec->query($list_line) as $row1){
-			$stst = "<font style='font-weight: bold; color: red'>NOT YET</font>";
+			$stst = "<font style='font-weight: bold; color: red'>BELUM</font>";
 			if($row1['status'] == '1'){
-				$stst = "<font style='font-weight: bold; color: green'>IMPORTED</font>";
+				$stst = "<font style='font-weight: bold; color: green'>SUDAH</font>";
 			}
 			
 			$html .= '<tr>
