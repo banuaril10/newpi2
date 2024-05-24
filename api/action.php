@@ -2572,7 +2572,7 @@ if($_GET['modul'] == 'inventory'){
 			foreach ($result as $tot) {
 				if($tot['sku'] != ""){
 					$jum = 0;
-					$cekjum = "select count(m_piline_key) jum from m_piline where (sku='".$tot['sku']."' or barcode='".$tot['sku']."') ";
+					$cekjum = "select count(m_piline_key) jum from m_piline a inner join m_pi b on a.m_pi_key = b.m_pi_key where (a.sku='".$tot['sku']."' or a.barcode='".$tot['sku']."') and b.status in ('1','2') and inventorytype = 'Nasional'";
 					$result_jum = $connec->query($cekjum);
 					foreach($result_jum as $rrr){
 						$jum = $rrr['jum'];

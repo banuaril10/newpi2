@@ -42,14 +42,13 @@
 				
                 </form>
 				<br>
+				<hr style="background-color: #000; height: 2px; border: 0;">
 				<br>
 			
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalProses">Proses Data</button>
+			<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalProses">Proses Data</button>
 			<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalClear">Clear Data</button>
 			
-			
-				
-			
+
 						
 			<div class="modal fade" id="exampleModalProses" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
