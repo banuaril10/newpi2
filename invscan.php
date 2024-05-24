@@ -317,17 +317,17 @@ function prosesData(){
 			if(dataResult.result=='0'){
 				$('#notif').html(dataResult.msg);
 				$("#overlay").fadeOut(300);
-				getData("");
+				location.reload();
 			}else if(dataResult.result=='1'){
 				$("#overlay").fadeOut(300);
 				$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
 				$("#example1").load(" #example1");
-				getData("");
+				location.reload();
 			}
 			else {
 				$("#overlay").fadeOut(300);
 				$('#notif').html("Gagal sync coba lagi nanti!");
-				getData("");
+				location.reload();
 			}
 			
 		}
