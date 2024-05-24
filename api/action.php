@@ -2291,10 +2291,10 @@ if($_GET['modul'] == 'inventory'){
 		$sku = $_GET['sku'];
 		if($sku != ""){
 			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			where a.sku = '".$sku."' order by a.status asc ";
+			where a.sku = '".$sku."' order by a.status, a.sku asc ";
 		}else{
 			$list_line = "select a.*, b.name from inv_temp_nasional a left join pos_mproduct b on a.sku = b.sku 
-			order by a.status asc ";
+			order by a.status, a.sku asc ";
 		}
 
 		$no = 1;
