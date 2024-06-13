@@ -2316,6 +2316,7 @@ if($_GET['modul'] == 'inventory'){
 				</td>
 				<td>'.$row1['user_input'].'</td>
 				<td>'.$stst.'</td>
+				<td>'.$row1['filename'].'</td>
 			</tr>';
 			$no++;
 			

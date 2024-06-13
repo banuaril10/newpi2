@@ -187,6 +187,7 @@
 								<th>QTY</th>
 								<th>User Input</th>
 								<th>Status Proses</th>
+								<th>Filename</th>
 
 							</tr>
 						</thead>

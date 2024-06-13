@@ -2,7 +2,7 @@
  strtext = "               Idolmart               \n\n"+
 "              Jalan Caman              \n"+
 "                Bekasi                \n"+
-"STRUK   :BOSOL-00010I4DUQ      09:08:47\n"+
+"STRUK   :BOS125-00010I4DUQ      09:08:47\n"+
 "TANGGAL :22-Jul-24               Widya\n"+
 "=======================================\n"+
 "Nama Barang Qty  Harga  Disc      Total\n"+
@@ -20,7 +20,7 @@
 "INFAK                                 0\n"+
 "KEMBALI                             500\n"+
 "=======================================\n"+
-"DPP :     90,455    PPN :      990,045\n"+
+"DPP :     90,455    PPN :      1,990,045\n"+
 "=======================================\n"+
 "      NPWP :31.188.370.6-407.000      \n"+
 "            IDOLMART Group            \n"+
@@ -28,7 +28,7 @@
 "            #TERIMA KASIH#            \n"+
 " BARANG YANG SUDAH DIBELI TIDAK DAPAT \n"+
 "         DITUKAR/DIKEMBALIKAN         \n"+
-"***************************************";
+"***************************************\r\n\r\n\r\n\r\n\r\n\r\n";
 
 <!-- function escapeRegExp(string) { -->
   <!-- return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string -->
@@ -46,7 +46,7 @@ function replaceAlls(str, find, replace) {
 
 
 
-   	 strtext = replaceAlls(strtext,'       Idolmart', 'Idolmart');
+   	 strtext = replaceAlls(strtext,'       Idolmart              ', 'Idolmart');
 	 strtext = replaceAlls(strtext,'       IDOLMART', 'IDOLMART');
 	 strtext = replaceAlls(strtext,'       Jalan','Jalan');
 	 strtext = replaceAlls(strtext,'       Jl.','Jl.');
@@ -64,19 +64,21 @@ function replaceAlls(str, find, replace) {
     <!-- } -->
 	
 	for (let i = 1; i < 10; i++) {
-         strtext = replaceAlls(strtext,'0'+i+':', '\n0'+i+':');
-         <!-- strtext = replaceAlls(strtext,'\n:0'+i+':', ':06'+i+':'); -->
+         strtext = replaceAlls(strtext,'     0'+i+':', '0'+i+':');
+        
     }
 	
 	for (let i = 10; i < 25; i++) {
-         strtext = replaceAlls(strtext,''+i+':', '\n'+i+':');
+         strtext = replaceAlls(strtext,'     '+i+':', ''+i+':');
     }
 	
 	
 
+     strtext = replaceAlls(strtext,'STRUK   :', 'STRUK:');
+     strtext = replaceAlls(strtext,'STRUK   :', 'STRUK:');
      strtext = replaceAlls(strtext,'KASIR      :     ', 'KASIR      :');
      strtext = replaceAlls(strtext,' BARANG', 'BARANG');
-     strtext = replaceAlls(strtext,'TANGGAL    :           ', 'TANGGAL    :');
+     strtext = replaceAlls(strtext,'TANGGAL', 'TGL ');
      strtext = replaceAlls(strtext,'SALDO AWAL :           ', 'SALDO AWAL :');
 	 //strtext = replaceAlls(strtext,'TOTAL', 'TOTAL'); 
 	 //strtext = replaceAlls(strtext,'DISKON        ', 'DISKON'); 
@@ -86,7 +88,7 @@ function replaceAlls(str, find, replace) {
 	 //strtext = replaceAlls(strtext,'KEMBALI        ', 'KEMBALI'); 
 	 strtext = replaceAlls(strtext,'MEMBER       ', 'MEMBER');
 	 strtext = replaceAlls(strtext,'POINT       ', 'POINT');
-     strtext = replaceAlls(strtext,'PPN :    ', 'PPN :');
+     strtext = replaceAlls(strtext,'  PPN :    ', 'PPN :');
 	 strtext = replaceAlls(strtext,'      NPWP', 'NPWP');
 	 strtext = replaceAlls(strtext,':31.188.370.6-407.000    ', ':31.188.370.6-407.000');
 	 strtext = replaceAlls(strtext,'     IDOLMART Group   ', 'IDOLMART Group');
