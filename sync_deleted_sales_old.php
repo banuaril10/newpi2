@@ -23,7 +23,7 @@
 			<div class="card-header">
 				
 
-				<h4>SYNC DELETED SALES OLD</h4>
+				<h4>RESET PENJUALAN MENYISAKAN 60 HARI TERAKHIR</h4>
 			
 			</div>
 			<div class="card-body">
@@ -38,7 +38,7 @@
 
 					<div class="form-group"> 
 					
-					<button type="button" onclick="sync_deleted();" class="btn btn-primary">Sync</button>
+					<button type="button" onclick="sync_deleted();" class="btn btn-danger">Reset Penjualan</button>
 					<br>
 					<br>
 					
