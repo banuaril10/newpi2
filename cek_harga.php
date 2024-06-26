@@ -38,7 +38,8 @@
 			<font style="color: red; font-weight: bold">Note : <br>- cari items terlebih dahulu by nama/sku, arahkan kursor ke textbox yg ada pada kolom Barcode
 			<br>- untuk update Barcode di kolom Barcode bisa langsung scan menggunakan scanner / ketik kode Barcode lalu enter
 			<br>- jika muncul pesan "Data Barcode sudah ada ...." silahkan <button type="button" onclick="manage_stock();" class="btn btn-primary">Sync Barcode</button> terlebih dahulu
-			
+			<br>- untuk update data shortcut lakukan <button type="button" onclick="sync_shortcut();" class="btn btn-danger">Sync Shortcut</button>
+			<br>
 			</font>
 			<br>
 			<button type="button" onclick="sync_price();" class="btn btn-danger">Sync Harga</button>
@@ -107,12 +108,29 @@ function manage_stock(){
 			
 		}
 		});
-		
-	
-	
-	
-	
 }
+
+function sync_shortcut(){
+	$("#overlay").fadeIn(300);
+
+		$.ajax({
+		url: "api/action.php?modul=inventory&act=sync_shortcut",
+		type: "POST",
+		beforeSend: function(){
+			$('#notif').html("Proses sync Barcode..");
+			
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+			location.reload();
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#overlay").fadeOut(300);
+			
+		}
+		});
+}
+
 
 function sync_price(){
 	$("#overlay").fadeIn(300);

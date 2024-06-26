@@ -23,7 +23,7 @@
 			<div class="card-header">
 				
 
-				<h4>SYNC BARCODE</h4>
+				<h4>SYNC ITEMS NON AKTIF SEBULAN TERAKHIR</h4>
 			
 			</div>
 			<div class="card-body">
@@ -37,11 +37,7 @@
 					<div class="form-inline"> 
 
 					<div class="form-group"> 
-					
-					<button type="button" onclick="manage_stock();" class="btn btn-primary">Sync Barcode</button>
-					
-					<button type="button" onclick="load_product();" class="btn btn-danger">Load Data
-					</button>
+						<button type="button" onclick="manage_stock();" class="btn btn-primary">Sync</button>
 					<br>
 					<br>
 					<input type="text" id="search" class="form-control" id="exampleInputName2" placeholder="Search" onchange="filterTable();">
@@ -55,18 +51,17 @@
 						<thead>
 							<tr>
 								<th>No</th>
-								<th>SKU / Nama</th>
-								<th>Barcode</th>
-								<th>Shortcut</th>
-
+								<th>SKU</th>
+								<th>Nama</th>
+								<th>Updated</th>
 							</tr>
 						</thead>
 						<tbody>
 			
 					
 			
-				</tbody>
-			</table>
+						</tbody>
+				</table>
 				</div>
 			</div>
 		</div>
@@ -115,10 +110,10 @@ function manage_stock(){
 	$("#overlay").fadeIn(300);
 
 		$.ajax({
-		url: "api/action.php?modul=inventory&act=sync_barcode",
+		url: "api/action.php?modul=inventory&act=sync_items_nonaktif",
 		type: "POST",
 		beforeSend: function(){
-			$('#notif').html("Proses sync barcode..");
+			$('#notif').html("Proses sync..");
 		},
 		success: function(dataResult){
 			var dataResult = JSON.parse(dataResult);
@@ -128,18 +123,13 @@ function manage_stock(){
 			
 		}
 		});
-		
-	
-	
-	
-	
 }
 
 
 function load_product(){
 	$("#overlay").fadeIn(300);
 	$.ajax({
-		url: "api/action.php?modul=inventory&act=load_product_barcode",
+		url: "api/action.php?modul=inventory&act=load_product_nonaktif",
 		type: "GET",
 		success: function(dataResult){
 			document.querySelector('#example1 > tbody').innerHTML = dataResult;
