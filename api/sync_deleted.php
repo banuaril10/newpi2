@@ -19,16 +19,16 @@ $cp3 = $connec->query($order);
 $cp4 = $connec->query($orderline);
 
 
-if($cp1){$text += "Sales, ";}
-if($cp2){$text += "Sales line, ";}
-if($cp3){$text += "Order, ";}
-if($cp4){$text += "Order line, ";}
+if($cp1){$text .= "Sales, ";}
+if($cp2){$text .= "Sales line, ";}
+if($cp3){$text .= "Order, ";}
+if($cp4){$text .= "Order line, ";}
 
+echo $text;
+// $json = array('result'=>'1', 'msg'=>$text);
 
-$json = array('result'=>'1', 'msg'=>$text);
-
-$json_string = json_encode($json);
-echo $json_string;
+// $json_string = json_encode($json);
+// echo $json_string;
 
 
 
