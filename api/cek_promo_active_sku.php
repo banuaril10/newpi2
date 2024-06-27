@@ -28,11 +28,11 @@ $discount_name = "";
 		$nama_product = $r1['name'];
 	}
 	
-	$cek_reguler = "select discount, discountname from pos_mproductdiscount where sku = '".$sku."' and DATE(now()) between fromdate and todate ";
-	$cr = $connec->query($cek_reguler);
-	foreach ($cr as $r1){
-		$discount_name .= $r1['discountname'].', Potongan '.rupiah($r1['discount']).'/Pcs <br>';
-	}
+	// $cek_reguler = "select discount, discountname from pos_mproductdiscount where sku = '".$sku."' and DATE(now()) between fromdate and todate ";
+	// $cr = $connec->query($cek_reguler);
+	// foreach ($cr as $r1){
+		// $discount_name .= $r1['discountname'].', Potongan '.rupiah($r1['discount']).'/Pcs <br>';
+	// }
 	
 	$cek_grosir = "select discount, discountname from pos_mproductdiscountgrosir_new where sku = '".$sku."' and DATE(now()) between fromdate and todate and minbuy > 1 order by minbuy asc";
 	$cv = $connec->query($cek_grosir);
