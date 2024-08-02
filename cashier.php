@@ -2,9 +2,6 @@
 <?php include "components/main.php"; ?>
 <?php include "components/sidebar.php"; ?>
 
-
-
-
 <div id="app" onload="cekTotal();">
 <div id="main">
 <header class="mb-3">

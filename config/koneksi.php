@@ -17,7 +17,6 @@ $options = array(
 );
 try {
 
-
 	if(hash_equals($hmac, $calcmac)){
 		$dbuser = 'postgres';
 		$dbpass = $op;
