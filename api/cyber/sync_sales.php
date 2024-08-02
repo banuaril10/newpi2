@@ -250,8 +250,7 @@ foreach ($connec->query($list_deleted) as $row3) {
     );
 }
 
-$list_cashierbalance = "select * from pos_dcashierbalance where status_intransit is null and date(insertdate) = '" . $tanggal . "'
-and status_intransit is null";
+$list_cashierbalance = "select * from pos_dcashierbalance where date(insertdate) = '" . $tanggal . "'";
 foreach ($connec->query($list_cashierbalance) as $row4) {
     $jj_cashierbalance[] = array(
         "pos_dcashierbalance_key" => $row4['pos_dcashierbalance_key'],

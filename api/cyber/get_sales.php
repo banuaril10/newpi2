@@ -81,8 +81,15 @@ echo
         <td>" . rupiah($j_hasil['header_amount']) . "</td>
         <td>" . $j_hasil['line'] . "</td>
         <td>" . rupiah($j_hasil['line_amount']) . "</td>
-        <td>" . rupiah($selisih) . "</td>
-        <td>" . rupiah($selisih_line) . "</td>
+        <td>" . rupiah($j_hasil['cashier_amount']) . "</td>
+        </tr>
+        <tr>
+        <th style='background-color: rgb(244, 44, 44)' colspan='4'>SELISIH HEADER</th>
+        <th style='background-color: rgb(244, 44, 44)' colspan='4'>SELISIH LINE</th>
+        </tr>
+        <tr>
+        <td colspan='4'>" . rupiah($selisih) . "</td>
+        <td colspan='4'>" . rupiah($selisih_line) . "</td>
         </tr>
         ";
 
