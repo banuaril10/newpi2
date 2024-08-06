@@ -155,7 +155,7 @@ $jj_deleted = array();
 $jj_cashierbalance = array();
 $jj_posdshopsales = array();
 
-$list_header = "select * from pos_dsales where status_intransit is null and date(insertdate) = '" . $tanggal . "' 
+$list_header = "select * from pos_dsales where date(insertdate) = '" . $tanggal . "' 
 and isactived = '1' and status_intransit is null";
 foreach ($connec->query($list_header) as $row1) {
     $jj_header[] = array(
@@ -197,8 +197,8 @@ foreach ($connec->query($list_header) as $row1) {
     );
 }
 
-$list_line = "select * from pos_dsalesline where status_intransit is null and date(insertdate) = '" . $tanggal . "' and isactived = '1'
-and status_intransit is null";
+$list_line = "select * from pos_dsalesline where date(insertdate) = '" . $tanggal . "' 
+and isactived = '1' and status_intransit is null ";
 foreach ($connec->query($list_line) as $row2) {
     $jj_line[] = array(
         "pos_dsalesline_key" => $row2['pos_dsalesline_key'],
@@ -225,7 +225,7 @@ foreach ($connec->query($list_line) as $row2) {
 }
 
 
-$list_deleted = "select * from pos_dsalesdeleted where status_intransit is null and date(insertdate) = '" . $tanggal . "'
+$list_deleted = "select * from pos_dsalesdeleted where date(insertdate) = '" . $tanggal . "'
 and status_intransit is null";
 foreach ($connec->query($list_deleted) as $row3) {
     $jj_deleted[] = array(
@@ -286,7 +286,7 @@ foreach ($connec->query($list_cashierbalance) as $row4) {
     );
 }
 
-$list_posdshopsales = "select * from pos_dshopsales where status_intransit is null and date(insertdate) = '" . $tanggal . "'
+$list_posdshopsales = "select * from pos_dshopsales where date(insertdate) = '" . $tanggal . "'
 and status_intransit is null";
 
 foreach ($connec->query($list_posdshopsales) as $row5) {
@@ -347,10 +347,12 @@ if (!empty($jj_line)) {
     $hasil_line = push_to_line($array_line_json);
     $j_hasil_line = json_decode($hasil_line, true);
 
+    print_r($j_hasil_line);
+
     if (!empty($j_hasil_line)) {
         foreach ($j_hasil_line as $r) {
             $statement2 = $connec->query("update pos_dsalesline set status_intransit = '1' 
-        where pos_dsalesline_key = '" . $r . "'");
+            where pos_dsalesline_key = '" . $r . "'");
         }
     }
 }
