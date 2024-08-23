@@ -1,16 +1,10 @@
 <?php include "../../config/koneksi.php";
 $tanggal = $_GET['date'];
 
-$ll = "select * from ad_morg where isactived = 'Y'";
-$query = $connec->query($ll);
-while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    $idstore = $row['ad_morg_key'];
-}
-function push_to_posdshopsales($url, $posdshopsales, $idstore)
+function push_to_posdshopsales($posdshopsales)
 {
     $postData = array(
-        "posdshopsales" => $posdshopsales,
-        "idstore" => $idstore
+        "posdshopsales" => $posdshopsales
     );
     $fields_string = http_build_query($postData);
 
@@ -19,7 +13,7 @@ function push_to_posdshopsales($url, $posdshopsales, $idstore)
     curl_setopt_array(
         $curl,
         array(
-            CURLOPT_URL => $url,
+            CURLOPT_URL => 'https://intransit.idolmartidolaku.com/salesorderidolmart/sync_sales_posdshopsales.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -82,14 +76,9 @@ foreach ($connec->query($list_posdshopsales) as $row5) {
 }
 
 if (!empty($jj_posdshopsales)) {
-    $url = $base_url . "/sales_order/sync_sales_posdshopsales.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
     $array_posdshopsales = array("posdshopsales" => $jj_posdshopsales);
     $array_posdshopsales_json = json_encode($array_posdshopsales);
-    $hasil_posdshopsales = push_to_posdshopsales($url, $array_posdshopsales_json, $idstore);
-
-    // echo $hasil_posdshopsales;
-
-
+    $hasil_posdshopsales = push_to_posdshopsales($array_posdshopsales_json);
     $j_hasil_posdshopsales = json_decode($hasil_posdshopsales, true);
     if (!empty($j_hasil_posdshopsales)) {
         foreach ($j_hasil_posdshopsales as $r) {

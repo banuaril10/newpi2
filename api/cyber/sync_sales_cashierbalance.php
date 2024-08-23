@@ -1,17 +1,10 @@
 <?php include "../../config/koneksi.php";
 $tanggal = $_GET['date'];
 
-$ll = "select * from ad_morg where isactived = 'Y'";
-$query = $connec->query($ll);
-while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    $idstore = $row['ad_morg_key'];
-}
-
-function push_to_cashierbalance($url, $cashierbalance, $idstore)
+function push_to_cashierbalance($cashierbalance)
 {
     $postData = array(
-        "cashierbalance" => $cashierbalance,
-        "idstore" => $idstore
+        "cashierbalance" => $cashierbalance
     );
     $fields_string = http_build_query($postData);
 
@@ -20,7 +13,7 @@ function push_to_cashierbalance($url, $cashierbalance, $idstore)
     curl_setopt_array(
         $curl,
         array(
-            CURLOPT_URL => $url,
+            CURLOPT_URL => 'https://intransit.idolmartidolaku.com/salesorderidolmart/sync_sales_cashierbalance.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -78,10 +71,9 @@ foreach ($connec->query($list_cashierbalance) as $row4) {
 
 
 if (!empty($jj_cashierbalance)) {
-    $url = $base_url . "/sales_order/sync_sales_cashierbalance.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
     $array_cashierbalance = array("cashierbalance" => $jj_cashierbalance);
     $array_cashierbalance_json = json_encode($array_cashierbalance);
-    $hasil_cashierbalance = push_to_cashierbalance($url,$array_cashierbalance_json, $idstore);
+    $hasil_cashierbalance = push_to_cashierbalance($array_cashierbalance_json);
     $j_hasil_cashierbalance = json_decode($hasil_cashierbalance, true);
 
     print_r($j_hasil_cashierbalance);
@@ -93,3 +85,9 @@ if (!empty($jj_cashierbalance)) {
         }
     }
 }
+
+
+
+
+
+
