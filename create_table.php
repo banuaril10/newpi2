@@ -548,10 +548,30 @@ $cmd_alter_sync_transit = [
 	'ALTER TABLE pos_dsalesdeleted ADD COLUMN IF NOT EXISTS status_intransit varchar(2);',
 	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS status_intransit varchar(2);',
 	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS status_intransit varchar(2);',
+	'ALTER TABLE pos_mproduct ADD COLUMN IF NOT EXISTS idcat int;',
+	'ALTER TABLE pos_mproduct ADD COLUMN IF NOT EXISTS idsubcat int;',
+	'ALTER TABLE pos_mproduct ADD COLUMN IF NOT EXISTS idsubitem int;'
 ];
 
 foreach ($cmd_alter_sync_transit as $r) {
 	$connec->exec($r);
 }
+
+
+
+
+$inv_category_oracle = [
+		'CREATE TABLE IF NOT EXISTS in_master_category (cat_id varchar NULL,category varchar NULL);',
+		'CREATE TABLE IF NOT EXISTS in_master_categorysub (catsub_id varchar NULL,subcategory varchar NULL);',
+		'CREATE TABLE IF NOT EXISTS in_master_categorysubitem (catsubitem_id varchar NULL,subitem varchar NULL);',
+		'CREATE TABLE IF NOT EXISTS in_master_rack (rack_id varchar NULL,rack varchar NULL);',
+		'CREATE TABLE IF NOT EXISTS otp_register (nohp varchar NULL,code varchar NULL, expired timestamp);'
+];
+
+foreach ($inv_category_oracle as $r) {
+	$connec->exec($r);
+}
+
+
 
 ?>

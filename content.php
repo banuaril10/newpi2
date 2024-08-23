@@ -71,20 +71,7 @@
 				<p>Note : Proses input header sekaligus sync dari ERP, mohon tunggu</p>
 				
 				<p style="color:red; font-weight: bold">Pastikan GR Area sesuai dengan toko</p>
-				
-				<?php if($status_gantung == 1){ ?>
-					
-					<!--<font style="color: red; font-weight: bold">Ada sales order gantung, tetap bisa melakukan PI tapi proses agak lambat</font><br>-->
-					<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-					<!--<button type="button" class="btn btn-success" onclick="cekSalesOrder('<?php echo $org_key; ?>');">Cek Sales Gantung</button>-->
-				<?php }else if($status_gantung == 0){ ?>
-					<!--<font style="color: green; font-weight: bold">Sales order sudah komplit</font><br>-->
-					<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-				<?php }else if($status_gantung == 2){ ?>
-					<!--<button type="button" class="btn btn-success" onclick="cekSalesOrder('<?php echo $org_key; ?>');">Cek Sales Gantung</button>-->
-					<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
-				<?php } ?>
-				
+				<button type="button" onclick="cekSalesOrder('<?php echo $org_key; ?>');" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
 				<font id="notif1" style="color: red; font-weight: bold"></font>	
 			</div>
 			<div class="card-body">
@@ -274,11 +261,6 @@
 </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<!--<div id="overlay">
-			<div class="cv-spinner">
-				<span class="spinner"></span>
-			</div>
-		</div>-->
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -308,19 +290,15 @@
 			<select name="sl" id="sl" class="selectize">
 				<?php 
 				
-				$sqll = "select value as storecode,name from ad_morg";
+				$sqll = "select ad_morg_key,name from ad_morg";
 				$results = $connec->query($sqll);
 				foreach ($results as $r) {
-					$storecode = $r["storecode"];	
+					$ad_morg_key = $r["ad_morg_key"];	
 					$name = $r["name"];	
 				}
+
+				echo '<option value="'.$ad_morg_key.'">'.$name.'</option>';	    
 				
-				
-				$sql2 = "select m_locator_id ,locator_name from pos_mproduct WHERE locator_name ilike '%GR AREA BOS%' and locator_name like '%".$name."%' group by m_locator_id ,locator_name";
-	
-				foreach ($connec->query($sql2) as $row) {
-					echo '<option value="'.$row['m_locator_id'].'">'.$row['locator_name'].'</option>';	    
-				}
 				?>
 			</select>
 			<select name="kat" id="kat" onchange="selectKat();" class="selectize">
@@ -338,10 +316,10 @@
 			<select name="pc" id="pc"class="selectize" >
 				<option value="">Product Category</option>			
 				<?php 
-				$sql = "select * from inv_mproductcategory";
+				$sql = "select * from in_master_category";
 	
 				foreach ($connec->query($sql) as $row) {
-					echo '<option value="'.$row['m_product_category_id'].'">'.$row['value'].'</option>';	    
+					echo '<option value="'.$row['cat_id'].'">'.$row['category'].'</option>';	    
 				}
 				?>
 			</select>
@@ -350,10 +328,10 @@
 			<select name="rack" id="rack" class="selectize">
 				<option value="">Rack Name</option>
 				<?php 
-				$sql1 = "select rack_name from inv_mproduct where not rack_name isnull group by rack_name order by rack_name";
+				$sql1 = "select * from in_master_rack";
 	
 				foreach ($connec->query($sql1) as $row) {
-					echo '<option value="'.$row['rack_name'].'">'.$row['rack_name'].'</option>';	    
+					echo '<option value="'.$row['rack_id'].'">'.$row['rack'].'</option>';	    
 				}
 				?>
 			</select>
@@ -373,7 +351,6 @@
 
 <script type="text/javascript">
 function resetPI(){ 
-	
 	$.ajax({
 		url: "api/action.php?modul=inventory&act=reset_active",
 		type: "GET",
@@ -389,11 +366,6 @@ function resetPI(){
 				$("#overlay").fadeOut(300);
 			}
 			$("#overlay").fadeOut(300);
-			
-			// else {
-				// $('#notif').html(dataResult.msg);
-			// }
-			
 		}
 	});
 }
@@ -553,9 +525,7 @@ $('#butsave').on('click', function() {
 		var rack = $('select[id=rack] option').filter(':selected').val();
 		var pc = $('select[id=pc] option').filter(':selected').val();
 		var sso = $('#stats_sales_order').val();
-		// var image = $('#image')[0].files[0];
-		
-		
+
 		var formData = new FormData();
 		
 		formData.append('it', it);
@@ -617,15 +587,6 @@ $('#butsave').on('click', function() {
 									
 								}
 								
-								
-								
-								
-							// }
-							// else{   
-								// $('#notif').html("Items tidak ditemukan");
-								// $( "#butsave" ).prop( "disabled", false );
-								// $("#overlay").fadeOut(300);
-							// }
 						}
 					});
 					
@@ -744,35 +705,35 @@ $('#butsave').on('click', function() {
 	
 	
 	function cekSalesOrder(org_id){
-		// alert(org_id);
-		$.ajax({
-			url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=cek_sales&org_id="+org_id,
-			type: "GET",
-			beforeSend: function(){
-				$("#overlay").fadeIn(300);
-				$('#notif').html("Proses cek sales order gantung..");
-				$(".row-info").hide();
-				$(".modal-footer").hide();
+		// $.ajax({
+		// 	url: "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=cek_sales&org_id="+org_id,
+		// 	type: "GET",
+		// 	beforeSend: function(){
+		// 		$("#overlay").fadeIn(300);
+		// 		$('#notif').html("Proses cek sales order gantung..");
+		// 		$(".row-info").hide();
+		// 		$(".modal-footer").hide();
 				
-			},
-			success: function(dataResult){
-				var dataResult = JSON.parse(dataResult);
-				if(dataResult.result=='1'){
-					$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
-					$("#overlay").fadeOut(300);
-					updateStatusSales(dataResult.stats);
+		// 	},
+		// 	success: function(dataResult){
+		// 		var dataResult = JSON.parse(dataResult);
+		// 		if(dataResult.result=='1'){
+		// 			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+		// 			$("#overlay").fadeOut(300);
+		// 			updateStatusSales(dataResult.stats);
 					
 					
-				}else if(dataResult.result=='0'){
-					$("#overlay").fadeOut(300);
-					$('#notif').html(dataResult.msg);
+		// 		}else if(dataResult.result=='0'){
+					// $("#overlay").fadeOut(300);
+					// $('#notif').html(dataResult.msg);
+					$('#notif').html("Proses cek sales order gantung..");
 					
 					
-				}
+		// 		}
 				
 				
-			}
-		});
+		// 	}
+		// });
 		
 	}
 	

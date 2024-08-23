@@ -1,16 +1,23 @@
 <?php include "../../config/koneksi.php";
 $tanggal = $_GET['date'];
-function push_to_header($header)
+
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $idstore = $row['ad_morg_key'];
+}
+function push_to_header($url, $header, $idstore)
 {
     $postData = array(
-        "header" => $header
+        "header" => $header,
+        "idstore" => $idstore
     );
     $fields_string = http_build_query($postData);
 
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://intransit.idolmartidolaku.com/salesorderidolmart/sync_sales_header.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI',
+        CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -74,9 +81,10 @@ foreach ($connec->query($list_header) as $row1) {
 
 
 if (!empty($jj_header)) {
+    $url = $base_url . "/sales_order/sync_sales_header.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
     $array_header = array("header" => $jj_header);
     $array_header_json = json_encode($array_header);
-    $hasil_header = push_to_header($array_header_json);
+    $hasil_header = push_to_header($url, $array_header_json, $idstore);
     $j_hasil_header = json_decode($hasil_header, true);
 
     if (!empty($j_hasil_header)) {

@@ -11,13 +11,11 @@ foreach ($resultss as $r) {
 
 function rupiah($angka)
 {
-
     $hasil_rupiah = number_format($angka, 0, ',', '.');
     return $hasil_rupiah;
-
 }
 
-function get_sales($date, $ad_org_id)
+function get_sales($url, $date, $ad_org_id)
 {
     $postData = array(
         "date" => $date,
@@ -26,7 +24,7 @@ function get_sales($date, $ad_org_id)
     $fields_string = http_build_query($postData);
     $curl = curl_init();
     curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://intransit.idolmartidolaku.com/salesorderidolmart/get_sales.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI',
+        CURLOPT_URL => $url,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -43,7 +41,8 @@ function get_sales($date, $ad_org_id)
     return $response;
 }
 
-$hasil = get_sales($tanggal, $ad_org_id);
+$url = $base_url . "/sales_order/get_sales.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
+$hasil = get_sales($url, $tanggal, $ad_org_id);
 
 
 

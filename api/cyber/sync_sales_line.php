@@ -1,11 +1,17 @@
 <?php include "../../config/koneksi.php";
 $tanggal = $_GET['date'];
 
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $idstore = $row['ad_morg_key'];
+}
 
-function push_to_line($line)
+function push_to_line($url, $line, $idstore)
 {
     $postData = array(
-        "line" => $line
+        "line" => $line,
+        "idstore" => $idstore
     );
     $fields_string = http_build_query($postData);
 
@@ -14,7 +20,7 @@ function push_to_line($line)
     curl_setopt_array(
         $curl,
         array(
-            CURLOPT_URL => 'https://intransit.idolmartidolaku.com/salesorderidolmart/sync_sales_line.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI',
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -35,10 +41,7 @@ function push_to_line($line)
 
 $jj_line = array();
 
-
-
-$list_line = "select * from pos_dsalesline where date(insertdate) = '" . $tanggal . "' 
-and isactived = '1' and status_intransit is null ";
+$list_line = "select * from pos_dsalesline where date(insertdate) = '" . $tanggal . "' and isactived = '1' and status_intransit is null ";
 foreach ($connec->query($list_line) as $row2) {
     $jj_line[] = array(
         "pos_dsalesline_key" => $row2['pos_dsalesline_key'],
@@ -65,15 +68,20 @@ foreach ($connec->query($list_line) as $row2) {
 }
 
 
-
+// print_r($jj_line);
+// echo "test";
 
 if (!empty($jj_line)) {
+    $url = $base_url . "/sales_order/sync_sales_line.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
+    // echo $url;
     $array_line = array("line" => $jj_line);
     $array_line_json = json_encode($array_line);
-    $hasil_line = push_to_line($array_line_json);
-    $j_hasil_line = json_decode($hasil_line, true);
+    // print_r($array_line_json);
+    
 
-    print_r($j_hasil_line);
+    $hasil_line = push_to_line($url, $array_line_json, $idstore);
+    $j_hasil_line = json_decode($hasil_line, true);
+    // print_r($hasil_line);
 
     if (!empty($j_hasil_line)) {
         foreach ($j_hasil_line as $r) {
