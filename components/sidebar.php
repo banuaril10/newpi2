@@ -31,6 +31,13 @@
 						<span>Capture Event</span>
 					</a>
 				</li>
+				
+				<li class="sidebar-item">
+					<a href="capture_sku_go.php" class='sidebar-link'>
+						<i class="bi bi-camera"></i>
+						<span>Dokumentasi GO / Relaunching</span>
+					</a>
+				</li>
 							
 				<li class="sidebar-item">
 					<a href="monitoring.php" class='sidebar-link'>

@@ -255,8 +255,8 @@
     </div>
   </div>
 </div>
-<script src="js/mask.js"></script>
-<script src="js/numeric.js"></script>
+<script src="assets/mask.js"></script>
+<script src="assets/numeric.js"></script>
 
 
 <script type="text/javascript">
