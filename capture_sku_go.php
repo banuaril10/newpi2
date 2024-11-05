@@ -73,7 +73,7 @@
 							$curl = curl_init();
 						
 							curl_setopt_array($curl, array(
-							CURLOPT_URL => "https://mkt.idolmartidolaku.com/api/image_sku.php",
+							CURLOPT_URL => "https://mkt.idolmartidolaku.com/api/image_sku_go.php",
 							CURLOPT_RETURNTRANSFER => true,
 							CURLOPT_ENCODING => '',
 							CURLOPT_MAXREDIRS => 10,
