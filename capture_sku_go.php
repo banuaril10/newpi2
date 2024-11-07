@@ -43,10 +43,8 @@
 				$toko = '';
 				$cek_brand = "select * from ad_morg where postby = 'SYSTEM'";
 				foreach ($connec->query($cek_brand) as $row) {
-					
 					$toko = $row['name'];
 					$value = $row['value'];
-					
 				}
 				
 				
@@ -128,9 +126,13 @@
 							
 							$img = '<img src="images/no-image.png" style="width: 200px"></img>';
 							$img_sample = '<img src="images/no-image.png" style="width: 400px"></img>';
+
+
+							$array_img = array();
 							if($jum1 > 0){
 								foreach ($arr1 as $row_img) {
 									$img = $row_img['image'];
+									$array_img[] = $img;
 								}
 							}
 							
@@ -158,10 +160,15 @@
 								<form id="file-info<?php echo $row1['id']; ?>">
 								
 								<center>
+								<div class="row">
+								<?php 
+								foreach ($array_img as $row_img) { ?>
+									<div class="col-md-4">
+										<div id="file-load<?php echo $row1['id']; ?>"><?php echo $row_img; ?></div>
+									</div>
+								<?php } ?>
 								
-								
-								<div id="file-load<?php echo $row1['id']; ?>"><?php echo $img; ?></div>
-								
+								</div>
 								</center>
 								<br>
 								<br>
@@ -170,7 +177,6 @@
 								<!-- <input class="dropzone" type="file" id="fileupload<?php echo $row1['id']; ?>" name="fileupload" accept="image/*" /> -->
 
 								<input type="file" id="fileupload<?php echo $row1['id']; ?>" name="fileupload" accept="image/*" />
-								<input type="file" id="fileupload2<?php echo $row1['id']; ?>" name="fileupload" accept="image/*" />
 
 
 
@@ -237,8 +243,57 @@ $(document).ready( function () {
     });
 });
 
-//upload with dropzone js
-// url: 'https://mkt.idolmartidolaku.com/api/upload_sku_go.php',
+function uploadImage(id){
+	
+			var vidFileLength = $("#fileupload"+id)[0].files.length;
+			if(vidFileLength === 0){
+				// var fileupload = $('#fileuploads'+id).prop('files')[0];
+				alert("File belum dipilih");
+			}else{
+				// alert("ada");
+				var fileupload = $('#fileupload'+id).prop('files')[0];
+				
+				var sku = $("#sku"+id).val();
+				var toko = $("#toko"+id).val();
+				
+				
+				let formData = new FormData();
+				formData.append('fileupload', fileupload);
+				formData.append('id', id);
+				formData.append('sku', sku);
+				formData.append('toko', toko);
+				
+				$.ajax({
+					xhr: function() {
+					var xhr = new window.XMLHttpRequest();
+					xhr.upload.addEventListener("progress", function(evt) {
+						if (evt.lengthComputable) {
+							var percentComplete = ((evt.loaded / evt.total) * 100);
+							$("#progress-bar"+id).width(percentComplete+'%');
+							$("#progress-bar"+id).html(parseInt(percentComplete)+'%');
+						}
+					}, false);
+					return xhr;
+					},
+					type: 'POST',
+					url: "https://mkt.idolmartidolaku.com/api/upload_sku_go.php",
+					data: formData,
+					cache: false,
+					processData: false,
+					contentType: false,
+					success: function (msg) {
+						location.reload();
+						$("#file-load"+id).load(" #file-load"+id);
+						$("#fileupload"+id).val('');
+						
+					},
+					error: function () {
+						$("#notif"+id).html("<font style='color: red'>File Gagal diupload</font>");
+					}
+				});
+			}
+	
+}
 
 function syncMaster(){
 	
