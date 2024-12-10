@@ -136,7 +136,7 @@ foreach ($resultss as $r) {
 						$date_now = date("Y-m-d");
 						// $date_now = '2023-10-10';
 						
-						$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_plano.php?tgl=".$date_now."&toko=".$value;
+						$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_plano_approve.php?tgl=".$date_now."&toko=".$value;
 						$options = stream_context_create(array('http'=>
 							array(
 							'timeout' => 10 //10 seconds
@@ -144,20 +144,8 @@ foreach ($resultss as $r) {
 						));
 						
 						$json = file_get_contents($json_url, false, $options);
+						
 						$arr = json_decode($json, true);
-						
-						
-						// $json_url_approve = "https://mkt.idolmartidolaku.com/api/get_sku_plano_approve.php?tgl=".$date_now."&toko=".$value;
-						// $options = stream_context_create(array('http'=>
-							// array(
-							// 'timeout' => 10 //10 seconds
-							// )
-						// ));
-						
-						// $json_approve = file_get_contents($json_url_approve, false, $options);
-						// $arr_approve = json_decode($json_approve, true);
-						
-						
 						$jum = count($arr);
 					
 					
@@ -212,43 +200,11 @@ foreach ($resultss as $r) {
 							
 						?>
 						
-				
-							<tr>
-								<td colspan="3" style="background-color: #629584; color: #fff; font-size: 35px"><center>Contoh Foto <b><?php echo $row1['nama']; ?></center></b></td>
-							</tr>
 			
-						
-						
-							<tr>
-									<td><?php echo $img_sample; ?></td>
-									<td><?php echo $img_sample2; ?></td>
-									<td><?php echo $img_sample3; ?></td>
-							</tr>
 							<tr>
 								<td colspan="3">
 								<?php echo $no; ?>. <?php echo $row1['desk']; ?>
-								
-								<form id="file-info<?php echo $row1['id']; ?>">
-								
-								<center>
-								
-								
-								<div id="file-load<?php echo $row1['id']; ?>"><?php echo $img; ?></div>
-								
-								</center>
-								<br>
-								<br>
-								
-								<textarea class="form-control" id="alasan<?php echo $row1['id']; ?>" placeholder="Masukan alasan jika ada.. (tidak wajib)"><?php echo $row1['alasan']; ?></textarea>
-								<br>
-								<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload<?php echo $row1['id']; ?>" id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
-								<br>
-								<input type="hidden" id="sku<?php echo $row1['id']; ?>" value="<?php echo $row1['sku']; ?>">
-								<input type="hidden" id="toko<?php echo $row1['id']; ?>" value="<?php echo $toko; ?>">
-								<button class="btn btn-primary" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>');" >Upload</button>
-								
-								</form>
-
+							
 								<div class="progress">
 									<div id="progress-bar<?php echo $row1['id']; ?>" class="progress-bar"></div>
 								</div>
