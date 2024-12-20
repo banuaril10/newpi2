@@ -13,20 +13,20 @@ document
 
     var x = 1;
     for (let i = 0; i < array.length; i++) {
-		    var copy = document.getElementById("copy" + sku).value;
-            var copy = parseInt(copy);
+      var res = array[i].split("|");
+
+      var sku = res[0];
+      var name = res[1];
+      var normal = res[2];
+      var dates = res[3];
+      var rack = res[4];
+      var afterdiscount = res[6];
+      var todate = res[7];
+      var barcode = res[9];
+
+      var copy = document.getElementById("copy" + sku).value;
+      var copy = parseInt(copy);
       for (let j = 0; j < copy; j++) {
-        var res = array[i].split("|");
-
-        var sku = res[0];
-        var name = res[1];
-        var normal = res[2];
-        var dates = res[3];
-        var rack = res[4];
-        var afterdiscount = res[6];
-        var todate = res[7];
-        var barcode = res[9];
-
         if (x == 5) {
           var x = 1;
         }
@@ -66,8 +66,6 @@ document
         // "<tr><td><label style='text-align: left; font-size: 14px'>"+res[0]+""+sc+"</label></td></tr>"+
         // "<tr><td><label style='text-align: left; font-size: 14px'>"+res[3]+"</label> / <label style='text-align: left; font-size: 14px'>"+res[4].toUpperCase()+"</label></td></tr>"+
         // "<tr><td><hr><label>HARGA KEJUTAN</label></td></tr></table></div></td>";
-
-
 
         // alert(copy);
 

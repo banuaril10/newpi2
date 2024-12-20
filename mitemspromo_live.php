@@ -316,7 +316,7 @@
 </div>
 </div>
 
-<script src="styles/js/price-promo.js?id=1777"></script>
+<script src="styles/js/price-promo.js?id=4243"></script>
 <script type="text/javascript">
 $(document).ready( function () {
     $('#example').DataTable({
