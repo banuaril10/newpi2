@@ -70,7 +70,7 @@
 						var copy = document.getElementById("copy" + sku).value;
 						var copy = parseInt(copy);
 
-						alert(copy);
+						// alert(copy);
 
 						//loop sebanyak copy
 						for (let j = 0; j < copy; j++) {
