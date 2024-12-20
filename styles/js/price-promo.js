@@ -65,6 +65,14 @@
 						// "<tr><td><label style='text-align: left; font-size: 14px'>"+res[0]+""+sc+"</label></td></tr>"+
 						// "<tr><td><label style='text-align: left; font-size: 14px'>"+res[3]+"</label> / <label style='text-align: left; font-size: 14px'>"+res[4].toUpperCase()+"</label></td></tr>"+
 						// "<tr><td><hr><label>HARGA KEJUTAN</label></td></tr></table></div></td>";
+
+
+						var copy = document.getElementById("copy" + sku).value;
+						var copy = parseInt(copy);
+
+						//loop sebanyak copy
+						for (let j = 0; j < copy; j++) {
+
 						
 						text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:25px; text-align: left; font-size: 10px'><b>"+name.toUpperCase()+"</b></div><label style='text-align: left; font-size: 10px'><b>Rp </b></label><label style='text-align: left; font-size: 20px; text-decoration: line-through;'><b>"+formatRupiah(normal, '')+"</b></label><label style='float: right !important; font-size: 10px;'> s.d. "+todate+"</label><label style='margin: -10px 0 0 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(afterdiscount, '')+"</b></label> &nbsp &nbsp &nbsp &nbsp &nbsp <br><br><hr style='width: 100%;border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:1.5px 0 0 0;'><label style='text-align: center; font-size: 8px; margin-top: -10px'>"+newStr+"</label></div></td>";
 						
@@ -74,6 +82,12 @@
 							
 							text += "</tr><tr>";
 						}
+
+					}
+
+
+
+
 						x++;
 
 					}
