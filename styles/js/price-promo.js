@@ -11,7 +11,7 @@ document
     let text = "<table><tr>";
     // let text = "<div style='position: relative; width: 920px; height: 135px; padding-top: 25px; border: 1px solid #000;'>";
 
-    var x = 1;
+    var x = 0;
     for (let i = 0; i < array.length; i++) {
       var res = array[i].split("|");
 
