@@ -242,7 +242,8 @@ foreach ($resultss as $r) {
 								<br>
 
 
-								<input type="file" accept=".jpg, .png, .jpeg, .gif" capture="camera" name="fileupload<?php echo $row1['id']; ?>" id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
+								<input type="file" accept=".jpg, .png, .jpeg, .gif" capture="camera" name="fileupload<?php echo $row1['id']; ?>" 
+								id="fileupload<?php echo $row1['id']; ?>" class="form-control" />
 
 
 								<br>
