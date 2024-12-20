@@ -13,6 +13,8 @@ document
 
     var x = 1;
     for (let i = 0; i < array.length; i++) {
+		    var copy = document.getElementById("copy" + sku).value;
+            var copy = parseInt(copy);
       for (let j = 0; j < copy; j++) {
         var res = array[i].split("|");
 
@@ -65,8 +67,7 @@ document
         // "<tr><td><label style='text-align: left; font-size: 14px'>"+res[3]+"</label> / <label style='text-align: left; font-size: 14px'>"+res[4].toUpperCase()+"</label></td></tr>"+
         // "<tr><td><hr><label>HARGA KEJUTAN</label></td></tr></table></div></td>";
 
-        var copy = document.getElementById("copy" + sku).value;
-        var copy = parseInt(copy);
+
 
         // alert(copy);
 
