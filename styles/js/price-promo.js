@@ -88,7 +88,7 @@ document
 
         // text += "<td style='border: 0.5px solid #000'><div style='margin:5px 5px 0 5px; color: black; width: 177px; height: 121px; font-family: Calibri; '><div style='height:25px; text-align: left; font-size: 10px'><b>"+res[1].toUpperCase()+"</b></div><label style='text-align: left; font-size: 10px'><b>Rp </b></label><label style='text-align: left; font-size: 18px; text-decoration: line-through;'><b>"+formatRupiah(res[2], '')+"</b></label><label style='float: right !important; font-size: 10px;'> s.d. "+res[7]+"</label><label style='margin: -10px 0 0 0; float: right; font-size: "+sizeprice+"'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[6], '')+"</b></label> &nbsp &nbsp &nbsp &nbsp &nbsp <br><br><hr style='width: 100%; border-top: solid 1px #000 !important; background-color:black; border:none; height:1px; margin:1.5px 0 0 0;'><label style='font-size: 10px'><b>Rp </b></label><b>"+formatRupiah(res[6], '')+"</b></label> &nbsp &nbsp &nbsp &nbsp &nbsp <br><br><label style='text-align: left; font-size: 10px; width: 100%'>"+newStr+"</label></div></td>";
 
-        if ((i + 1) % 4 == 0 && i !== 0) {
+        if ((x + 1) % 4 == 0 && x !== 0) {
           text += "</tr><tr>";
         }
 
