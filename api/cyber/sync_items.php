@@ -88,29 +88,29 @@ try {
                 '" . $idsubcat . "', idsubitem = '" . $idsubitem . "' WHERE m_product_id = '" . $id . "'");
             }else{
 
-                // $arr_insert[] = "('".$ad_mclient_key."', '".$idstore."', 
-                // '".$isactived."', '".date("Y-m-d H:i:s")."', 'SYSTEM', 'SYSTEM', '".date("Y-m-d H:i:s")."', '".$id."', '".$idcat."', '".$sku."',
-                // '".$name."', '', 0, 0, '".$shortcut."', '".$barcode."', '".$tag."', '".$idcat."', '".$idsubcat."', '".$idsubitem."')";
-				
-				
-				$insert = "insert into pos_mproduct (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, postdate, m_product_id, m_product_category_id, sku, 
-				name, description, price, stockqty, shortcut, barcode, tag, idcat, idsubcat, idsubitem)
-				VALUES ('".$ad_mclient_key."', '".$idstore."', 
+                $arr_insert[] = "('".$ad_mclient_key."', '".$idstore."', 
                 '".$isactived."', '".date("Y-m-d H:i:s")."', 'SYSTEM', 'SYSTEM', '".date("Y-m-d H:i:s")."', '".$id."', '".$idcat."', '".$sku."',
-                '".$name."', '', 0, 0, '".$shortcut."', '".$barcode."', '".$tag."', '".$idcat."', '".$idsubcat."', '".$idsubitem."');";
-				$connec->query($insert);
+                '".$name."', '', 0, 0, '".$shortcut."', '".$barcode."', '".$tag."', '".$idcat."', '".$idsubcat."', '".$idsubitem."')";
+				
+				
+				// $insert = "insert into pos_mproduct (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, postdate, m_product_id, m_product_category_id, sku, 
+				// name, description, price, stockqty, shortcut, barcode, tag, idcat, idsubcat, idsubitem)
+				// VALUES ('".$ad_mclient_key."', '".$idstore."', 
+                // '".$isactived."', '".date("Y-m-d H:i:s")."', 'SYSTEM', 'SYSTEM', '".date("Y-m-d H:i:s")."', '".$id."', '".$idcat."', '".$sku."',
+                // '".$name."', '', 0, 0, '".$shortcut."', '".$barcode."', '".$tag."', '".$idcat."', '".$idsubcat."', '".$idsubitem."');";
+				// $connec->query($insert);
 
            }
         }
     }
 
-        // if(count($arr_insert) > 0){
-            // $values = implode(", ", $arr_insert);
-            // $insert = "insert into pos_mproduct (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, postdate, m_product_id, m_product_category_id, sku, 
-            // name, description, price, stockqty, shortcut, barcode, tag, idcat, idsubcat, idsubitem)
-            // VALUES " . $values . ";";
-            // $connec->query($insert);
-        // }
+        if(count($arr_insert) > 0){
+            $values = implode(", ", $arr_insert);
+            $insert = "insert into pos_mproduct (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, postdate, m_product_id, m_product_category_id, sku, 
+            name, description, price, stockqty, shortcut, barcode, tag, idcat, idsubcat, idsubitem)
+            VALUES " . $values . ";";
+            $connec->query($insert);
+        }
 
         // $connec->beginTransaction();
         // if(count($arr_update) > 0){
