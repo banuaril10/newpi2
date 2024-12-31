@@ -1,10 +1,17 @@
 <?php include "../../config/koneksi.php";
 $tanggal = $_GET['date'];
 
-function push_to_cashierbalance($cashierbalance)
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $idstore = $row['ad_morg_key'];
+}
+
+function push_to_cashierbalance($url, $cashierbalance, $idstore)
 {
     $postData = array(
-        "cashierbalance" => $cashierbalance
+        "cashierbalance" => $cashierbalance,
+        "idstore" => $idstore
     );
     $fields_string = http_build_query($postData);
 
@@ -13,7 +20,7 @@ function push_to_cashierbalance($cashierbalance)
     curl_setopt_array(
         $curl,
         array(
-            CURLOPT_URL => 'https://intransit.idolmartidolaku.com/salesorderidolmart/sync_sales_cashierbalance.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI',
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -33,7 +40,16 @@ function push_to_cashierbalance($cashierbalance)
 
 $jj_cashierbalance = array();
 
-$list_cashierbalance = "select * from pos_dcashierbalance where date(insertdate) = '" . $tanggal . "'";
+
+
+if ($tanggal != "now") {
+    $list_cashierbalance = "select * from pos_dcashierbalance where date(insertdate) = '" . $tanggal . "' and status_intransit is null";
+} else {
+    // $list_cashierbalance = "select * from pos_dcashierbalance where status_intransit is null";
+    $list_cashierbalance = "select * from pos_dcashierbalance where date(insertdate) = date(now()) ";
+}
+
+
 foreach ($connec->query($list_cashierbalance) as $row4) {
     $jj_cashierbalance[] = array(
         "pos_dcashierbalance_key" => $row4['pos_dcashierbalance_key'],
@@ -71,9 +87,10 @@ foreach ($connec->query($list_cashierbalance) as $row4) {
 
 
 if (!empty($jj_cashierbalance)) {
+    $url = $base_url . "/sales_order/sync_sales_cashierbalance.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
     $array_cashierbalance = array("cashierbalance" => $jj_cashierbalance);
     $array_cashierbalance_json = json_encode($array_cashierbalance);
-    $hasil_cashierbalance = push_to_cashierbalance($array_cashierbalance_json);
+    $hasil_cashierbalance = push_to_cashierbalance($url,$array_cashierbalance_json, $idstore);
     $j_hasil_cashierbalance = json_decode($hasil_cashierbalance, true);
 
     print_r($j_hasil_cashierbalance);
@@ -85,9 +102,3 @@ if (!empty($jj_cashierbalance)) {
         }
     }
 }
-
-
-
-
-
-

@@ -91,8 +91,15 @@ function cekVersion(){
 		success: function(dataResult){
 			// console.log(dataResult);
 			var dataResults = JSON.parse(dataResult);
+			// var btnoracle = "";
+			// if(dataResults.oracle=='0'){
+			// 	btnoracle = "<button type='button' id='sync' onclick='changeConfig();' class='btn btn-success'>Change Config</button>";
+			// }
+
 			if(dataResults.result=='1'){
-				$('#notif1').html("<font style='color: green'>Version up to date (ver "+dataResults.version+") <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp <button type='button' onclick='updateVersion();' class='btn btn-danger'>Update</button></font>");
+				$('#notif1').html("<font style='color: green'>Version up to date (ver "+dataResults.version+") "+
+				"<a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp "+
+				"<button type='button' onclick='updateVersion();' class='btn btn-danger'>Update</button></font> ");
 				$(':input[type="submit"]').prop('disabled', false);
 			}else{
 				
@@ -105,7 +112,8 @@ function cekVersion(){
 					
 				}
 				
-				$('#notif1').html(msg+" <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp <button type='button' onclick='updateVersion();' class='btn btn-danger'>Update</button>");
+				$('#notif1').html(msg+" <a target=_blank href='https://idolmart.co.id/live/pi/doc_pi.php'>Link update</a> &nbsp <button type='button'"+
+					"onclick='updateVersion();' class='btn btn-danger'>Update</button> ");
 				// $(':input[type="submit"]').prop('disabled', true);
 				$(':input[type="submit"]').prop('disabled', false);
 			}
@@ -137,7 +145,21 @@ function updateVersion(){
 			
 		}
 	});
-	
+}
+
+function changeConfig(){
+	$.ajax({
+		url: "api/cyber/change_config.php",
+		type: "GET",
+		beforeSend: function(){
+			$('#notif1').html("<font style='color: red'>Sedang mengubah config, mohon tunggu..</font>");
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			$('#notif1').html("<font style='color: green'>"+dataResult+"</font>");
+			// $('#notif1').html("<font style='color: green'>"+dataResult+"</font>");
+		}
+	});
 }
 
 function runPhp(){

@@ -1,10 +1,16 @@
 <?php include "../../config/koneksi.php";
 $tanggal = $_GET['date'];
 
-function push_to_deleted($deleted)
+$ll = "select * from ad_morg where isactived = 'Y'";
+$query = $connec->query($ll);
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $idstore = $row['ad_morg_key'];
+}
+function push_to_deleted($url, $deleted, $idstore)
 {
     $postData = array(
-        "deleted" => $deleted
+        "deleted" => $deleted,
+        "idstore" => $idstore
     );
     $fields_string = http_build_query($postData);
 
@@ -13,7 +19,7 @@ function push_to_deleted($deleted)
     curl_setopt_array(
         $curl,
         array(
-            CURLOPT_URL => 'https://intransit.idolmartidolaku.com/salesorderidolmart/sync_sales_deleted.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI',
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -33,8 +39,13 @@ function push_to_deleted($deleted)
 
 $jj_deleted = array();
 
-$list_deleted = "select * from pos_dsalesdeleted where date(insertdate) = '" . $tanggal . "'
-and status_intransit is null";
+if ($tanggal != "now") {
+    $list_deleted = "select * from pos_dsalesdeleted where date(insertdate) = '" . $tanggal . "' and status_intransit is null";
+} else {
+    $list_deleted = "select * from pos_dsalesdeleted where status_intransit is null";
+}
+
+
 foreach ($connec->query($list_deleted) as $row3) {
     $jj_deleted[] = array(
         "pos_dsalesdeleted_key" => $row3['pos_dsalesdeleted_key'],
@@ -59,9 +70,10 @@ foreach ($connec->query($list_deleted) as $row3) {
 }
 
 if (!empty($jj_deleted)) {
+    $url = $base_url . "/sales_order/sync_sales_deleted.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
     $array_deleted = array("deleted" => $jj_deleted);
     $array_deleted_json = json_encode($array_deleted);
-    $hasil_deleted = push_to_deleted($array_deleted_json);
+    $hasil_deleted = push_to_deleted($url, $array_deleted_json, $idstore);
     $j_hasil_deleted = json_decode($hasil_deleted, true);
     if (!empty($j_hasil_deleted)) {
         foreach ($j_hasil_deleted as $r) {

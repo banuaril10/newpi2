@@ -548,10 +548,173 @@ $cmd_alter_sync_transit = [
 	'ALTER TABLE pos_dsalesdeleted ADD COLUMN IF NOT EXISTS status_intransit varchar(2);',
 	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS status_intransit varchar(2);',
 	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS status_intransit varchar(2);',
+	'ALTER TABLE pos_mproduct ADD COLUMN IF NOT EXISTS idcat int;',
+	'ALTER TABLE pos_mproduct ADD COLUMN IF NOT EXISTS idsubcat int;',
+	'ALTER TABLE pos_mproduct ADD COLUMN IF NOT EXISTS idsubitem int;',
+	'ALTER TABLE pos_mproductdiscount ADD COLUMN IF NOT EXISTS jenis_promo varchar(20);',
+	'ALTER TABLE pos_mproductdiscountgrosir_new ADD COLUMN IF NOT EXISTS jenis_promo varchar(20);',
+	'ALTER TABLE pos_mproductbuyget ADD COLUMN IF NOT EXISTS jenis_promo varchar(20);',
+	'ALTER TABLE pos_medc ADD COLUMN IF NOT EXISTS jenis varchar(20);',
 ];
 
 foreach ($cmd_alter_sync_transit as $r) {
 	$connec->exec($r);
 }
 
+
+
+
+$inv_category_oracle = [
+	'CREATE TABLE IF NOT EXISTS in_master_category (cat_id varchar NULL,category varchar NULL);',
+	'CREATE TABLE IF NOT EXISTS in_master_categorysub (catsub_id varchar NULL,subcategory varchar NULL);',
+	'CREATE TABLE IF NOT EXISTS in_master_categorysubitem (catsubitem_id varchar NULL,subitem varchar NULL);',
+	'CREATE TABLE IF NOT EXISTS in_master_rack (rack_id varchar NULL,rack varchar NULL);',
+	'CREATE TABLE IF NOT EXISTS otp_register (nohp varchar NULL,code varchar NULL, expired timestamp);'
+];
+
+foreach ($inv_category_oracle as $r) {
+	$connec->exec($r);
+}
+
+$pos_dsales_log = [
+	'CREATE TABLE pos_dsales_log (
+	pos_dsales_key varchar(32) NOT NULL DEFAULT get_uuid(),
+	ad_mclient_key varchar(32) NULL,
+	ad_morg_key varchar(32) NULL,
+	isactived varchar(2) NULL,
+	insertdate timestamp NULL,
+	insertby varchar(50) NULL,
+	postby varchar(50) NULL,
+	postdate timestamp NULL,
+	pos_medc_key varchar(32) NULL,
+	pos_dcashierbalance_key varchar(32) NULL,
+	pos_mbank_key varchar(32) NULL,
+	ad_muser_key varchar(32) NULL,
+	billno varchar(50) NULL,
+	billamount numeric NULL,
+	paymentmethodname varchar(50) NULL,
+	membercard varchar(50) NULL,
+	cardno varchar(50) NULL,
+	approvecode varchar(50) NULL,
+	edcno varchar(50) NULL,
+	bankname varchar(50) NULL,
+	serialno numeric NULL,
+	billstatus varchar(50) NULL,
+	paycashgiven numeric NULL,
+	paygiven numeric NULL,
+	printcount int4 NULL,
+	issync bool NULL,
+	donasiamount numeric NULL,
+	dpp numeric NULL,
+	ppn numeric NULL,
+	billcode varchar(20) NULL,
+	ispromomurah bool NULL,
+	point numeric NULL,
+	pointgive numeric NULL,
+	membername varchar(255) NULL,
+	status_intransit varchar(2) NULL,
+	CONSTRAINT pos_dsales_log_pkey PRIMARY KEY (pos_dsales_key)
+);',
+	'CREATE INDEX pos_dsales_ad_morg_key_idx ON pos_dsales_log USING btree (ad_morg_key);',
+	'CREATE INDEX pos_dsales_billcode_idx ON pos_dsales_log USING btree (billcode);',
+	'CREATE INDEX pos_dsales_pos_dcashierbalance_key_idx ON pos_dsales_log USING btree (pos_dcashierbalance_key);',
+	'CREATE INDEX pos_dsales_pos_mbank_key_idx ON pos_dsales_log USING btree (pos_mbank_key);',
+	'CREATE INDEX pos_dsales_pos_medc_key_idx ON pos_dsales_log USING btree (pos_medc_key);'
+];
+
+foreach ($pos_dsales_log as $r) {
+	$connec->exec($r);
+}
+
+
+$pos_dsalesline_log = [
+	'CREATE TABLE pos_dsalesline_log (
+	pos_dsalesline_key varchar(32) NOT NULL DEFAULT get_uuid(),
+	ad_mclient_key varchar(32) NULL,
+	ad_morg_key varchar(32) NULL,
+	isactived varchar(2) NULL,
+	insertdate timestamp(6) NULL,
+	insertby varchar(50) NULL,
+	postby varchar(50) NULL,
+	postdate timestamp(6) NULL,
+	pos_dsales_key varchar(32) NULL,
+	billno varchar(50) NULL,
+	seqno int4 NULL,
+	sku varchar(50) NULL,
+	qty numeric NULL,
+	price numeric NULL,
+	discount numeric NULL,
+	amount numeric NULL,
+	issync bool NULL,
+	discountname varchar NULL,
+	status_sales numeric NOT NULL DEFAULT 0,
+	status_intransit varchar(2) NULL
+);'
+];
+
+foreach ($pos_dsalesline_log as $r) {
+	$connec->exec($r);
+}
+
+
+$send_to_pos_dsales = [
+'CREATE OR REPLACE FUNCTION send_to_pos_dsales()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    INSERT INTO pos_dsales_log(pos_dsales_key, ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, 
+    postdate, pos_medc_key, pos_dcashierbalance_key, pos_mbank_key, ad_muser_key, billno, billamount, 
+    paymentmethodname, membercard, cardno, approvecode, edcno, bankname, serialno, billstatus, paycashgiven, 
+    paygiven, printcount, issync, donasiamount, dpp, ppn, billcode, 
+    ispromomurah, point, pointgive, membername, status_intransit)
+    VALUES (OLD.pos_dsales_key, OLD.ad_mclient_key, OLD.ad_morg_key, OLD.isactived, OLD.insertdate, OLD.insertby, OLD.postby, OLD.
+    postdate, OLD.pos_medc_key, OLD.pos_dcashierbalance_key, OLD.pos_mbank_key, OLD.ad_muser_key, OLD.billno, OLD.billamount, OLD.
+    paymentmethodname, OLD.membercard, OLD.cardno, OLD.approvecode, OLD.edcno, OLD.bankname, OLD.serialno, OLD.billstatus, OLD.paycashgiven, OLD.
+    paygiven, OLD.printcount, OLD.issync, OLD.donasiamount, OLD.dpp, OLD.ppn, OLD.billcode, OLD.
+    ispromomurah, OLD.point, OLD.pointgive, OLD.membername, OLD.status_intransit);
+    
+    RETURN OLD; 
+END;
+$function$
+;',
+'DROP TRIGGER IF EXISTS trigger_send_to_pos_dsales ON public.pos_dsales;',
+"CREATE TRIGGER trigger_send_to_pos_dsales
+AFTER DELETE
+ON public.pos_dsales
+FOR EACH ROW
+WHEN (OLD.isactived = '1')
+EXECUTE procedure send_to_pos_dsales();"
+];
+
+foreach ($send_to_pos_dsales as $r) {
+	$connec->exec($r);
+}
+
+
+$send_to_pos_dsalesline = [
+	'CREATE OR REPLACE FUNCTION send_to_pos_dsalesline()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    INSERT INTO pos_dsalesline_log(pos_dsalesline_key, ad_mclient_key, ad_morg_key, isactived, insertdate, 
+    insertby, postby, postdate, pos_dsales_key, billno, seqno, sku, qty, price, discount, amount, 
+    issync, discountname, status_sales, status_intransit)
+    VALUES (OLD.pos_dsalesline_key, OLD.ad_mclient_key, OLD.ad_morg_key, OLD.isactived, OLD.insertdate, OLD.
+    insertby, OLD.postby, OLD.postdate, OLD.pos_dsales_key, OLD.billno, OLD.seqno, OLD.sku, OLD.qty, OLD.price, OLD.discount, OLD.amount, OLD.
+    issync, OLD.discountname, OLD.status_sales, OLD.status_intransit);
+    
+    RETURN OLD; 
+END;
+$function$
+;','create trigger trigger_send_to_pos_dsalesline after delete on public.pos_dsalesline for each row execute PROCEDURE send_to_pos_dsalesline()'
+];
+
+foreach ($send_to_pos_dsalesline as $r) {
+	$connec->exec($r);
+}
+
+
 ?>
+

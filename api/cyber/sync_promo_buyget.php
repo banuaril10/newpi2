@@ -30,6 +30,8 @@ $url = $base_url.'/store/promo/get_promo_buyget.php?idstore='.$idstore;
 $hasil = get_category($url);
 $j_hasil = json_decode($hasil, true);
 
+// print_r($j_hasil);
+
 $s = array();
 foreach ($j_hasil as $key => $value) {
 
@@ -49,10 +51,11 @@ foreach ($j_hasil as $key => $value) {
     $fromdate = $value['fromdate']; //etc
     $todate = $value['todate']; //etc
     $discount = $value['discount']; //etc
+    $jenis_promo = $value['jenis_promo']; //etc
 
     $s[] = "('" . $isactived . "','" . $ad_mclient_key . "', '" . $ad_morg_key . "', '" . date("Y-m-d H:i:s") . "','" . $insertby . "', 
     '" . $insertby . "', '" . date("Y-m-d H:i:s") . "', '" . $discountname . "','" . $typepromo . "', '" . $fromdate . "', '" . $todate . "', '" . $skubuy . "', 
-    '" . $qtybuy . "', '" . $skuget . "', '" . $qtyget . "', '" . $priceget . "', '" . $discount . "')";
+    '" . $qtybuy . "', '" . $skuget . "', '" . $qtyget . "', '" . $priceget . "', '" . $discount . "', '" . $jenis_promo . "')";
 
 }
 
@@ -72,7 +75,7 @@ $statement->execute();
 
 $values = implode(", ", $s);
 $insert = "insert into pos_mproductbuyget (isactived, ad_mclient_key, ad_morg_key, insertdate, insertby, postby, postdate, discountname, typepromo, 
-fromdate, todate, skubuy, qtybuy, skuget, qtyget, priceget, discount) VALUES " . $values . ";";
+fromdate, todate, skubuy, qtybuy, skuget, qtyget, priceget, discount, jenis_promo) VALUES " . $values . ";";
 
 $statement = $connec->prepare($insert);
 $statement->execute();

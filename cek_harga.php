@@ -23,7 +23,7 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h4>CEK HARGA & UPDATE BARCODE</h4>
+				<h4>CEK HARGA</h4>
 				<!--<button type="button" onclick="manage_stock();" class="btn btn-primary">Sync Barcode</button>-->
 			</div>
 			
@@ -35,16 +35,9 @@
 			
 			
 			
-			<font style="color: red; font-weight: bold">Note : <br>- cari items terlebih dahulu by nama/sku, arahkan kursor ke textbox yg ada pada kolom Barcode
-			<br>- untuk update Barcode di kolom Barcode bisa langsung scan menggunakan scanner / ketik kode Barcode lalu enter
-			<br>- jika muncul pesan "Data Barcode sudah ada ...." silahkan <button type="button" onclick="manage_stock();" class="btn btn-primary">Sync Barcode</button> terlebih dahulu
-			<br>- untuk update data shortcut lakukan <button type="button" onclick="sync_shortcut();" class="btn btn-danger">Sync Shortcut</button>
-			<br>
+			<font style="color: red; font-weight: bold">Note : Jika barcode belum ada, lakukan sync barcode pada POS, jika blm ada berarti data blm diinput silahkan koordinasi dgn pihak DC
 			</font>
 			<br>
-			<button type="button" onclick="sync_price();" class="btn btn-danger">Sync Harga</button>
-			<button type="button" onclick="sync_price_all();" class="btn btn-primary">Sync Harga All</button>
-			<button type="button" onclick="sync_price_khusus();" class="btn btn-success">Sync Harga Khusus</button>
 			<p id="notif" style="color: green; font-weight: bold"></p>
 			<!--<button onclick="turnOn();" class="switch">On</button>
 			<button onclick="turnOff();" class="switch1">Off</button>

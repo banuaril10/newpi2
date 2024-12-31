@@ -45,9 +45,10 @@ foreach ($j_hasil as $key => $value) {
     $discount = $value['discount']; 
     $fromdate = $value['fromdate']; 
     $todate = $value['todate'];
+    $jenis_promo = $value['jenis_promo'];
 
     $s[] = "('" . $ad_mclient_key . "', '" . $ad_morg_key . "', '" . $isactived . "', '" . $insertdate . "', '" . $insertby . "', '" . $postby . "', 
-			'" . $postdate . "','" . $discountname . "', '" . $sku . "', '" . $minbuy . "', '" . $discount . "', '" . $fromdate . "', '" . $todate . "')";
+			'" . $postdate . "','" . $discountname . "', '" . $sku . "', '" . $minbuy . "', '" . $discount . "', '" . $fromdate . "', '" . $todate . "', '" . $jenis_promo . "')";
 
 }
 
@@ -67,7 +68,7 @@ $statement->execute();
 
 $values = implode(", ", $s);
 $insert = "insert into pos_mproductdiscountgrosir_new (ad_mclient_key, ad_morg_key, isactived, insertdate, insertby, postby, 
-		   postdate, discountname, sku, minbuy, discount, fromdate, todate) 
+		   postdate, discountname, sku, minbuy, discount, fromdate, todate, jenis_promo) 
            VALUES " . $values . ";";
 
 $statement = $connec->prepare($insert);

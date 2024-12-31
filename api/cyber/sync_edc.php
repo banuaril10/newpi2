@@ -40,8 +40,9 @@ foreach ($j_hasil as $key => $value) {
     $name = $value['name'];
     $description = $value['description'];
     $code = $value['code'];
+    $jenis = $value['jenis'];
 
-    $s[] = "('$pos_medc_key', '$isactived', '$insertdate', '$insertby', '$postby', '$postdate', '$name', '$description', '$code')";
+    $s[] = "('$pos_medc_key', '$isactived', '$insertdate', '$insertby', '$postby', '$postdate', '$name', '$description', '$code', '$jenis')";
 
 }
 
@@ -60,7 +61,7 @@ $statement = $connec->prepare($truncate);
 $statement->execute();
 
 $values = implode(", ", $s);
-$insert =  "INSERT INTO pos_medc (pos_medc_key, isactived, insertdate, insertby, postby, postdate, name, description, code) VALUES $values";
+$insert =  "INSERT INTO pos_medc (pos_medc_key, isactived, insertdate, insertby, postby, postdate, name, description, code, jenis) VALUES $values";
 
 $statement = $connec->prepare($insert);
 $statement->execute();

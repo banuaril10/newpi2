@@ -45,6 +45,8 @@ foreach ($j_hasil as $key => $value) {
     $todate = $value['todate']; 
     $typepromo = $value['typepromo']; 
     $maxqty = $value['maxqty'];
+    $jenis_promo = $value['jenis_promo'];
+
 
     $s[] = "('" . $ad_mclient_key . "', 
     '" . $amk . "', 
@@ -59,7 +61,10 @@ foreach ($j_hasil as $key => $value) {
      '" . $fromdate . "', 
      '" . $todate . "', 
      '" . $typepromo . "', 
-     '" . $maxqty . "')";
+     '" . $maxqty . "',
+     '" . $jenis_promo . "'
+     
+     )";
 
 }
 
@@ -78,7 +83,8 @@ $statement = $connec->prepare($truncate);
 $statement->execute();
 
 $values = implode(", ", $s);
-$insert = "insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, fromdate, todate, typepromo, maxqty) 
+$insert = "insert into pos_mproductdiscount (ad_mclient_key, ad_morg_key, isactived, postdate, insertdate, insertby, discountname, discounttype, sku, discount, 
+fromdate, todate, typepromo, maxqty, jenis_promo) 
 						VALUES " . $values . ";";
 
 $statement = $connec->prepare($insert);
