@@ -76,17 +76,17 @@ try {
             $idsubitem = 0;
         }
 
-        $check = "SELECT count(*) jum FROM pos_mproduct WHERE m_product_id = '".$id."'";
-        $stmt_check = $connec->query($check);
+        // $check = "SELECT count(*) jum FROM pos_mproduct WHERE m_product_id = '".$id."'";
+        // $stmt_check = $connec->query($check);
     
 
-        foreach ($stmt_check as $r) {
-           if($r['jum'] > 0){
-                $connec->query("UPDATE pos_mproduct SET ad_mclient_key = '" . $ad_mclient_key . "', ad_morg_key = '" . $idstore . "', isactived = '" . $isactived . "',
-                postby = 'SYSTEM', postdate = '" . date("Y-m-d H:i:s") . "', m_product_id = '" . $id . "', m_product_category_id = '" . $idcat . "', sku = '" . $sku . "',
-                name = '" . $name . "', shortcut = '" . $shortcut . "', barcode = '" . $barcode . "', tag = '" . $tag . "', idcat = '" . $idcat . "', idsubcat = 
-                '" . $idsubcat . "', idsubitem = '" . $idsubitem . "' WHERE m_product_id = '" . $id . "'");
-            }else{
+        // foreach ($stmt_check as $r) {
+           // if($r['jum'] > 0){
+                // $connec->query("UPDATE pos_mproduct SET ad_mclient_key = '" . $ad_mclient_key . "', ad_morg_key = '" . $idstore . "', isactived = '" . $isactived . "',
+                // postby = 'SYSTEM', postdate = '" . date("Y-m-d H:i:s") . "', m_product_id = '" . $id . "', m_product_category_id = '" . $idcat . "', sku = '" . $sku . "',
+                // name = '" . $name . "', shortcut = '" . $shortcut . "', barcode = '" . $barcode . "', tag = '" . $tag . "', idcat = '" . $idcat . "', idsubcat = 
+                // '" . $idsubcat . "', idsubitem = '" . $idsubitem . "' WHERE m_product_id = '" . $id . "'");
+            // }else{
 
                 $arr_insert[] = "('".$ad_mclient_key."', '".$idstore."', 
                 '".$isactived."', '".date("Y-m-d H:i:s")."', 'SYSTEM', 'SYSTEM', '".date("Y-m-d H:i:s")."', '".$id."', '".$idcat."', '".$sku."',
@@ -100,8 +100,8 @@ try {
                 // '".$name."', '', 0, 0, '".$shortcut."', '".$barcode."', '".$tag."', '".$idcat."', '".$idsubcat."', '".$idsubitem."');";
 				// $connec->query($insert);
 
-           }
-        }
+           // }
+        // }
     }
 
         if(count($arr_insert) > 0){
