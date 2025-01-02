@@ -233,7 +233,7 @@
 </div>
 </div>
 
-<script src="styles/js/price-promo.js?id=321"></script>
+<script src="styles/js/price-promo.js?id=32441"></script>
 <script type="text/javascript">
 $(document).ready( function () {
     $('#example').DataTable({
