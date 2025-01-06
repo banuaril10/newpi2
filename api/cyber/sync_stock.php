@@ -58,7 +58,7 @@ foreach ($j_hasil as $key => $value) {
 
     
     $update = "UPDATE pos_mproduct SET stockqty = '".$stock."', postdate = '".date('Y-m-d H:i:s')."' WHERE sku = '".$itemsid."'";
-    $result = $connec->exec($update);
+    $result = $connec->query($update);
    
     if ($result) {
         $items_updated++;
