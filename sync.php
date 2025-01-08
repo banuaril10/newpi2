@@ -43,43 +43,6 @@
                                 <div class="container-fluid">
 
 
-                                    <div class="row">
-                                        <div class="col-sm-3">
-                                            <div class="panel btn-primary pricing-big">
-                                                <div class="panel-heading">
-                                                    <div class="badge">Total Product</div>
-                                                    <h3 class="panel-title" id="divinttotal">-</h3>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="panel btn-primary pricing-big">
-                                                <div class="panel-heading">
-                                                    <div class="badge">Total Reguler Promo</div>
-                                                    <h3 class="panel-title" id="divintdiscount">-</h3>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="panel btn-primary pricing-big">
-                                                <div class="panel-heading">
-                                                    <div class="badge">Total Member Promo</div>
-                                                    <h3 class="panel-title" id="divintmemberdiscount">-</h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="panel btn-primary pricing-big">
-                                                <div class="panel-heading">
-                                                    <div class="badge">Not Sale</div>
-                                                    <h3 class="panel-title" id="divintnosale">-</h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <?php
 
                                     $total_kategori = 0;
