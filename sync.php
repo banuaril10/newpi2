@@ -99,7 +99,7 @@
             }
 
             $total_stock = 0;
-            $sql = "SELECT count(*) as total FROM pos_mproduct where stock > 0";
+            $sql = "SELECT count(*) as total FROM pos_mproduct where stockqty > 0";
             foreach ($connec->query($sql) as $row) {
                 $total_stock = $row['total'];
             }
