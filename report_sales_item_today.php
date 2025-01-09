@@ -92,7 +92,8 @@
 				"url": "api/cyber/report_sales_item.php",
 				"dataSrc": ""
 			},
-			lengthMenu: [0, 5, 10, 20, 50, 100, 200, -1],
+			"pageLength": -1, // Set to -1 to show all entries
+			"lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
 			"columns": [{
 					"data": "no"
 				},
