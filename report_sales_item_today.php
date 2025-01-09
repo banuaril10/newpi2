@@ -105,7 +105,7 @@
 					"data": "qty"
 				},
 				{
-					"data": "amount_num"
+					"data": "amount"
 				}
 			]
 		});
