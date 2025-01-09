@@ -86,12 +86,13 @@
 <script type="text/javascript">
 	//create datatable sumber data from json api/cyber/report_sales_item.php
 	$(document).ready(function() {
-
+			//atur show entries
 			$('#example').DataTable({
 			"ajax": {
 				"url": "api/cyber/report_sales_item.php",
 				"dataSrc": ""
 			},
+			lengthMenu: [0, 5, 10, 20, 50, 100, 200, -1],
 			"columns": [{
 					"data": "no"
 				},
@@ -107,7 +108,8 @@
 				{
 					"data": "amount"
 				}
-			]
+			],
+			
 		});
 	});
 

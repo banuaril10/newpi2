@@ -206,7 +206,7 @@
 				
 				<li class="sidebar-item  has-sub">
 					<a href="#" class='sidebar-link'>
-						<i class="bi bi-gift"></i>
+						<i class="bi bi-file-bar-graph"></i>
 						<span>Report</span>
 					</a>
 					<ul class="submenu ">
