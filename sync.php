@@ -258,10 +258,10 @@
 
 
                                 </div>
-                                </body>
+
                                 <script src="styles/js/product.js"></script>
 
-                                </html>
+
 
 
 

@@ -1,9 +1,23 @@
 <?php include "../../config/koneksi.php";
 //get
+
+$tgl_filter = $_GET['date'];
+
 $query = "SELECT date(a.insertdate) date, a.sku, b.name, sum(a.qty) qty, sum(a.amount) amount, sum(b.price) price FROM pos_dsalesline a 
-left join pos_mproduct b on a.sku = b.sku
-group by date(a.insertdate), a.sku, b.name
-order by date(a.insertdate) desc";
+left join pos_mproduct b on a.sku = b.sku where a.sku != '' ";
+
+
+if ($tgl_filter != "") {
+    $query .= " and date(a.insertdate) = '".$tgl_filter."' ";
+}else{
+    $query .= " and date(a.insertdate) = date(now()) ";
+}
+
+
+$query .= ' group by date(a.insertdate), a.sku, b.name
+order by date(a.insertdate) desc';
+
+echo $query;
 
 
 $json = array();
