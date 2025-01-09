@@ -82,8 +82,6 @@
 </div>
 </div>
 
-//print datatable with cdn
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.bootstrap4.min.js"></script>
@@ -116,22 +114,22 @@
 					"data": "amount"
 				},
 			],
-			"columnDefs": [{
-				"targets": 4,
-				"orderable": false,
-				"searchable": false
-			}],
-			"order": [
-				[0, "asc"]
-			],
-			"paging": true,
-			"lengthChange": true,
-			"searching": true,
-			"ordering": true,
-			"info": true,
-			"autoWidth": true,
-			"responsive": true,
-			"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			// "columnDefs": [{
+			// 	"targets": 4,
+			// 	"orderable": false,
+			// 	"searchable": false
+			// }],
+			// "order": [
+			// 	[0, "asc"]
+			// ],
+			// "paging": true,
+			// "lengthChange": true,
+			// "searching": true,
+			// "ordering": true,
+			// "info": true,
+			// "autoWidth": true,
+			// "responsive": true,
+			// "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 		});
 	});
 
