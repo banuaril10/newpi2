@@ -17,7 +17,7 @@ if ($tgl_filter != "") {
 $query .= ' group by date(a.insertdate), a.sku, b.name
 order by date(a.insertdate) desc';
 
-echo $query;
+// echo $query;
 
 
 $json = array();
