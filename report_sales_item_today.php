@@ -105,7 +105,7 @@
 					"data": "qty"
 				},
 				{
-					"data": "amount"
+					"data": "amount_num"
 				}
 			]
 		});
@@ -114,7 +114,28 @@
 
 	function search(){
 		var date = $('#date').val();
-		$('#example').DataTable().ajax.url('api/cyber/report_sales_item.php?date='+date).load();
+			$('#example').DataTable({
+			"ajax": {
+				"url": "api/cyber/report_sales_item.php?date="+date,
+				"dataSrc": ""
+			},
+			"columns": [{
+					"data": "no"
+				},
+				{
+					"data": "sku"
+				},
+				{
+					"data": "name"
+				},
+				{
+					"data": "qty"
+				},
+				{
+					"data": "amount_num"
+				}
+			]
+		});
 	}
 
 </script>
