@@ -59,7 +59,6 @@
 					<table class="table table-bordered table-hover" id="example">
 						<thead>
 							<tr>
-								<th></th>
 								<th>No</th>
 								<th>SKU</th>
 								<th>Name</th>
@@ -90,7 +89,6 @@
 		$('#example').DataTable({
 			"ajax": "api/cyber/report_sales_item.php",
 			"columns": [
-				{ "data": null },
 				{ "data": "no" },
 				{ "data": "sku" },
 				{ "data": "name" },
