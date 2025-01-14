@@ -18,3 +18,5 @@ if (file_exists('D:\\')) {
 
 // Execute commands in the selected drive
 execPrint("$drive && cd /xampp/htdocs/pi && git config --global --add safe.directory '*' && git config --global user.email 'banuaril100@gmail.com' && git stash && git pull");
+
+echo $drive;
