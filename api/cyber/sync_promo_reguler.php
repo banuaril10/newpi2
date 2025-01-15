@@ -35,6 +35,17 @@ try {
 
     $s = array();
 
+    //if j_hasil exist, truncate
+
+    if ($j_hasil == null) {
+        $json = array(
+            "status" => "FAILED",
+            "message" => "Data Not Found",
+        );
+        echo json_encode($json);
+        die();
+    }
+
     $truncate = "TRUNCATE pos_mproductdiscount";
     $statement = $connec->prepare($truncate);
     $statement->execute();
