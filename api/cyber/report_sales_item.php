@@ -19,7 +19,7 @@ if ($date_awal != '' && $date_akhir != '' ) {
 $query .= ' group by a.sku, b.name
 order by b.name asc';
 
-// echo $query;
+echo $query;
 
 
 $json = array();
