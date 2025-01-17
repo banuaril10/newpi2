@@ -5,7 +5,7 @@ $date_awal = $_GET['date_awal'];
 $date_akhir = $_GET['date_akhir'];
 
 
-$query = "SELECT date(a.insertdate) date, a.sku, b.name, sum(a.qty) qty, sum(a.price * a.qty) amount FROM pos_dsalesline a 
+$query = "SELECT a.sku, b.name, sum(a.qty) qty, sum(a.price * a.qty) amount FROM pos_dsalesline a 
 left join pos_mproduct b on a.sku = b.sku where a.sku != '' ";
 
 
@@ -19,7 +19,7 @@ if ($date_awal != '' && $date_akhir != '' ) {
 $query .= ' group by a.sku, b.name
 order by b.name asc';
 
-echo $query;
+// echo $query;
 
 
 $json = array();
