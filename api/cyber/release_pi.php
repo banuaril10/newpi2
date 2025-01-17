@@ -122,7 +122,8 @@ foreach ($result as $row) {
 
     
     $items_json = json_encode($allarray);
-
+	
+	echo  $items_json;
 
 
     $hasil = piline_semua($url, $items_json);
