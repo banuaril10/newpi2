@@ -124,6 +124,7 @@
 		var todate = $('#todate').val();
 
 		$('#example').DataTable().ajax.url('api/cyber/report_sales_item.php?date_awal='+date+'&date_akhir='+todate).load();
+		console.log('api/cyber/report_sales_item.php?date_awal='+date+'&date_akhir='+todate);
 	}
 
 </script>
