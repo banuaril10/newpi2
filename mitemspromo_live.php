@@ -184,11 +184,11 @@
 													
 
 													$json = file_get_contents($json_url, false, $options);
-
+													echo $json_url;
 													$arr = json_decode($json, true);
 													$jum = count($arr);
 
-													var_dump($json);
+													// var_dump($json);
 													
 													$s = array();
 													if ($jum > 0) {
