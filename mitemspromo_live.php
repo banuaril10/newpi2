@@ -188,7 +188,7 @@
 													$arr = json_decode($json, true);
 													$jum = count($arr);
 
-													var_dump(value: $json);
+													var_dump($json);
 													
 													$s = array();
 													if ($jum > 0) {
