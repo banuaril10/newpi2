@@ -273,6 +273,8 @@
 											<th>Price</th>
 											<th>Price Discount</th>
 											<th>Rack Name</th>
+											<th>Fromdate</th>
+											<th>Todate</th>
 											<th>Copy</th>
 										</tr>
 									</thead>
@@ -330,6 +332,8 @@
 														<td><?php echo $row['normal']; ?></td>
 														<td><?php echo $row['afterdiscount']; ?></td>
 														<td><?php echo $row['rack']; ?></td>
+														<td><?php echo $row['fromdate']; ?></td>
+														<td><?php echo $row['todate']; ?></td>
 														<td><input type="number" id="copy<?php echo $row['sku']; ?>" value="1"></td>
 
 													</tr>
@@ -352,6 +356,8 @@
 													<td><?php echo $row['normal']; ?></td>
 													<td><?php echo $row['afterdiscount']; ?></td>
 													<td><?php echo $row['rack']; ?></td>
+													<td><?php echo $row['fromdate']; ?></td>
+													<td><?php echo $row['todate']; ?></td>
 													<td><input type="number" id="copy<?php echo $row['sku']; ?>" value="1"></td>
 
 												</tr>
