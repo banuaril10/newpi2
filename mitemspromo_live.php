@@ -156,6 +156,9 @@
 								}
 
 
+								// echo $murah;
+
+
 
 								?>
 
@@ -167,10 +170,21 @@
 
 										<tr>
 
-											<td><select id="murah" name="murah" class="form-control text-search">
-
-												<option value="semua">Tampilkan Semua Promo</option>
-												<option value="termurah">Tampilkan yg Termurah</option>
+											<td>
+											<?php $array = ['semua','termurah']; 
+												$array_value = ['Tampilkan Semua Promo','Tampilkan yg Termurah'];
+											
+											?>
+											<select id="murah" name="murah" class="form-control text-search">
+												<?php for($i=0;$i<count($array);$i++){ 
+													$selected = "";
+													if($array[$i] == $_GET['murah']){
+														$selected = "selected";
+													}
+													
+													?>
+												<option value="<?php echo $array[$i]; ?>"><?php echo $array_value[$i]; ?></option>
+												<?php } ?>
 											</select></td>
 
 											<td>
