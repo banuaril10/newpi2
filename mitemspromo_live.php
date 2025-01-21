@@ -125,11 +125,12 @@
 
 
 
-								function get_data_pricetag($hn, $idstore, $baseurl)
+								function get_data_pricetag($hn, $idstore, $baseurl, $murah)
 								{
 									$postData = array(
 										"header_name" => $hn,
-										"idstore" => $idstore
+										"idstore" => $idstore,
+										"murah" => $murah
 									);
 									$fields_string = http_build_query($postData);
 									$curl = curl_init();
@@ -165,6 +166,12 @@
 
 
 										<tr>
+
+											<td><select id="murah" name="murah" class="form-control text-search">
+
+												<option value="semua">Tampilkan Semua Promo</option>
+												<option value="termurah">Tampilkan yg Termurah</option>
+											</select></td>
 
 											<td>
 												<select id="headerpromo" name="headerpromo"
@@ -263,9 +270,12 @@
 											$ad_org_id = $row['ad_morg_key'];
 										}
 										$hn = $_GET['headerpromo'];
+										$murah = $_GET['murah'];
 
 
-										$jsons = get_data_pricetag($hn, $idstore, $base_url);
+
+
+										$jsons = get_data_pricetag($hn, $idstore, $base_url, $murah);
 										// echo "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=list_price_tag&header_name=".$hn."&org_id=".$ad_org_id
 										$arrs = json_decode($jsons, true);
 										// $jums = count($arrs);
