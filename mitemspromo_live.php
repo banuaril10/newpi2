@@ -173,9 +173,9 @@
 
 													<option value="Semua Promo">Semua Promo</option>
 													<?php
-													$json_url = $baseurl . "/store/promo/get_promo_header.php?idstore=" . $idstore;
+													$json_url = $base_url . "/store/promo/get_promo_header.php?idstore=" . $idstore;
 
-													echo $json_url;
+													// echo $json_url;
 
 													$options = stream_context_create(array(
 														'http' =>
@@ -265,7 +265,7 @@
 										$hn = $_GET['headerpromo'];
 
 
-										$jsons = get_data_pricetag($hn, $idstore, $baseurl);
+										$jsons = get_data_pricetag($hn, $idstore, $base_url);
 										// echo "https://pi.idolmartidolaku.com/api/action.php?modul=inventory&act=list_price_tag&header_name=".$hn."&org_id=".$ad_org_id
 										$arrs = json_decode($jsons, true);
 										// $jums = count($arrs);
