@@ -183,7 +183,7 @@
 													}
 													
 													?>
-												<option value="<?php echo $array[$i]; ?>"><?php echo $array_value[$i]; ?></option>
+												<option value="<?php echo $array[$i]; ?>" <?php echo $selected; ?>><?php echo $array_value[$i]; ?></option>
 												<?php } ?>
 											</select></td>
 
