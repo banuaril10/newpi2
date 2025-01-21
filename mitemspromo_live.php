@@ -174,6 +174,9 @@
 													<option value="Semua Promo">Semua Promo</option>
 													<?php
 													$json_url = $baseurl . "/store/promo/get_promo_header.php?idstore=" . $idstore;
+
+													echo $json_url;
+
 													$options = stream_context_create(array(
 														'http' =>
 															array(
@@ -184,7 +187,7 @@
 													
 
 													$json = file_get_contents($json_url, false, $options);
-													echo $json_url;
+													
 													$arr = json_decode($json, true);
 													$jum = count($arr);
 
