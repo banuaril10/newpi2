@@ -1542,19 +1542,19 @@ if ($_GET['modul'] == 'inventory') {
 
 
 		foreach ($connec->query($getinv) as $gi) {
-			
+			$sku = $gi['sku'];
 			if($gi['sku'] != ''){
 				$get_barcode = "select sku from pos_mproduct where barcode = '".$gi['sku']."'";
 				$gb = $connec->query($get_barcode);
 			
 				foreach($gb as $rrr){
-					$gi['sku'] = $rrr['sku'];
+					$sku = $rrr['sku'];
 				}
 			}
 			
 			
 
-			$cekqty = "select qtycount from m_piline where (sku = '" . $gi['sku'] . "' or barcode = '" . $gi['sku'] . "') and date(insertdate) = date(now())";
+			$cekqty = "select qtycount from m_piline where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate) = date(now())";
 			$result = $connec->query($cekqty);
 			$count = $result->rowCount();
 
