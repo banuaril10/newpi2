@@ -1567,7 +1567,7 @@ if ($_GET['modul'] == 'inventory') {
 
 
 
-					$upcount = $connec->query("update m_piline set qtycount='" . $jumqty . "' where (sku = '" . $gi['sku'] . "' or barcode = '" . $gi['sku'] . "') and date(insertdate)=date(now()) ");
+					$upcount = $connec->query("update m_piline set qtycount='" . $jumqty . "' where (sku = '" . $sku . "' or barcode = '" . $gi['sku'] . "') and date(insertdate)=date(now()) ");
 					if ($upcount) {
 
 						$connec->query("update inv_temp set status = 1 where sku = '" . $gi['sku'] . "' and date(tanggal) = date(now()) and filename = '" . $filename . "'");
