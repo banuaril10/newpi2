@@ -8,7 +8,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
     $sku_or_barcode = isset($_GET['sku']) ? $_GET['sku'] : $_GET['barcode'];
 
     // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku atau barcode
-    $sqlPrice = "SELECT price, sku FROM pos_mproduct WHERE (sku = :sku_or_barcode OR barcode = :sku_or_barcode) AND isactived = '1'";
+    $sqlPrice = "SELECT price, sku, name FROM pos_mproduct WHERE (sku = :sku_or_barcode OR barcode = :sku_or_barcode) AND isactived = '1'";
     $stmtPrice = $connec->prepare($sqlPrice);
     $stmtPrice->bindParam(':sku_or_barcode', $sku_or_barcode);
     $stmtPrice->execute();
@@ -16,6 +16,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
     // Cek apakah produk ditemukan
     if ($product) {
+        $name = $product['name'];
         $regularPrice = $product['price'];
         $sku = $product['sku'];
 
@@ -34,6 +35,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             $discountedPrice = $regularPrice - ($regularPrice * ($discount['discount'] / 100));
             $response = [
                 'sku' => $sku,
+                'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => $discount['discount'],
                 'discounted_price' => $discountedPrice,
@@ -44,6 +46,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             // Tidak ada diskon, hanya mengembalikan harga reguler
             $response = [
                 'sku' => $sku,
+                'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => null,
                 'discounted_price' => null,
