@@ -1,21 +1,23 @@
-<?php include "../../config/koneksi.php";
+<?php
+include "../../config/koneksi.php";
 
 header('Content-Type: application/json');
 
-// Mendapatkan SKU dari parameter GET
-if (isset($_GET['sku'])) {
-    $sku = $_GET['sku'];
+// Mendapatkan SKU atau barcode dari parameter GET
+if (isset($_GET['sku']) || isset($_GET['barcode'])) {
+    $sku_or_barcode = isset($_GET['sku']) ? $_GET['sku'] : $_GET['barcode'];
 
-    // Query untuk mendapatkan harga reguler dari tabel pos_mproduct
-    $sqlPrice = "SELECT price FROM pos_mproduct WHERE sku = :sku AND isactived = '1'";
+    // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku atau barcode
+    $sqlPrice = "SELECT price, sku FROM pos_mproduct WHERE (sku = :sku_or_barcode OR barcode = :sku_or_barcode) AND isactived = '1'";
     $stmtPrice = $connec->prepare($sqlPrice);
-    $stmtPrice->bindParam(':sku', $sku);
+    $stmtPrice->bindParam(':sku_or_barcode', $sku_or_barcode);
     $stmtPrice->execute();
     $product = $stmtPrice->fetch(PDO::FETCH_ASSOC);
 
     // Cek apakah produk ditemukan
     if ($product) {
         $regularPrice = $product['price'];
+        $sku = $product['sku'];
 
         // Query untuk mendapatkan diskon dari tabel pos_mproductdiscount
         $sqlDiscount = "SELECT discount, fromdate, todate FROM pos_mproductdiscount 
@@ -57,6 +59,6 @@ if (isset($_GET['sku'])) {
     }
 
 } else {
-    echo json_encode(['error' => 'SKU parameter is required']);
+    echo json_encode(['error' => 'SKU or Barcode parameter is required']);
 }
 ?>
