@@ -117,7 +117,7 @@ function syncPromo(){
 	$("#overlay").fadeIn(300);
 
 		$.ajax({
-		url: "api/action.php?modul=inventory&act=sync_promo_bundling",
+		url: "api/cyber/sync_promo_bundling.php",
 		type: "POST",
 		beforeSend: function(){
 			$('#notif').html("Proses sync Promo..");
