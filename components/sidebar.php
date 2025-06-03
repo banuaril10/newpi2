@@ -137,6 +137,9 @@
 						<li class="submenu-item ">
 							<a href="cek_promo_buyget.php">Buy & Get</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="cek_promo_bundling.php">Bundling</a>
+						</li>
 					</ul>
 				</li>
 
