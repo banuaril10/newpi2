@@ -57,7 +57,7 @@ try {
         $insertby = $value['insertby'];
         $discountname = str_replace("'", "\'", $value['discountname']);
         $discounttype = $value['discounttype'];
-        $sku = $value['sku'];
+        $sku = str_replace(' ', '', $value['sku']);
         $discount = $value['discount'];
         $fromdate = $value['fromdate'];
         $todate = $value['todate'];
