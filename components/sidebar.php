@@ -111,6 +111,15 @@
 						<li class="submenu-item ">
 							<a href="sync_function.php">Sync Function</a>
 						</li>
+
+
+						<?php 
+						if($username == 'pos'){ ?>
+						<li class="submenu-item ">
+							<a href="sync_function_dev.php">Sync Function Dev</a>
+						</li>
+						<?php } ?>
+
 						
 						<li class="submenu-item ">
 							<a href="sync_struk_category.php">Sync Struk Undian</a>
