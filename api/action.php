@@ -2203,6 +2203,7 @@ if ($_GET['modul'] == 'inventory') {
 				$nestedData['afterdiscount'] = '<font style="color: green;font-weight: bold">Rp. ' . rupiah($pd) . '</font>';
 				$nestedData['discountname'] = $discname;
 				$nestedData['fromdate'] = $r['fromdate'];
+				$nestedData['qtybundling'] = $r['maxqty'];
 				$nestedData['todate'] = $r['todate'];
 				$nestedData['price'] = rupiah($r['price']);
 				$nestedData['price_discount'] = rupiah($pd);

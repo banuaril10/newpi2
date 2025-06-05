@@ -59,6 +59,7 @@
                 <th scope="col">Harga Akhir</th>
                 <th scope="col">Nama Items</th>
 				<th scope="col">Nama Promo</th>
+				<th scope="col">Qty Bundling</th>
                 <th scope="col">Tgl Mulai</th>
                 <th scope="col">Tgl Berakhir</th>
                 <!--<th scope="col">Harga</th>
@@ -102,6 +103,7 @@
 				  { "data": "afterdiscount" },
                   { "data": "name" },
 				  { "data": "discountname" },
+				  { "data": "qtybundling" },
                   { "data": "fromdate" },
                   { "data": "todate" },
                   // { "data": "price" },
