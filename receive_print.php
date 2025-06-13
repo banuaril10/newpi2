@@ -8,6 +8,7 @@ $query = $connec->query($ll);
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 	$idstore = $row['ad_morg_key'];
+	$name = $row['name'];
 }
 
 ?>
@@ -54,6 +55,9 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 							<input id="tglAkhir" type="date" class="form-control mr-2">
 							<button id="filterBtn" class="btn btn-primary mr-2">Filter</button>
 						</div>
+						<br>
+						<button class='btn btn-info' onclick='printReceiveAll()'>Cetak All</button>
+
 						<p id="notif1" style="color: red; font-weight: bold;"></p>
 					</div>
 					<div class="card-body">
@@ -66,6 +70,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 									<th>Insert Date</th>
 									<th>Is Receipt</th>
 									<th>Receipt Date</th>
+									<th>Receipt By</th>
 									<th>Aksi</th>
 								</tr>
 							</thead>
@@ -91,9 +96,10 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			});
 
 			function loadData(tglAwal, tglAkhir) {
-				var url = 'https://api.idolmartidolaku.com/apiidolmart/store/receive/get_receive.php?id_master_location=<?php echo $idstore; ?>';
+				var url = 'https://api.idolmartidolaku.com/apiidolmart/store/receive/get_receive.php';
 				var data = {};
 
+				data.id_master_location = <?php echo $idstore; ?>;
 				if (tglAwal) data.tgl_awal = tglAwal;
 				if (tglAkhir) data.tgl_akhir = tglAkhir;
 
@@ -112,6 +118,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 								item.insertdate,
 								item.is_receipt,
 								item.receipt_date,
+								item.receipt_by,
 								"<button class='btn btn-info' onclick='printReceive(\"" + item.documentno + "\")'>Cetak</button>"
 							]);
 						});
@@ -139,11 +146,99 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 		});
 
-		// Fungsi print
+
+
+
 		function printReceive(id) {
-			// Arahakan ke sebuah halaman untuk proses cetak, misalnya:
-			window.open('print_receive.php?id=' + id, '_blank');
+    // cari row yang sesuai
+			var row =$('#example tbody tr').filter(function(){
+				return $(this).find("td").first().text() == id;
+			});
+
+			var documentno = row.find("td").eq(0).text();
+			var driver = row.find("td").eq(1).text();
+			var keycode = row.find("td").eq(2).text();
+			var insertdate = row.find("td").eq(3).text();
+			var is_receipt = row.find("td").eq(4).text();
+			var receipt_date = row.find("td").eq(5).text();
+
+
+			var header = "Driver : " + driver + "\n" + 
+				// "Keycode : " + keycode + "\n" + 
+				// "Insert Date : " + insertdate + "\n" + 
+				// "Is Receipt : " + is_receipt + "\n" + 
+				"Receipt Date : " + receipt_date + "\n" + 
+				"________________________________\n";
+
+
+			// susun struknya sesuai data yang tersedia
+			var struk = 
+				"DOCUMENT NO : " + documentno + "\n" + 
+				"________________________________\n" + 
+				
+
+
+			// Kirim ke server untuk dicetak
+			$.post("printer/print_receive.php", {html: struk}, function(data) {
+				console.log(data);
+				if (data.result == 1) {
+					alert("Struk berhasil dicetak!");
+					console.log("Struk berhasil dicetak: " + struk);
+				} else {
+					alert("Struk gagal dicetak!");
+				}
+			}, "json").fail(function(){
+				alert("Terjadi kesalahan saat mencetak.");
+			});
 		}
+
+
+		function printReceiveAll() {
+			var struk = '';
+			var header = '';
+		$('#example tbody tr').each(function(){
+				var row = $(this);
+				var documentno = row.find("td").eq(0).text();
+				var driver = row.find("td").eq(1).text();
+				var keycode = row.find("td").eq(2).text();
+				var insertdate = row.find("td").eq(3).text();
+				var is_receipt = row.find("td").eq(4).text();
+				var receipt_date = row.find("td").eq(5).text();
+				var receipt_by = row.find("td").eq(6).text();
+
+				header = "STRUK PENERIMAAN BARANG \n" + 
+				"Toko : <?php echo $name; ?>\n" + 
+				"Receipt Date : " + receipt_date + "\n" + 
+				"Receipt By : " + receipt_by + "\n" + 
+				"________________________________\n";
+
+				struk += 
+					"DOC NO : " + documentno + " - " + driver + "\n";
+
+			});
+			struk += "________________________________\n";
+			struk += "Print Date : <?php echo date('Y-m-d H:i:s'); ?>\n";
+			struk += "STRUK INI SEBAGAI BUKTI\n";
+			struk += "PENERIMAAN BARANG YANG SAH OLEH TOKO\n";
+
+			// Kirim ke server untuk dicetak
+			$.post("printer/print_receive.php", {html: header+struk}, function(data) {
+				console.log(data);
+				if (data.result == 1) {
+					alert("Struk berhasil dicetak!");
+					console.log("Struk berhasil dicetak:\n" + struk);
+				} else {
+					alert("Struk gagal dicetak!");
+				}
+			}, "json").fail(function(){
+				alert("Terjadi kesalahan saat mencetak.");
+			});
+		}
+
+
+
+
+
 	</script>
 
 </div>
