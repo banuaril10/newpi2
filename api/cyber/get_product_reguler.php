@@ -5,7 +5,7 @@ $rack = $_GET['rack'];
 
 $query = "SELECT * FROM pos_mproduct where sku != '' and price > 0";
 if($stock > 0){
-    $query .= " and stockqty > 0 order by sku asc";
+    $query .= " and stockqty > 0 ";
 }
 
 if($rack != ""){
