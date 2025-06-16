@@ -260,7 +260,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 						struk += "PENERIMAAN BARANG YANG SAH OLEH TOKO\n";
 
 						// Kirim ke server untuk dicetak
-						$.post("printer/print_receive.php", { html: struk, ip_printer: ip_printer }, function (data) {
+						$.post("http://"+ip_printer+"/pi/printer/print_receive.php", { html: struk, ip_printer: ip_printer }, function (data) {
 							console.log(data);
 							if (data.result == 1) {
 								alert("Struk berhasil dicetak!");
