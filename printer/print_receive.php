@@ -5,8 +5,13 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 
-header('Content-Type: application/json');
 
+header("Access-Control-Allow-Origin: *"); // Atau ganti * sesuai domain yang diijinkan
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+
+header("Access-Control-Allow-Headers: Content-Type");
+
+header('Content-Type: application/json');
 // Mengambil data yang akan dicetak
 $html = $_POST['html']; 
 $ip_printer = 'localhost'; // jika windows
