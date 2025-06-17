@@ -49,25 +49,32 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-						<h4>RECEIVE PRINT</h4>
+						<h4>Receive Print</h4>
 						<div class="form-inline">
-							<input id="tglAwal" type="date" class="form-control mr-2" value="<?php echo date('Y-m-d'); ?>">
-							<input id="tglAkhir" type="date" class="form-control mr-2" value="<?php echo date('Y-m-d'); ?>">
-							
-							<button id="filterBtn" class="btn btn-primary mr-2">Filter</button>
+							<input id="tglAwal" type="date" class="form-control mr-2 p-2"
+								value="<?php echo date('Y-m-d'); ?>">
+							<input id="tglAkhir" type="date" class="form-control mr-2 p-2"
+								value="<?php echo date('Y-m-d'); ?>">
+							<button id="filterBtn" class="btn btn-primary mr-2 px-4">Filter</button>
 						</div>
 						<br>
-						<button class='btn btn-info' onclick='printReceiveAll()'>Cetak All</button>
+						<button class='btn btn-info px-4' onclick='printReceiveAll()'>Cetak All</button>
 
-						<p id="notif1" style="color: red; font-weight: bold;"></p>
+						<p id="notif1">Jika ada perbarui data, reload dahulu sebelum cetak kembali, data yang tampil
+							adalah yang sesuai tanggal yang dipilih</p>
 					</div>
 					
-					<div class="card-body">
+					<!-- <div class="card-body">
 						<p style="color: red; font-weight: bold;">Jika ada perbarui data, reload dulu baru cetak kembali, data yg tampil default hari berjalan</p>
-					</div>
+					</div> -->
 
 					<div class="card-body">
-					IP PRINTER (Jika localhost tidak bisa / printer struk tidak ada di server, masukan ip komputer yg ada printernya) : <input id="ip_printer" type="text" class="form-control mr-2" value="localhost">
+					IP PRINTER (Jika localhost tidak bisa / printer struk tidak ada di server, masukan ip komputer yg ada printernya) : 
+					<div class="input-group mb-3">
+					<input id="ip_printer" type="text" class=" mr-2" value="localhost" style="width: 200px;"
+						placeholder="Masukkan IP Printer"> &nbsp <button id="save_ip" class="btn btn-primary ml-2">Save</button>
+					</div>
+					<br>
 					<br>
 						<table class="table table-bordered" id="example">
 							<thead>
@@ -200,6 +207,20 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 			});
 		}
 
+		function detectOS(){
+			var platform = navigator.platform.toLowerCase();
+
+			if (platform.indexOf('win') !== -1) {
+				return 'Windows';
+			} else if (platform.indexOf('linux') !== -1) {
+				return 'Linux';
+			} else if (platform.indexOf('mac') !== -1) {
+				return 'macOS';
+			} else {
+				return 'Unknown';
+			}
+		}
+
 
 		function printReceiveAll() {
 			var struk = '';
@@ -233,51 +254,90 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 					// Header baru
 					header = 
 						"STRUK PENERIMAAN BARANG \n" + 
-						"Toko : <?php echo $name; ?>\n" +
-									"Receipt Date : " + receipt_date + "\n" +
-									"Receipt By : " + receipt_by + "\n" +
-									"________________________________\n";
+						"Toko : <?php echo $name; ?>\n" + 
+						"Receipt Date : " + receipt_date + "\n" + 
+						"Receipt By : " + receipt_by + "\n" + 
+						"________________________________\n";
 
-								struk += header;
+					struk += header;
 
-								// Update last
-								lastReceiptDate = receipt_date;
-								lastReceiptBy = receipt_by;
-							}
+					// Update last
+					lastReceiptDate = receipt_date;
+					lastReceiptBy = receipt_by;
+				}
 
-							sectionStruk += "DOC NO : " + documentno + " - " + driver + "\n";
+				sectionStruk += "DOC NO : " + documentno + " - " + driver + "\n";
 
-						});
+			});
 
-						// Setelah loop, tambahan section terakhir
-						if (sectionStruk.length > 0) {
-							struk += sectionStruk;
-						}
-
-						struk += "________________________________\n";
-						struk += "Print Date : <?php echo date('Y-m-d H:i:s'); ?>\n";
-						struk += "STRUK INI SEBAGAI BUKTI\n";
-						struk += "PENERIMAAN BARANG YANG SAH OLEH TOKO\n";
-
-						// Kirim ke server untuk dicetak
-						$.post("http://"+ip_printer+"/pi/printer/print_receive.php", { html: struk, ip_printer: ip_printer }, function (data) {
-							console.log(data);
-							if (data.result == 1) {
-								alert("Struk berhasil dicetak!");
-								console.log("Struk berhasil dicetak:\n" + struk);
-							} else {
-								alert("Struk gagal dicetak!");
-							}
-						}, "json").fail(function () {
-							alert("Terjadi kesalahan saat mencetak.");
-						});
+			// Setelah loop, tambahan section terakhir
+			if (sectionStruk.length > 0) {
+				struk += sectionStruk;
 			}
 
+			struk += "________________________________\n";
+			struk += "Print Date : <?php echo date('Y-m-d H:i:s'); ?>\n";
+			struk += "STRUK INI SEBAGAI BUKTI\n";
+			struk += "PENERIMAAN BARANG YANG SAH OLEH TOKO\n";
+
+			// Deteksi OS
+			var platform = navigator.platform.toLowerCase();
+
+			var printURL = '';
+			if (platform.indexOf('win') !== -1) {
+				printURL = "print_struk.php";
+			} else if (platform.indexOf('linux') !== -1) {
+				printURL = "print_struk_linux.php";
+			} else {
+				printURL = "print_struk.php";
+			}
+
+			// Kirim ke server untuk dicetak
+			$.post("http://" + ip_printer + "/pi/printer/" + printURL, 
+			{ 
+				html: struk, 
+				ip_printer: ip_printer 
+			}, 
+			function (data) {
+				console.log(data);
+				if (data.result == 1) {
+					alert("Struk berhasil dicetak!");
+					console.log("Struk berhasil dicetak:\n" + struk);
+				} else {
+					alert("Struk gagal dicetak!");
+				}
+			}, "json").fail(function () {
+				alert("Terjadi kesalahan saat mencetak.");
+			});
+		}
 
 
 
 
+		document.getElementById('save_ip').addEventListener('click', function(){
+        var ip = document.getElementById('ip_printer').value.trim();
 
+        // Set cookie yang expire 5 tahun ke depan
+        var expire = new Date();
+        expire.setFullYear(expire.getFullYear() + 5);
+        document.cookie = "ip_printer=" + ip + ";expires=" + expire.toUTCString() + ";path=/";
+
+        alert("IP printer disimpan.");
+    });
+
+
+	function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(^|;)\\s*' + name + '=([^;]+)'));
+        return match ? match[2] : '';
+    }
+
+    window.onload = function(){
+        var ip = getCookie("ip_printer");
+
+        if (ip) {
+            document.getElementById("ip_printer").value = ip;
+        }
+    };
 	</script>
 
 </div>
