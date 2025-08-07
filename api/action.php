@@ -1758,7 +1758,8 @@ if ($_GET['modul'] == 'inventory') {
 
 
 
-		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
+		$list_line = "select distinct ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) variant, m_piline.sku, m_piline.barcode ,m_piline.qtyerp, m_piline.qtysales, 
+		m_piline.qtycount, m_piline.qtysalesout, pos_mproduct.name, m_pi.status, m_piline.verifiedcount from m_pi inner join m_piline on m_pi.m_pi_key = m_piline.m_pi_key left join pos_mproduct on m_piline.sku = pos_mproduct.sku 
 		where m_pi.m_pi_key = '" . $mpi . "' and m_pi.status = '2' and ((m_piline.qtycount + m_piline.qtysales) - (m_piline.qtyerp - m_piline.qtysalesout)) != 0  ";
 
 		if ($show != '1') {
@@ -1800,7 +1801,8 @@ if ($_GET['modul'] == 'inventory') {
 				"barcode" => $row1['barcode'],
 				"name" => $row1['name'],
 				"qtyvariant" => $variant,
-				"qtycount" => $row1['qtycount']
+				"qtycount" => $row1['qtycount'],
+				"qtysales" => $row1['qtysales']
 			);
 		}
 
