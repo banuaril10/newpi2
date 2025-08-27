@@ -123,6 +123,27 @@ try {
         $chk->execute([':k' => $key]);
         $exists = $chk->fetchColumn();
 
+        $pos_dcashierbalance_key = null;
+
+        if (!empty($r['ad_muser_key']) && !empty($r['insertdate'])) {
+            $sqlBalance = "
+                SELECT pos_dcashierbalance_key 
+                FROM pos_dcashierbalance
+                WHERE ad_muser_key = :usr
+                AND DATE(startdate) = DATE(:tgl)
+                ORDER BY startdate DESC
+                LIMIT 1
+            ";
+            $stmtBalance = $connec->prepare($sqlBalance);
+            $stmtBalance->execute([
+                ':usr' => $r['ad_muser_key'],
+                ':tgl' => $r['insertdate']
+            ]);
+            $pos_dcashierbalance_key = $stmtBalance->fetchColumn() ?: null;
+        } else {
+            $pos_dcashierbalance_key = null;
+        }
+
         // jalankan UPSERT
         $stmtUpsert->execute([
             ':pos_dsales_key' => $key,
@@ -134,7 +155,7 @@ try {
             ':postby' => $r['postby'] ?? 'SYSTEM',
             ':postdate' => $r['postdate'] ?? null,
             ':pos_medc_key' => $r['pos_medc_key'] ?? null,
-            ':pos_dcashierbalance_key' => $r['pos_dcashierbalance_key'] ?? null,
+            ':pos_dcashierbalance_key' => $pos_dcashierbalance_key ?? null,
             ':pos_mbank_key' => $r['pos_mbank_key'] ?? null,
             ':ad_muser_key' => $r['ad_muser_key'] ?? null,
             ':billno' => $r['billno'] ?? null,
