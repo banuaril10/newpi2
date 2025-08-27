@@ -77,6 +77,19 @@ foreach ($gtk as $r) {
     $gtk_amount = $r['salesamount'];
 }
 
+// ambil total PPOB (billamount) pada tanggal yg sama
+$ppob = $connec->query("
+    SELECT COALESCE(SUM(billamount),0) as ppobamount 
+    FROM pos_dsales_ppob 
+    WHERE DATE(insertdate) = '" . $tanggal . "'
+");
+$ppob_amount = 0;
+foreach ($ppob as $p) {
+    $ppob_amount = $p['ppobamount'];
+}
+
+$gtk_amount = $gtk_amount - $ppob_amount;
+
 $selisih_gtk = $gtk_amount - $j_hasil['line_amount'];
 
 if($selisih_gtk != 0){
