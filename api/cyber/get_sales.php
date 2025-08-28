@@ -46,8 +46,6 @@ function get_sales($url, $date, $ad_org_id)
 $url = $base_url . "/sales_order/get_sales.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
 $hasil = get_sales($url, $tanggal, $ad_org_id);
 
-
-
 $j_hasil = json_decode($hasil, true);
 
 $header = 0;
@@ -78,17 +76,17 @@ foreach ($gtk as $r) {
 }
 
 // ambil total PPOB (billamount) pada tanggal yg sama
-$ppob = $connec->query("
-    SELECT COALESCE(SUM(billamount),0) as ppobamount 
-    FROM pos_dsales_ppob 
-    WHERE DATE(insertdate) = '" . $tanggal . "'
-");
-$ppob_amount = 0;
-foreach ($ppob as $p) {
-    $ppob_amount = $p['ppobamount'];
-}
+// $ppob = $connec->query("
+//     SELECT COALESCE(SUM(billamount),0) as ppobamount 
+//     FROM pos_dsales_ppob 
+//     WHERE DATE(insertdate) = '" . $tanggal . "'
+// ");
+// $ppob_amount = 0;
+// foreach ($ppob as $p) {
+//     $ppob_amount = $p['ppobamount'];
+// }
 
-$gtk_amount = $gtk_amount - $ppob_amount;
+// $gtk_amount = $gtk_amount - $ppob_amount;
 
 $selisih_gtk = $gtk_amount - $j_hasil['line_amount'];
 

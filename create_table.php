@@ -555,6 +555,14 @@ $cmd_alter_sync_transit = [
 	'ALTER TABLE pos_mproductdiscountgrosir_new ADD COLUMN IF NOT EXISTS jenis_promo varchar(20);',
 	'ALTER TABLE pos_mproductbuyget ADD COLUMN IF NOT EXISTS jenis_promo varchar(20);',
 	'ALTER TABLE pos_medc ADD COLUMN IF NOT EXISTS jenis varchar(20);',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobcashamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobdebitamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS ppobcreditamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobcashamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobdebitamount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS ppobcreditamount numeric DEFAULT 0;',
 ];
 
 foreach ($cmd_alter_sync_transit as $r) {
@@ -815,5 +823,7 @@ update
 foreach ($pos_dsales_ppob as $r) {
 	$connec->exec($r);
 }
+
+
 ?>
 
