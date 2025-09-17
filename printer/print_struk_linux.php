@@ -1,5 +1,9 @@
 <?php
-	//change font size to small
+header("Access-Control-Allow-Origin: https://intransit.idolmartidolaku.com"); // hanya domain frontend
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+//change font size to small
 	$html = chr(27) . chr(33) . chr(1); // ESC ! 1 to change font size to small
 	$html .= $_POST['html'];
 	$html .= '\r\n'; 

@@ -1,4 +1,8 @@
 <?php
+header("Access-Control-Allow-Origin: https://intransit.idolmartidolaku.com"); // hanya domain frontend
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
 require  '../vendor/autoload.php';
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
