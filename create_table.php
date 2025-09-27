@@ -846,6 +846,25 @@ foreach ($pos_mproductdiscount_bundling as $r) {
 }
 
 
+$indexing_table_promo = [
+	'CREATE INDEX IF NOT EXISTS idx_bundling_sku 
+	ON pos_mproductdiscount_bundling (sku);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_discountname 
+	ON pos_mproductdiscount_bundling (discountname);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_from_to_date 
+	ON pos_mproductdiscount_bundling (fromdate, todate);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_header_code 
+	ON pos_mproductdiscount_bundling_header (bundling_code);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_key 
+	ON pos_mproductdiscount_bundling (pos_mproductdiscount_key);',
+	'CREATE INDEX IF NOT EXISTS idx_bundling_header_key 
+	ON pos_mproductdiscount_bundling_header (pos_mproductdiscount_key);'
+];
+
+foreach ($indexing_table_promo as $r) {
+	$connec->exec($r);
+}
+
 
 ?>
 
