@@ -52,6 +52,9 @@
 						<li class="submenu-item ">
 							<a href="capture_sku_promo.php">Promo</a>
 						</li>
+						<li class="submenu-item ">
+							<a href="capture_sku_promo_rekomendasi.php">Rekomendasi Promo</a>
+						</li>
 					</ul>
 				</li>
 
@@ -118,6 +121,7 @@
 						<li class="submenu-item ">
 							<a href="sync_function.php">Sync Function</a>
 						</li>
+						
 
 
 						<?php 
@@ -237,6 +241,13 @@
 							<a href="report_sales_item_today.php">Sales Items Today</a>
 						</li>
 					</ul>
+				</li>
+
+				<li class="sidebar-item">
+					<a href="voucher_store.php" class='sidebar-link'>
+						<i class="bi bi-tags-fill"></i>
+						<span>Konfigurasi Voucher</span>
+					</a>
 				</li>
 
 				<li class="sidebar-item">
