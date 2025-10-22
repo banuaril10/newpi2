@@ -54,10 +54,12 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
         // Reguler
         $sqlReguler = "
-            SELECT discountname, jenis_promo, fromdate, todate 
+            SELECT discountname, jenis_promo, fromdate, todate, discount
             FROM pos_mproductdiscount
             WHERE sku = :sku AND isactived = '1'
             AND CURRENT_DATE BETWEEN fromdate AND todate
+            ORDER BY discount DESC
+            LIMIT 1
         ";
         $stmtReguler = $connec->prepare($sqlReguler);
         $stmtReguler->bindParam(':sku', $sku);
@@ -68,6 +70,8 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'type' => 'Reguler',
                 'discountname' => $p['discountname'],
                 'jenis_promo' => $p['jenis_promo'],
+                'regular_price' => $regularPrice,
+                'after_discount' => $regularPrice - $p['discount'],
                 'fromdate' => $p['fromdate'],
                 'todate' => $p['todate']
             ];
@@ -75,7 +79,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
         // Bundling
         $sqlBundling = "
-            SELECT discountname, headername, jenis_promo, fromdate, todate 
+            SELECT discountname, headername, jenis_promo, fromdate, todate, discount
             FROM pos_mproductdiscount_bundling
             WHERE sku = :sku AND isactived = '1'
             AND CURRENT_DATE BETWEEN fromdate AND todate
@@ -90,6 +94,8 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'discountname' => $p['discountname'],
                 'headername' => $p['headername'],
                 'jenis_promo' => $p['jenis_promo'],
+                'regular_price' => $regularPrice,
+                'after_discount' => $regularPrice - $p['discount'],
                 'fromdate' => $p['fromdate'],
                 'todate' => $p['todate']
             ];
@@ -97,7 +103,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
         // Grosir
         $sqlGrosir = "
-            SELECT discountname, jenis_promo, fromdate, todate 
+            SELECT discountname, jenis_promo, fromdate, todate, discount
             FROM pos_mproductdiscountgrosir_new
             WHERE sku = :sku AND isactived = '1'
             AND CURRENT_DATE BETWEEN fromdate AND todate
@@ -111,6 +117,8 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
                 'type' => 'Grosir',
                 'discountname' => $p['discountname'],
                 'jenis_promo' => $p['jenis_promo'],
+                'regular_price' => $regularPrice,
+                'after_discount' => $regularPrice - $p['discount'],
                 'fromdate' => $p['fromdate'],
                 'todate' => $p['todate']
             ];

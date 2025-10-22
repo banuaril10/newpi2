@@ -1,0 +1,157 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+include "../../config/koneksi.php";
+
+$tanggal = $_GET['date'] ?? 'now';
+
+try {
+    $ll = "select * from ad_morg where isactived = 'Y'";
+    $query = $connec->query($ll);
+    $idstore = null;
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $idstore = $row['ad_morg_key'];
+    }
+
+    if (!$idstore) {
+        throw new Exception("Tidak ada store aktif ditemukan di tabel ad_morg");
+    }
+
+    function push_to_line($url, $line, $idstore)
+    {
+        $postData = array(
+            "line" => $line,
+            "idstore" => $idstore
+        );
+        $fields_string = http_build_query($postData);
+
+        $curl = curl_init();
+
+        curl_setopt_array(
+            $curl,
+            array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => $fields_string,
+            )
+        );
+
+        $response = curl_exec($curl);
+
+        if (curl_errno($curl)) {
+            echo "cURL Error: " . curl_error($curl) . "<br>";
+        }
+
+        curl_close($curl);
+        return $response;
+    }
+
+    $jj_line = array();
+
+    if ($tanggal != "now") {
+        $list_line = "select * from pos_dsalesline where date(insertdate) = '" . $tanggal . "' and isactived = '1' and status_intransit is null ";
+    } else {
+        $list_line = "select * from pos_dsalesline where isactived = '1' and status_intransit is null and date(insertdate) = date(now())";
+    }
+
+    $stmt = $connec->query($list_line);
+    if (!$stmt) {
+        $error = $connec->errorInfo();
+        echo "Query Error (list_line): " . $error[2] . "<br>";
+    }
+
+    foreach ($stmt as $row2) {
+        $jenis_promo = "";
+
+        $queries = [
+            "select jenis_promo from pos_mproductdiscount 
+             where discountname = '" . $row2['discountname'] . "' 
+             and sku = '" . $row2['sku'] . "' 
+             and date(now()) between fromdate and todate",
+
+            "select jenis_promo from pos_mproductdiscountgrosir_new 
+             where discountname = '" . $row2['discountname'] . "' 
+             and sku = '" . $row2['sku'] . "' 
+             and date(now()) between fromdate and todate",
+
+            "select jenis_promo from pos_mproductbuyget 
+             where discountname = '" . $row2['discountname'] . "' 
+             and skuget = '" . $row2['sku'] . "' 
+             and date(now()) between fromdate and todate"
+        ];
+
+        foreach ($queries as $sqlJenis) {
+            $get_jenis = $connec->query($sqlJenis);
+            if (!$get_jenis) {
+                $err = $connec->errorInfo();
+                echo "Query Error (jenis promo): " . $err[2] . "<br>";
+            } else {
+                foreach ($get_jenis as $r) {
+                    $jenis_promo = $r['jenis_promo'];
+                }
+            }
+            if ($jenis_promo != "")
+                break;
+        }
+
+        $jj_line[] = array(
+            "pos_dsalesline_key" => $row2['pos_dsalesline_key'],
+            "ad_mclient_key" => $row2['ad_mclient_key'],
+            "ad_morg_key" => $row2['ad_morg_key'],
+            "isactived" => $row2['isactived'],
+            "insertdate" => $row2['insertdate'],
+            "insertby" => $row2['insertby'],
+            "postby" => $row2['postby'],
+            "postdate" => $row2['postdate'],
+            "pos_dsales_key" => $row2['pos_dsales_key'],
+            "billno" => $row2['billno'],
+            "seqno" => $row2['seqno'],
+            "sku" => $row2['sku'],
+            "qty" => $row2['qty'],
+            "price" => $row2['price'],
+            "discount" => $row2['discount'],
+            "amount" => $row2['amount'],
+            "issync" => $row2['issync'],
+            "discountname" => $row2['discountname'],
+            "status_sales" => $row2['status_sales'],
+            "status_intransit" => $row2['status_intransit'],
+            "jenis_promo" => $jenis_promo
+        );
+    }
+
+    if (!empty($jj_line)) {
+        $url = $base_url . "/sales_order/sync_sales_line.php?id=OHdkaHkyODczeWQ3ZDM2NzI4MzJoZDk3MzI4OTc5eDcyOTdyNDkycjc5N3N1MHI";
+        $array_line = array("line" => $jj_line);
+        $array_line_json = json_encode($array_line);
+
+        $hasil_line = push_to_line($url, $array_line_json, $idstore);
+        $j_hasil_line = json_decode($hasil_line, true);
+
+        echo "<pre>Response dari API:\n";
+        print_r($hasil_line);
+        echo "</pre>";
+
+        if (!empty($j_hasil_line)) {
+            foreach ($j_hasil_line as $r) {
+                $update = $connec->query("update pos_dsalesline set status_intransit = '1' 
+                    where pos_dsalesline_key = '" . $r . "'");
+                if (!$update) {
+                    $err = $connec->errorInfo();
+                    echo "Query Error (update status_intransit): " . $err[2] . "<br>";
+                }
+            }
+        }
+    } else {
+        echo "Tidak ada data line ditemukan untuk dikirim.<br>";
+    }
+} catch (Exception $e) {
+    echo "Terjadi error: " . $e->getMessage() . "<br>";
+}
+?>
