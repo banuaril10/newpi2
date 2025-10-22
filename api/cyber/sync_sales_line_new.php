@@ -131,6 +131,8 @@ try {
         $array_line = array("line" => $jj_line);
         $array_line_json = json_encode($array_line);
 
+        print_r($array_line_json);
+
         $hasil_line = push_to_line($url, $array_line_json, $idstore);
         $j_hasil_line = json_decode($hasil_line, true);
 
