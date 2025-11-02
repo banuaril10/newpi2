@@ -324,7 +324,7 @@
 												<?php if ($q_stock > 0) { ?>
 													<tr>
 														<td><input type="checkbox" id="checkbox" name="checkbox[]"
-																value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['normal']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>||<?php echo $row['afterdiscount']; ?>|<?php echo $row['todate']; ?>||<?php echo $barcode; ?>">
+																value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['normal']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>||<?php echo $row['afterdiscount']; ?>|<?php echo $row['todate']; ?>||<?php echo $barcode; ?>|<?php echo $row['fromdate']; ?>">
 														</td>
 														<td scope="row"><?php echo $no; ?></td>
 														<td><?php echo $row['sku']; ?></td>
@@ -348,7 +348,7 @@
 
 												<tr>
 													<td><input type="checkbox" id="checkbox" name="checkbox[]"
-															value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['normal']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>||<?php echo $row['afterdiscount']; ?>|<?php echo $row['todate']; ?>||<?php echo $row['barcode']; ?>">
+															value="<?php echo $row['sku']; ?>|<?php echo $row['name']; ?>|<?php echo $row['normal']; ?>|<?php echo date('Y-m-d'); ?>|<?php echo $row['rack']; ?>||<?php echo $row['afterdiscount']; ?>|<?php echo $row['todate']; ?>||<?php echo $row['barcode']; ?>|<?php echo $row['fromdate']; ?>">
 													</td>
 													<td scope="row"><?php echo $no; ?></td>
 													<td><?php echo $row['sku']; ?></td>
