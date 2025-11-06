@@ -93,6 +93,16 @@
 						<option value="green">Hijau</option>
 					</select>
 					</td>
+
+					<td> Verifikasi Ke</td>
+					<td><select id="verifikasiKe">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+					</td>
 					
 					</tr>
 					
@@ -100,7 +110,7 @@
 					<br>
 					
 					<button onclick="cetakGeneric('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>');" class="btn btn-primary">Cetak Selisih</button>	
-					<button onclick="cetakPdf('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>');" class="btn btn-warning">Cetak Selisih PDF</button>	
+					<button onclick="cetakPdf('<?php echo $_GET['m_pi']; ?>', '<?php echo $rack_name; ?>','<?php echo $dn; ?>','<?php echo $selisih; ?>');" class="btn btn-warning">Cetak Selisih PDF</button>	
 					<button onclick="testPrint();" class="btn btn-success">Test Print</button>	
 					<br>
 					<br>
@@ -538,91 +548,141 @@ html += 'No | Nama / SKU | '+textbyline('Count',6,'right')+' | '+textbyline('Var
 
 
 
-function cetakPdf(mpi, rn, dn){
-		
-		// alert(mpi+'<br>'+rn+'<br>'+dn);		
-		var number = 0;	
-		var no = 1;	
-				
-		var sort = document.getElementById("sort").value;
-		var warna = document.getElementById("warna").value;
-		// alert(html);
-		$.ajax({
-			url: "api/action.php?modul=inventory&act=cetak_generic",
-			type: "POST",
-			data : {mpi: mpi, sort: sort},
-			success: function(dataResult){
-			
-				
-				
-var html = '<font style="color: '+warna+'">No Document  : '+dn+'</font> <br>';
-   html += '<font style="color: '+warna+'">Rack         : '+rn+'</font> <br>';
-   
-   
-html += '<table ><tr><td style="color: '+warna+'; border-color: '+warna+';">No</td><td style="color: '+warna+'; border-color: '+warna+'">SKU</td><td style="color: '+warna+'; border-color: '+warna+'">Nama</td>'+
-'<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Count',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('Varian',6,'right')+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+textbyline('QTY Sales',6,'right')+'</td></tr>';
-			
-				
-				var dataResult = JSON.parse(dataResult);
-				
-				var panjang = dataResult.length;
-				$('#notif').html("Proses print");
-				
-				for(let i = 0; i < dataResult.length; i++) {
-						let data = dataResult[i];
+function cetakPdf(mpi, rn, dn, selisih) {
+    var number = 0;	
+    var no = 1;	
+            
+    var sort = document.getElementById("sort").value;
+    var warna = document.getElementById("warna").value;
+    var verifikasiKe = document.getElementById("verifikasiKe").value;
 
-						var sku = data.sku;
-						var name = data.name;
-						var qtyvariant = parseInt(data.qtyvariant);
-						var qtycount = data.qtycount;
-						var qtysales = data.qtysales;
-						var barcode = data.barcode;
-							
-							html += '<tr>';
-							html += '<td style="color: '+warna+'; border-color: '+warna+'">'+no+'</td><td style="color: '+warna+'; border-color: '+warna+'">'+sku+'</td>';
-							html +='<td style="color: '+warna+'; border-color: '+warna+'">'+textbyline(name,1,'left')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtycount+'',19-sku.length,'right')+'</td>'+
-							'<td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtyvariant+'',10,'right')+'</td><td style="text-align: center; color: '+warna+'; border-color: '+warna+'"> '+textbyline(''+qtysales+'',10,'right')+'</td>';
-							// html += "\n\r";
-							// html += barcode;
-	
-							html += '</tr>';
-						
+    $.ajax({
+        url: "api/action.php?modul=inventory&act=cetak_generic",
+        type: "POST",
+        data : { mpi: mpi, sort: sort },
+        success: function(dataResult) {
+            var dataResult = JSON.parse(dataResult);
+            var panjang = dataResult.length;
 
-								
-			
-							number++;
-							no++;
-							
-							
-							
-							if(number == panjang){
-							
-								html+='<br>';
-								html+='<br>';
+            // ===== HEADER UTAMA =====
+            var html = `
+                <div style="text-align:left; font-family:Arial;">
+                    <h3 style="color:${warna}; margin-bottom:2px;">KERTAS VERIFIKASI PI KE-${verifikasiKe}</h3>
+                    <font style="color:${warna};">No Document : ${dn}</font><br>
+                    <font style="color:${warna};">Rack : ${rn}</font><br>
+                    <font style="color:${warna};">Selisih : ${formatRupiah(selisih)}</font><br>
+                    <br>
+                </div>
+            `;
 
-								var mywindow = window.open('', 'my div', 'height=600,width=800');
-							/*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-							mywindow.document.write('<style>table, th, td {border: 1px solid black;border-collapse: collapse;}@media print{@page {size: potrait; width: 216mm;height: 280mm;}}table { page-break-inside:auto }tr{ page-break-inside:avoid; page-break-after:auto }</style>');
-							mywindow.document.write(html);
+            // ===== TABLE HEADER =====
+            html += `
+                <table style="width:100%; border-collapse:collapse; font-family:Arial; font-size:12px;">
+                    <thead>
+                        <tr>
+                            <th style="border:1px solid ${warna}; color:${warna};">No</th>
+                            <th style="border:1px solid ${warna}; color:${warna};">SKU</th>
+                            <th style="border:1px solid ${warna}; color:${warna};">Nama Barang</th>
+                            <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Count</th>
+                            <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Varian</th>
+                            <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Sales</th>
+                            <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Nota</th>
+                            <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Verif</th>
+                            <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Jumlah Verif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
-					
-							mywindow.print();
-								
-							}
-					
-				
-				}
-				
-				
-				
-				html += '</table>';
-				
-				
-			}
-		});
+            // ===== TABLE BODY =====
+            for (let i = 0; i < panjang; i++) {
+                let data = dataResult[i];
+                let sku = data.sku || '';
+                let name = data.name || '';
+                let qtyvariant = parseInt(data.qtyvariant || 0);
+                let qtycount = parseInt(data.qtycount || 0);
+                let qtysales = parseInt(data.qtysales || 0);
+                let nota = data.m_pi_line_key;
+                let qtyverif = parseInt(data.verifiedcount || 0);
+                let harga = parseFloat(data.price || 0);
+                let jumlahVerif = qtyverif * harga;
+                let selisihRp = (qtycount - qtyverif) * harga;
+                let verifiedcount = data.verifiedcount || 0;
 
-				
+                html += `
+                    <tr>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${no}</td>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${sku}</td>
+                        <td style="border:1px solid ${warna}; color:${warna};">${name}</td>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtycount}</td>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtyvariant}</td>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtysales}</td>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:center;"></td>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:right;"></td>
+                        <td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${verifiedcount}</td>
+                    </tr>
+                `;
+                no++;
+                number++;
+            }
+
+            html += `
+                    </tbody>
+                </table>
+                <br>
+            `;
+
+            // ===== FOOTER / TANDA TANGAN =====
+            let today = new Date();
+            let tgl = today.getDate();
+            let bulan = today.toLocaleString('id-ID', { month: 'long' });
+            let tahun = today.getFullYear();
+
+            html += `
+                <table style="width:100%; border:none; margin-top:10px; font-family:Arial; font-size:13px; text-align:center;">
+                    <tr>
+                        <td style="border:none;"><b>Diverifikasi</b></td>
+                        <td style="border:none;">Bekasi, ${tgl} ${bulan} ${tahun}<br>Dibuat</td>
+                    </tr>
+                    <tr><td colspan="2" style="height:60px;">&nbsp;</td></tr>
+                    <tr>
+                        <td style="border:none;"><b>(Tim Toko)</b></td>
+                        <td style="border:none;"><b>(Tim PI)</b></td>
+                    </tr>
+                </table>
+            `;
+
+            // ===== CETAK KE WINDOW BARU =====
+            var mywindow = window.open('', 'Cetak PI', 'height=700,width=900');
+            mywindow.document.write(`
+                <html><head>
+                <title>Kertas Verifikasi PI</title>
+                <style>
+                    table, th, td { border-collapse: collapse; font-size:12px; }
+                    th, td { padding:4px; }
+                    @media print {
+                        @page { size: A4 portrait; margin: 8mm; }
+                        table { page-break-inside:auto; }
+                        tr { page-break-inside:avoid; page-break-after:auto; }
+                    }
+                </style>
+                </head><body>
+                ${html}
+                </body></html>
+            `);
+            mywindow.document.close();
+            mywindow.focus();
+            mywindow.print();
+        }
+    });
+
+    // helper format rupiah
+    function formatRupiah(angka) {
+        if (!angka) return '-';
+        return 'Rp ' + parseFloat(angka).toLocaleString('id-ID');
+    }
 }
+
 
 
 
