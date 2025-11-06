@@ -48,8 +48,20 @@
 							$selisih = $qtycount - $qtyerp;
 							echo "<font>SELISIH : <b>".rupiah($selisih)."</b></font>";
 						}
+
+
+						//select address2 from ad_morg
+						$sql_address = "SELECT address2 FROM ad_morg WHERE id = 1";
+						$address2 = '';
+						foreach ($connec->query($sql_address) as $row_address) {
+							$address2 = $row_address['address2'];
+						}
+						//textbox hidden
+						
 						
 				?>
+				<br>
+				<input type="hidden" id="address2" value="<?php echo $address2; ?>">
 				<table>
 				<tr>
 					<td style="width: 40px; background-color: #ffa597"></td>
@@ -555,6 +567,7 @@ function cetakPdf(mpi, rn, dn, selisih) {
     var sort = document.getElementById("sort").value;
     var warna = document.getElementById("warna").value;
     var verifikasiKe = document.getElementById("verifikasiKe").value;
+    var address2 = document.getElementById("address2").value;
 
     $.ajax({
         url: "api/action.php?modul=inventory&act=cetak_generic",
@@ -570,7 +583,7 @@ function cetakPdf(mpi, rn, dn, selisih) {
                     <h3 style="color:${warna}; margin-bottom:2px;">KERTAS VERIFIKASI PI KE-${verifikasiKe}</h3>
                     <font style="color:${warna};">No Document : ${dn}</font><br>
                     <font style="color:${warna};">Rack : ${rn}</font><br>
-                    <font style="color:${warna};">Selisih : ${formatRupiah(selisih)}</font><br>
+                    <font class="highlight" style="color:${warna}; background-color:yellow;">Selisih : ${formatRupiah(selisih)}</font><br>
                     <br>
                 </div>
             `;
@@ -587,7 +600,7 @@ function cetakPdf(mpi, rn, dn, selisih) {
                             <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Varian</th>
                             <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Sales</th>
                             <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Nota</th>
-                            <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Verif</th>
+                            <th class="highlight" style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Verif</th>
                             <th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Jumlah Verif</th>
                         </tr>
                     </thead>
@@ -642,7 +655,7 @@ function cetakPdf(mpi, rn, dn, selisih) {
                 <table style="width:100%; border:none; margin-top:10px; font-family:Arial; font-size:13px; text-align:center;">
                     <tr>
                         <td style="border:none;"><b>Diverifikasi</b></td>
-                        <td style="border:none;">Bekasi, ${tgl} ${bulan} ${tahun}<br>Dibuat</td>
+                        <td style="border:none;">${address2}, ${tgl} ${bulan} ${tahun}<br>Dibuat</td>
                     </tr>
                     <tr><td colspan="2" style="height:60px;">&nbsp;</td></tr>
                     <tr>
@@ -660,6 +673,11 @@ function cetakPdf(mpi, rn, dn, selisih) {
                 <style>
                     table, th, td { border-collapse: collapse; font-size:12px; }
                     th, td { padding:4px; }
+					.highlight {
+						background-color: yellow !important;
+						-webkit-print-color-adjust: exact !important;
+						print-color-adjust: exact !important;
+					}
                     @media print {
                         @page { size: A4 portrait; margin: 8mm; }
                         table { page-break-inside:auto; }
