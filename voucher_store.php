@@ -43,6 +43,8 @@
 								<th>Nominal</th>
 								<th>Max Qty</th>
 								<th>Aktif</th>
+								<th>Start Date</th>
+								<th>End Date</th>
 								<th>Insert By</th>
 								<th>Insert Date</th>
 							</tr>
@@ -61,6 +63,8 @@
 								<td class="text-center">
 									<?= $row['isactive'] ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-secondary">Nonaktif</span>'; ?>
 								</td>
+								<td class="text-center"><?= $row['startdate'] ? htmlspecialchars($row['startdate']) : '-'; ?></td>
+								<td class="text-center"><?= $row['enddate'] ? htmlspecialchars($row['enddate']) : '-'; ?></td>
 								<td><?= htmlspecialchars($row['insertby']); ?></td>
 								<td><?= $row['insertdate']; ?></td>
 							</tr>

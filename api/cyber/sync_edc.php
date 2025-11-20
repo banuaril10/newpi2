@@ -21,7 +21,11 @@ function get_category($url)
     curl_close($curl);
     return $response;
 }
+
+
 $url = $base_url.'/store/bank/get_edc.php';
+
+echo $url;
 
 $hasil = get_category($url);
 $j_hasil = json_decode($hasil, true);
