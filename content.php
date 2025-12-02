@@ -312,6 +312,7 @@
 				
 				<option value="2">Rack</option>
 				<option value="3">Items</option>
+				<option value="4">Sesuai Schedule IC</option>
 			</select>
 		<div id="pc" style="display: none">
 			<select name="pc" id="pc"class="selectize" >
@@ -329,19 +330,57 @@
 				?>
 			</select>
 		</div>
-		<div id="rack" style="display: none">
-			<select name="rack" id="rack" class="selectize">
-				<option value="">Rack Name</option>
-				<?php 
-				$sql1 = "select rack from pos_mproduct where rack != '' group by rack";
-	
-				foreach ($connec->query($sql1) as $row) {
-					echo '<option value="'.$row['rack'].'">'.$row['rack'].'</option>';	    
-				}
-				?>
-			</select>
+
+
+			<div id="sub" style="display: none">
+				<select name="sub" id="sub" class="selectize">
+					<option value="">Sub Category</option>
+					<?php
+					// URL API
+					$api_url = "https://api.idolmartidolaku.com/apiidolmart/store/pi/get_subcat.php?date=" . date('Y-m-d');
+
+					// Mengambil data dari API dengan CURL
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $api_url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Timeout 10 detik
+					$api_response = curl_exec($ch);
+					$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+					curl_close($ch);
+
+					if ($api_response !== false && $http_code === 200) {
+						$api_data = json_decode($api_response, true);
+
+						// Debug: uncomment untuk melihat respons API
+						// echo "<pre>API Response: ";
+						// print_r($api_data);
+						// echo "</pre>";
+					
+						if (is_array($api_data) && !empty($api_data)) {
+							// Urutkan data berdasarkan subcategory
+							usort($api_data, function ($a, $b) {
+								return strcmp($a['subcategory'] ?? '', $b['subcategory'] ?? '');
+							});
+
+							// Loop melalui data API langsung
+							foreach ($api_data as $item) {
+								if (isset($item['id']) && isset($item['subcategory'])) {
+									$id = htmlspecialchars($item['id']);  // PERUBAHAN DI SINI
+									$name = htmlspecialchars($item['subcategory']);
+									echo '<option value="' . $name . '">' . $name . '</option>';
+								}
+							}
+						} else {
+							echo '<option value="">No data from API</option>';
+						}
+					} else {
+						echo '<option value="">Failed to fetch API (HTTP: ' . $http_code . ')</option>';
+					}
+					?>
+				</select>
 			
-		</div>	
+			</div>	
 			
 		</div> 
       </div>
@@ -410,18 +449,24 @@ function selectKat(){
 	if(kat == '1'){
 		 $("#pc").show();
 		 $("#rack").hide();
+		 $("#sub").hide();
 		
 	}else if(kat == '2'){
 		
 		 $("#pc").hide();
 		 $("#rack").show();
+		  $("#sub").hide();
 	}else if(kat == '3'){
 		
 		 $("#pc").hide();
 		 $("#rack").hide();
+		  $("#sub").hide();
+	}else if(kat == '4'){
+		
+		 $("#pc").hide();
+		 $("#rack").hide();
+		$("#sub").show();
 	}
-	
-	
 }
 
 function syncErp(m_pi){
@@ -529,6 +574,7 @@ $('#butsave').on('click', function() {
 		var kat = $('select[id=kat] option').filter(':selected').val();
 		var rack = $('select[id=rack] option').filter(':selected').val();
 		var pc = $('select[id=pc] option').filter(':selected').val();
+		var sub = $('select[id=sub] option').filter(':selected').val();
 		var sso = $('#stats_sales_order').val();
 
 		var formData = new FormData();
@@ -538,6 +584,7 @@ $('#butsave').on('click', function() {
 		formData.append('kat', kat);
 		formData.append('rack', rack);
 		formData.append('pc', pc);
+		formData.append('sub', sub);
 		formData.append('sso', sso);
 		
 		if(it!="" || sl!="" || kat!=""){
@@ -684,6 +731,66 @@ $('#butsave').on('click', function() {
 						}
 					});
 				
+			}else if(kat == '4'){
+				
+				if(sub!=""){
+					
+					
+					$.ajax({
+						url: "api/action.php?modul=inventory&act=input_sub",
+						type: "POST",
+						data : formData,
+						processData: false,
+						contentType: false,
+						beforeSend: function(){
+							$('#notif').html("Proses input header dan line..");
+							$("#overlay").fadeIn(300);
+							$(".modal").modal('hide');
+						},
+						success: function(dataResult){
+							console.log(dataResult);
+							
+							
+							// if (!$.trim(dataResult)){   
+								
+								if(dataResult){
+									var dataResult = JSON.parse(dataResult);
+									if(dataResult.result=='2'){
+										$('#notif').html("Proses input ke inventory line");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+										location.reload();
+									}else if(dataResult.result=='1'){
+										$('#notif').html("<font style='color: green'>Berhasil input dengan category!</font>");
+										$("#overlay").fadeOut(300);
+										location.reload();
+										$( "#butsave" ).prop( "disabled", false );
+									}
+									else {
+										$('#notif').html(dataResult.msg);
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									}
+									
+								}else{
+									
+										$('#notif').html("Items tidak ditemukan");
+										$( "#butsave" ).prop( "disabled", false );
+										$("#overlay").fadeOut(300);
+									
+								}
+								
+						}
+					});
+					
+					
+					
+					
+				}else{
+					
+					$('#notif').html("Product category tidak boleh kosong!");
+					$( "#butsave" ).prop( "disabled", false );
+				}
 			}
 			
 			
