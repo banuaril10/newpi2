@@ -587,6 +587,8 @@ $('#butsave').on('click', function() {
 		formData.append('sub', sub);
 		formData.append('sso', sso);
 		
+// alert(sub);
+
 		if(it!="" || sl!="" || kat!=""){
 			$( "#butsave" ).prop( "disabled", true );
 			// $('#notif').html("Sistem sedang melakukan input, jangan refresh halaman..");
