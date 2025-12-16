@@ -4,6 +4,7 @@
 
 
 <?php
+
 		// $sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
 		$sql_sales = "select count(tanggal) as jums from m_pi_sales where date(tanggal) = '".date('Y-m-d')."'";
 		
@@ -337,7 +338,7 @@
 					<option value="">Sub Category</option>
 					<?php
 					// URL API
-					$api_url = "https://api.idolmartidolaku.com/apiidolmart/store/pi/get_subcat.php?date=" . date('Y-m-d');
+					$api_url = "https://api.idolmartidolaku.com/apiidolmart/store/pi/get_subcat.php?date=" . date('Y-m-d')."&idstore=".$org_key;
 
 					// Mengambil data dari API dengan CURL
 					$ch = curl_init();
