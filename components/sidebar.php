@@ -17,6 +17,19 @@
 				<li class="sidebar-title">Menu</li>
 
 
+				<?php
+				$username = $_SESSION['username'];
+				if ($username == 'edp') { ?>
+					<li class="sidebar-item">
+						<a href="reset_cashier.php" class='sidebar-link'>
+							<i class="bi bi-person-x-fill"></i>
+							<span>Reset Cashier User</span>
+						</a>
+					</li>
+				<?php } ?>
+
+
+
 				<li class="sidebar-item">
 					<a href="receive_print.php" class='sidebar-link'>
 						<i class="bi bi-cash-stack"></i>

@@ -989,6 +989,15 @@ foreach ($cmd_alter_length as $r) {
 }
 
 
+//tambahin indexing tp cek existing dlu CREATE INDEX pos_dsalesline_billno_idx ON public.pos_dsalesline USING btree (billno);
+$indexing_table_billno = [
+	'CREATE INDEX IF NOT EXISTS pos_dsalesline_billno_idx ON public.pos_dsalesline USING btree (billno);'
+];
+
+foreach ($indexing_table_billno as $r) {
+	$connec->exec($r);
+}
+
 
 
 
