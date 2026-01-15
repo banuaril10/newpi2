@@ -999,6 +999,98 @@ foreach ($indexing_table_billno as $r) {
 }
 
 
+// CREATE TABLE pos_mvoucher_rule (
+//     pos_mvoucher_rule_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+//     isactived varchar(2),
+//     id_location varchar(10),
+//     min_transaction numeric,
+//     voucher_amount numeric,
+//     valid_days int,
+//     description varchar(255),
+//     insertdate timestamp,
+//     insertby varchar(50)
+// );
+
+
+$cmd_voucher_rule = [
+	'CREATE TABLE IF NOT EXISTS pos_mvoucher_rule (
+		pos_mvoucher_rule_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+		isactived varchar(2),
+		id_location varchar(10),
+		min_transaction numeric,
+		voucher_amount numeric,
+		valid_days int,
+		description varchar(255),
+		insertdate timestamp,
+		insertby varchar(50),
+		percent numeric default 0,
+		limit_voucher numeric default 0
+	);'
+];
+foreach ($cmd_voucher_rule as $r) {
+	$connec->exec($r);
+}
+
+
+
+$cmd_dvoucher = [
+	'CREATE TABLE IF NOT EXISTS pos_dvoucher (
+		pos_dvoucher_key varchar(32) PRIMARY KEY DEFAULT get_uuid(),
+		pos_dsales_key varchar(32),
+		membercard varchar(50),
+		voucher_amount numeric,
+		voucher_code varchar(30),
+		status varchar(20), -- NEW, USED, EXPIRED
+		valid_from date,
+		valid_until date,
+		insertdate timestamp,
+		useddate timestamp,
+		percent numeric default 0
+	);'
+];
+foreach ($cmd_dvoucher as $r) {
+	$connec->exec($r);
+}
+
+
+// ALTER TABLE pos_dsales
+// ADD COLUMN voucher_amount numeric DEFAULT 0,
+// ADD COLUMN voucher_code varchar(30);
+
+$cmd_alter_dsales_voucher = [
+	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS voucher_amount numeric DEFAULT 0;',
+	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS voucher_code varchar(30);',
+	'ALTER TABLE pos_dsales ADD COLUMN IF NOT EXISTS voucher_description varchar(125);'
+
+];
+
+foreach ($cmd_alter_dsales_voucher as $r) {
+	$connec->exec($r);
+}
+
+$cmd_alter_dcashierbalance_voucher = [
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS vouchercashamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS voucherdebitamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS vouchercreditamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;'
+];
+
+foreach ($cmd_alter_dcashierbalance_voucher as $r) {
+	$connec->exec($r);
+}
+
+//untuk pos_dshopsales juga
+$cmd_alter_dshopsales_voucher = [
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS vouchercashamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS voucherdebitamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS vouchercreditamount numeric NULL DEFAULT 0;',
+	'ALTER TABLE pos_dshopsales ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;'
+];
+
+foreach ($cmd_alter_dshopsales_voucher as $r) {
+	$connec->exec($r);
+}
+
 
 
 ?>

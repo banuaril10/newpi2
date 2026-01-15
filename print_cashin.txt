@@ -1,10 +1,260 @@
-              IDOLMART OL              
-              Jalan Caman              
-                Bekasi                
-REPRINT
-=======================================
-KASIR      :                 pos
-TANGGAL    :                   02-Jul-24
-SALDO AWAL :                      10,000
-=======================================
-02-Jul-24 11:23:05
+No Document  : BOSOL-20260115151709 
+Rack         : 15-ELEKTRONIK 
+ 
+No | Nama / SKU |  Count | Varian 
+1. 66-17 Kipas Portable Telinga
+8150200000278      0        -11
+
+2. Air Fryer Advance ADF 35A
+8151600000007      0         -3
+
+3. Air Fryer Advance ADF 35D
+8151600000008      0         -4
+
+4. Air Fryer Advance ADF 50A
+8151600000010      0         -3
+
+5. Arashi Bottom Dispenser ABD 03N White
+8151600000012      0         -6
+
+6. Arashi Multifunction Dispenser AMD 02BC Black
+8151600000011      0         -4
+
+7. Catok Omfu 2 in 1 HS01
+8150700000061      0         -1
+
+8. Colokan Jupiter 3L 5M
+8150500000141      0         -1
+
+9. Colokan Jupiter 4L 1.5M
+8150500000136      0         -1
+
+10. Colokan Jupiter 5L 3M
+8150500000140      0         -8
+
+11. Colokan SunFree 3L 1.5M
+8150500000144      0         -1
+
+12. Dispenser Multifungsi Arashi AMD-01B
+8151700000108      0         -3
+
+13. Earphone Vgen VEP1-09
+8151000000133      0         -7
+
+14. Finger Counter 1011
+815003788          0         -4
+
+15. Kalkulator Retype CX-512
+815003872          0         -3
+
+16. Kipas 3 in 1 Welhome WH-1881M 18 Inch
+8150200000084      0        -19
+
+17. Kipas Advance 3 in 1 TDS-18
+8150200000054      0        -93
+
+18. Kipas Karakter Car WH-108K
+8150200000077      0         -6
+
+19. Kipas Karakter Doraemon
+815004152          0         -1
+
+20. Kipas Karakter Goofy
+8150200000058      0         -3
+
+21. Kipas Karakter HK
+815004169          0         -9
+
+22. Kipas Karakter Kuda Poni WH-106P
+8150200000080      0         -8
+
+23. Kipas Karakter Pinguin WH-201P
+8150200000079      0         -8
+
+24. Kipas Karakter Tiger
+8150200000316      0        -10
+
+25. Kipas Portable Labubu 2
+8150200000314      0         -3
+
+26. Kipas Portable Lampu Adv SF10
+8150200000032      0         -1
+
+27. Kipas Portable Lipat v2
+815004154          0         -2
+
+28. Kipas Portable Mini Bolong Rabbit
+8150200000036      0         -2
+
+29. Lampu Hannochs Alfa 12 Watt
+8151200000190      0        -19
+
+30. Lampu Hannochs Alfa 15W CDL
+815004165          0        -11
+
+31. Lampu Hannochs Alfa 3W CDL
+815004159          0        -13
+
+32. Lampu Hannochs Alfa 5W CDL
+815004160          0        -10
+
+33. Lampu Hannochs Alfa 7W CDL
+815004161          0         -3
+
+34. Lampu Hannochs Alfa Multipack (Beli 3 Gratis 1) 6
+8151800000052      0         -1
+
+35. Lampu Hannochs Basic 3W
+8151200000154      0         -2
+
+36. Lampu Hannochs Basic 7W
+8151200000170      0         -3
+
+37. Lampu Hannochs Genius 6W CDL
+815004207          0         -1
+
+38. Lampu Hannochs Vario 12 W CDL
+8151800000026      0         -3
+
+39. Lampu Hannochs Vario 18 W CDL
+8151800000027      0         -6
+
+40. Lampu Hannochs Vario 6 W CDL
+8151800000025      0        -40
+
+41. Lampu Hias MS36
+815003929          0         -5
+
+42. Lampu LED Cable USB
+815004290          0         -2
+
+43. Lampu LED Hannochs Sonic 5W CDL
+8151800000024      0         -4
+
+44. Lampu LED Hannochs Sonic 7W CDL
+8151800000023      0        -15
+
+45. Lampu LED Laku Laku Tipe 20
+8151800000036      0         -6
+
+46. Lampu LED Laku Laku Tipe 30
+8151800000037      0        -12
+
+47. Panci Elektrik Multifungsi C-18
+8151700000057      0         -1
+
+48. Penggiling Daging Serbaguna (Stainless)
+8150000000003      0         -2
+
+49. Pompa Galon Elektrik
+8150400000188      0         -2
+
+50. Set Top Box TV Digital
+8151700000094      0        -22
+
+51. Setrika Niko NK333S
+8150500000158      0         -1
+
+52. Speaker JBL Mega Bass BT
+8151400000144      0         -1
+
+53. Speaker Mini AK-JJB-0112
+8151400000140      0        -11
+
+54. Speaker Niko JS1 BT
+8151400000146      0         -7
+
+55. Speaker Niko Slank Classic BT
+8151400000153      0         -1
+
+56. Speaker Portable K12/2 Mic
+8151400000189      0         -1
+
+57. Speaker Portable Mic Karaoke BT
+8151400000151      0         -2
+
+58. Timbangan Digital Karakter
+8151700000056      0         -7
+
+59. Tripod Weifeng WT3310A
+8150400000210      0         -1
+
+60. Wall Fan Welhome 12 Inch WH-1261
+8150200000085      0         -2
+
+61. Wall Fan Welhome 16 Inch WH-1661
+8150200000086      0         -1
+
+62. null
+8150000000050      0        -24
+
+63. null
+8150000000053      0        -24
+
+64. null
+8150000000055      0        -24
+
+65. null
+8150000000056      0        -24
+
+66. null
+8150000000057      0        -24
+
+67. null
+8150000000058      0        -24
+
+68. null
+8150000000059      0        -24
+
+69. null
+8150000000060      0        -24
+
+70. null
+8150000000061      0        -24
+
+71. null
+8150000000063      0        -24
+
+72. null
+8150000000064      0        -24
+
+73. null
+8150000000065      0        -24
+
+74. null
+8150000000066      0        -24
+
+75. null
+8150000000067      0        -24
+
+76. null
+8150000000068      0        -24
+
+77. null
+8150000000069      0        -24
+
+78. null
+8150000000071      0        -24
+
+79. null
+8150000000072      0        -24
+
+80. null
+8150000000077      0        -24
+
+81. null
+8150000000054      0        -23
+
+82. null
+8150000000075      0        -23
+
+83. null
+8150000000078      0        -23
+
+
+
+
+
+
+
+
