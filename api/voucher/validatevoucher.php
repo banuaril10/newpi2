@@ -6,10 +6,8 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 include "../../config/koneksi.php";
 
-// Tangkap request
 $input = json_decode(file_get_contents('php://input'), true);
 
-// Validasi input - hanya vouchercode dan totalamount yang wajib
 if (!isset($input['vouchercode']) || !isset($input['totalamount'])) {
     echo json_encode([
         'valid' => false,
@@ -19,34 +17,32 @@ if (!isset($input['vouchercode']) || !isset($input['totalamount'])) {
     exit;
 }
 
-$voucherCode = trim($input['vouchercode']);
-$totalAmount = floatval($input['totalamount']);
-$currentDate = date('Y-m-d');
+$voucherCode  = trim($input['vouchercode']);
+$totalAmount  = floatval($input['totalamount']);
+$currentDate  = date('Y-m-d');
 
 try {
-    // 1. Cek voucher di database
+
+    // 1. Ambil voucher berdasarkan kode
     $sql = "SELECT * FROM pos_dvoucher 
-            WHERE voucher_code = ? 
-            AND status = 'NEW'
-            AND valid_from <= ?
-            AND valid_until >= ?
+            WHERE voucher_code = ?
             LIMIT 1";
-    
     $stmt = $connec->prepare($sql);
-    $stmt->execute([$voucherCode, $currentDate, $currentDate]);
+    $stmt->execute([$voucherCode]);
     $voucher = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
+    // 2. Voucher tidak ditemukan
     if (!$voucher) {
         echo json_encode([
             'valid' => false,
-            'message' => 'Voucher blm berlaku, kadaluarsa, atau sudah digunakan',
+            'message' => 'Voucher tidak ditemukan',
             'amount' => 0
         ]);
         exit;
     }
-    
-    // 2. Cek apakah voucher sudah dipakai (cek kolom useddate)
-    if ($voucher['useddate'] !== null) {
+
+    // 3. Voucher sudah digunakan
+    if ($voucher['useddate'] !== null || $voucher['status'] !== 'NEW') {
         echo json_encode([
             'valid' => false,
             'message' => 'Voucher sudah digunakan',
@@ -54,68 +50,62 @@ try {
         ]);
         exit;
     }
-    
-    // 3. Validasi minimal pembelian (opsional)
-    $minPurchase = 0; // Disable minimal pembelian
-    
-    if ($minPurchase > 0 && $totalAmount < $minPurchase) {
+
+    // 4. Voucher belum berlaku
+    if ($currentDate < $voucher['valid_from']) {
         echo json_encode([
             'valid' => false,
-            'message' => 'Minimal pembelian Rp ' . number_format($minPurchase, 0, ',', '.') . ' untuk menggunakan voucher',
+            'message' => 'Voucher belum berlaku',
             'amount' => 0
         ]);
         exit;
     }
-    
-    // 4. Hitung nilai voucher berdasarkan tipe (amount atau percent)
+
+    // 5. Voucher sudah kadaluarsa
+    if ($currentDate > $voucher['valid_until']) {
+        echo json_encode([
+            'valid' => false,
+            'message' => 'Voucher sudah kadaluarsa',
+            'amount' => 0
+        ]);
+        exit;
+    }
+
+    // 6. Hitung nilai voucher
     $voucherAmount = 0;
-    
-    if (isset($voucher['percent']) && $voucher['percent'] > 0) {
-        // Jika ada field percent dan nilainya > 0, gunakan persentase
+
+    if (!empty($voucher['percent']) && $voucher['percent'] > 0) {
         $percent = floatval($voucher['percent']);
-        
-        // Hitung potongan berdasarkan persentase
         $calculatedAmount = $totalAmount * ($percent / 100);
-        
-        // Jika ada voucher_amount (maksimum), gunakan yang lebih kecil
-        if (isset($voucher['voucher_amount']) && $voucher['voucher_amount'] > 0) {
-            $maxAmount = floatval($voucher['voucher_amount']);
-            $voucherAmount = min($calculatedAmount, $maxAmount);
+
+        if (!empty($voucher['voucher_amount']) && $voucher['voucher_amount'] > 0) {
+            $voucherAmount = min($calculatedAmount, $voucher['voucher_amount']);
         } else {
-            // Jika tidak ada batas maksimum, gunakan hasil perhitungan persentase
             $voucherAmount = $calculatedAmount;
         }
-        
-        // Pastikan tidak melebihi total amount
+
         $voucherAmount = min($voucherAmount, $totalAmount);
-        
     } else {
-        // Jika tidak ada percent, gunakan voucher_amount biasa
-        $voucherAmount = floatval($voucher['voucher_amount']);
-        
-        // Aturan: Voucher bisa digunakan untuk total belanja berapapun
-        // Nilai akhir = min(nilai voucher, total belanja)
-        $voucherAmount = min($voucherAmount, $totalAmount);
+        $voucherAmount = min(floatval($voucher['voucher_amount']), $totalAmount);
     }
-    
-    // 5. Response sukses
+
+    // 7. Response sukses
     echo json_encode([
         'valid' => true,
         'message' => 'Voucher valid',
         'amount' => $voucherAmount,
         'voucher_data' => [
-            'voucher_key' => $voucher['pos_dvoucher_key'],
+            'voucher_key'     => $voucher['pos_dvoucher_key'],
             'original_amount' => $voucher['voucher_amount'] ?? 0,
-            'percent' => $voucher['percent'] ?? 0,
-            'valid_until' => $voucher['valid_until']
+            'percent'         => $voucher['percent'] ?? 0,
+            'valid_until'     => $voucher['valid_until']
         ]
     ]);
-    
+
 } catch (PDOException $e) {
     echo json_encode([
         'valid' => false,
-        'message' => 'Error database: ' . $e->getMessage(),
+        'message' => 'Error database',
         'amount' => 0
     ]);
 }
-?>
