@@ -46,7 +46,7 @@ $server = json_decode($response, true);
 if (!$server || ($server['valid'] ?? false) !== true) {
     echo json_encode([
         'valid' => false,
-        'message' => $server['message'] ?? 'Gagal cek voucher ke server',
+        'message' => $server['message'] ?? 'Gagal cek voucher ke server, periksa internet/intransit',
         'amount' => 0
     ]);
     exit;
