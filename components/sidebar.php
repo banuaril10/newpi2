@@ -36,6 +36,13 @@
 						<span>Cetak Receive</span>
 					</a>
 				</li>
+
+				<li class="sidebar-item">
+					<a href="dashboard_voucher.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Dashboard Voucher</span>
+					</a>
+				</li>
 				
 				<li class="sidebar-item">
 					<a href="muser.php" class='sidebar-link'>
