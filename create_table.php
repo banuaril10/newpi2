@@ -1094,6 +1094,17 @@ foreach ($cmd_alter_dshopsales_voucher as $r) {
 }
 
 
+//alter table m_pi add column weight numeric
+$cmd_alter_noncash = ['ALTER TABLE pos_dcashiernoncash
+ADD COLUMN IF NOT EXISTS voucheramount numeric NULL DEFAULT 0;
+'
+];
+
+foreach ($cmd_alter_noncash as $r) {
+	$connec->exec($r);
+}
+
+
 
 ?>
 
