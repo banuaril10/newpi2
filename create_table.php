@@ -1105,6 +1105,20 @@ foreach ($cmd_alter_noncash as $r) {
 }
 
 
+// ALTER TABLE public.pos_dvoucher ADD status_intransit varchar(2) NULL;
+
+// ALTER TABLE public.pos_dvoucher ADD id_location varchar(10) NULL;
+
+$cmd_alter_pos_dvoucher = [
+	'ALTER TABLE public.pos_dvoucher ADD COLUMN IF NOT EXISTS status_intransit varchar(2) NULL;',
+	'ALTER TABLE public.pos_dvoucher ADD COLUMN IF NOT EXISTS id_location varchar(10) NULL;'
+];
+
+foreach ($cmd_alter_pos_dvoucher as $r) {
+	$connec->exec($r);
+}
+
+
 
 ?>
 
