@@ -1121,5 +1121,16 @@ foreach ($cmd_alter_pos_dvoucher as $r) {
 
 
 
+// ALTER TABLE pos_dcashierbalance add notes text;
+$cmd_alter_notes = [
+	'ALTER TABLE pos_dcashierbalance ADD COLUMN IF NOT EXISTS notes text;'
+];
+
+foreach ($cmd_alter_notes as $r) {
+	$connec->exec($r);
+}
+
+
+
 ?>
 
