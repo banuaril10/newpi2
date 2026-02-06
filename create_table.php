@@ -1131,6 +1131,17 @@ foreach ($cmd_alter_notes as $r) {
 }
 
 
+//indexing voucher_code di pos_dsales dan pos_dvoucher
+$indexing_voucher_code = [
+	'CREATE INDEX IF NOT EXISTS idx_pos_dsales_voucher_code ON pos_dsales(voucher_code);',
+	'CREATE INDEX IF NOT EXISTS idx_pos_dvoucher_voucher_code ON pos_dvoucher(voucher_code);'
+];
+
+foreach ($indexing_voucher_code as $r) {
+	$connec->exec($r);
+}
+
+
 
 ?>
 
