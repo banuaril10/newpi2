@@ -1160,6 +1160,13 @@ foreach ($cmd_price_audit as $r) {
 	$connec->exec($r);
 }
 
+//alter add column status_intransit di table price_audit
+$cmd_alter_price_audit = [
+	'ALTER TABLE price_audit ADD COLUMN IF NOT EXISTS status_intransit varchar(2);'
+];
+foreach ($cmd_alter_price_audit as $r) {
+	$connec->exec($r);
+}
 
 ?>
 
