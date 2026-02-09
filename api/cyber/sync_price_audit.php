@@ -60,7 +60,7 @@ if ($tanggal != "now") {
     ";
 }
 
-echo $sql;
+// echo $sql;
 
 foreach ($connec->query($sql) as $row) {
     $jj_audit[] = array(
@@ -75,7 +75,7 @@ foreach ($connec->query($sql) as $row) {
     );
 }
 
-echo json_encode($jj_audit);
+// echo json_encode($jj_audit);
 
 // ================= push ke server pusat =================
 if (!empty($jj_audit)) {
@@ -87,6 +87,11 @@ if (!empty($jj_audit)) {
     ));
 
     $hasil = push_to_line($url, $payload, $idstore);
+
+    // echo $payload;
+
+    // print_r($hasil);
+
     $j_hasil = json_decode($hasil, true);
 
     // ================= update status_intransit =================
