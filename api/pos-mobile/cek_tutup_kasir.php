@@ -26,8 +26,8 @@ if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key)) {
 }
 
 try {
-    // Panggil function proc_pos_dsales_lastbill_get
-    $sql = "SELECT * FROM proc_pos_dsales_lastbill_get(
+    // Panggil function proc_pos_dcashierbalance_cashierclose_check
+    $sql = "SELECT * FROM proc_pos_dcashierbalance_cashierclose_check(
         :p_ad_mclient_key,
         :p_ad_morg_key,
         :p_ad_muser_key
@@ -48,30 +48,18 @@ try {
     // Decode JSON data
     $data = $o_data ? json_decode($o_data, true) : null;
     
-    if ($o_message == "success" && !empty($data) && is_array($data)) {
-        // Ambil data pertama (karena array)
-        $billData = $data[0];
-        
+    if ($o_message == "Confirm") {
         echo json_encode([
             "status" => "SUCCESS",
-            "message" => "Berhasil mendapatkan bill",
-            "data" => [
-                "serialno" => $billData["serialno"] ?? 0,
-                "lastbillno" => $billData["lastbillno"] ?? "",
-                "lasttempvalue" => $billData["lasttempvalue"] ?? 0,
-                "lasttempstring" => $billData["lasttempstring"] ?? "Rp 0",
-                "memberid" => $billData["memberid"] ?? null,
-                "membername" => $billData["membername"] ?? null,
-                "isbirthday" => $billData["isbirthday"] ?? false,
-                "memberpoint" => $billData["memberpoint"] ?? 0,
-                "membercardno" => $billData["membercardno"] ?? null,
-                "membertext" => $billData["membertext"] ?? null
-            ]
+            "message" => "Boleh tutup kasir",
+            "can_close" => true,
+            "data" => $data ? $data[0] : null
         ]);
     } else {
         echo json_encode([
             "status" => "ERROR",
-            "message" => "Gagal mendapatkan bill: " . $o_message
+            "message" => $o_message ?: "Tidak bisa tutup kasir",
+            "can_close" => false
         ]);
     }
     

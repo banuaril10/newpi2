@@ -12,30 +12,25 @@ include "../../config/koneksi.php";
 // Terima input JSON
 $input = json_decode(file_get_contents("php://input"), true);
 
-$f1 = $input["f1"] ?? null; // ad_muser_key (supervisor id)
-$f2 = $input["f2"] ?? null; // gen id
-$f3 = $input["f3"] ?? null; // gen password (hasil perhitungan)
+$ad_muser_key = $input["ad_muser_key"] ?? null;
 
 // Validasi input
-if (empty($f1) || empty($f2) || empty($f3)) {
+if (empty($ad_muser_key)) {
     echo json_encode([
-        "result" => "Error: Parameter tidak lengkap"
+        "status" => "ERROR",
+        "message" => "Parameter ad_muser_key wajib diisi"
     ]);
     exit;
 }
 
 try {
-    // Panggil function proc_pos_supervisor_check
-    $sql = "SELECT * FROM proc_pos_supervisor_check(
-        :p_ad_muser_key,
-        :p_genid,
-        :p_genpassword
+    // Panggil function proc_pos_dcashierbalance_insert_check
+    $sql = "SELECT * FROM proc_pos_dcashierbalance_insert_check(
+        :p_ad_muser_key
     )";
     
     $stmt = $connec->prepare($sql);
-    $stmt->bindParam(":p_ad_muser_key", $f1);
-    $stmt->bindParam(":p_genid", $f2);
-    $stmt->bindParam(":p_genpassword", $f3);
+    $stmt->bindParam(":p_ad_muser_key", $ad_muser_key);
     $stmt->execute();
     
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -44,20 +39,25 @@ try {
     $o_data = $result["o_data"] ?? null;
     $o_message = $result["o_message"] ?? "";
     
-    // Response sesuai dengan yang diharapkan Android
     if ($o_message == "Confirm") {
         echo json_encode([
-            "result" => "Confirm"
+            "status" => "SUCCESS",
+            "message" => "Boleh buka kasir",
+            "can_open" => true
         ]);
     } else {
         echo json_encode([
-            "result" => $o_message ?: "PASSWORD SALAH !!"
+            "status" => "ERROR",
+            "message" => $o_message ?: "Tidak bisa buka kasir",
+            "can_open" => false
         ]);
     }
     
 } catch(PDOException $e) {
     echo json_encode([
-        "result" => "Database error: " . $e->getMessage()
+        "status" => "ERROR",
+        "message" => "Database error: " . $e->getMessage(),
+        "can_open" => false
     ]);
 }
 ?>

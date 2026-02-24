@@ -15,9 +15,11 @@ $input = json_decode(file_get_contents("php://input"), true);
 $ad_mclient_key = $input["ad_mclient_key"] ?? null;
 $ad_morg_key = $input["ad_morg_key"] ?? null;
 $ad_muser_key = $input["ad_muser_key"] ?? null;
+$pos_mcashier_key = $input["pos_mcashier_key"] ?? null;
+$actualamount = $input["actualamount"] ?? "0";
 
 // Validasi input
-if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key)) {
+if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key) || empty($pos_mcashier_key)) {
     echo json_encode([
         "status" => "ERROR",
         "message" => "Parameter tidak lengkap"
@@ -25,18 +27,30 @@ if (empty($ad_mclient_key) || empty($ad_morg_key) || empty($ad_muser_key)) {
     exit;
 }
 
+// Sanitasi angka
+function sanitizeNumber($value) {
+    if ($value === null || $value === '') return "0";
+    return preg_replace('/[^0-9\-]/', '', $value);
+}
+
+$actualamount = sanitizeNumber($actualamount);
+
 try {
-    // Panggil function proc_pos_dsales_lastbill_get
-    $sql = "SELECT * FROM proc_pos_dsales_lastbill_get(
+    // Panggil function proc_pos_dcashierbalance_close_update
+    $sql = "SELECT * FROM proc_pos_dcashierbalance_close_update(
         :p_ad_mclient_key,
         :p_ad_morg_key,
-        :p_ad_muser_key
+        :p_ad_muser_key,
+        :p_pos_mcashier_key,
+        :p_actualamount
     )";
     
     $stmt = $connec->prepare($sql);
     $stmt->bindParam(":p_ad_mclient_key", $ad_mclient_key);
     $stmt->bindParam(":p_ad_morg_key", $ad_morg_key);
     $stmt->bindParam(":p_ad_muser_key", $ad_muser_key);
+    $stmt->bindParam(":p_pos_mcashier_key", $pos_mcashier_key);
+    $stmt->bindParam(":p_actualamount", $actualamount);
     $stmt->execute();
     
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -45,33 +59,15 @@ try {
     $o_data = $result["o_data"] ?? null;
     $o_message = $result["o_message"] ?? "";
     
-    // Decode JSON data
-    $data = $o_data ? json_decode($o_data, true) : null;
-    
-    if ($o_message == "success" && !empty($data) && is_array($data)) {
-        // Ambil data pertama (karena array)
-        $billData = $data[0];
-        
+    if ($o_message == "success") {
         echo json_encode([
             "status" => "SUCCESS",
-            "message" => "Berhasil mendapatkan bill",
-            "data" => [
-                "serialno" => $billData["serialno"] ?? 0,
-                "lastbillno" => $billData["lastbillno"] ?? "",
-                "lasttempvalue" => $billData["lasttempvalue"] ?? 0,
-                "lasttempstring" => $billData["lasttempstring"] ?? "Rp 0",
-                "memberid" => $billData["memberid"] ?? null,
-                "membername" => $billData["membername"] ?? null,
-                "isbirthday" => $billData["isbirthday"] ?? false,
-                "memberpoint" => $billData["memberpoint"] ?? 0,
-                "membercardno" => $billData["membercardno"] ?? null,
-                "membertext" => $billData["membertext"] ?? null
-            ]
+            "message" => "Berhasil tutup kasir"
         ]);
     } else {
         echo json_encode([
             "status" => "ERROR",
-            "message" => "Gagal mendapatkan bill: " . $o_message
+            "message" => $o_message ?: "Gagal tutup kasir"
         ]);
     }
     

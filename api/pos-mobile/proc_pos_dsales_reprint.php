@@ -24,13 +24,16 @@ if (empty($billno)) {
 }
 
 try {
-    // Panggil function proc_pos_dsales_print
+    // Panggil function proc_pos_dsales_print dengan parameter |R untuk reprint
     $sql = "SELECT * FROM proc_pos_dsales_print(
         :p_billno
     )";
     
     $stmt = $connec->prepare($sql);
-    $stmt->bindParam(":p_billno", $billno);
+    
+    // Tambahkan |R untuk menandai reprint
+    $billnoWithR = $billno . "|R";
+    $stmt->bindParam(":p_billno", $billnoWithR);
     $stmt->execute();
     
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
