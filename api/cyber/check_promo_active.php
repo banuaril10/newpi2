@@ -121,6 +121,69 @@ foreach ($promo_berakhir as $row) {
     $no_berakhir++;
 }
 
+
+
+// ================= BUY & GET MULAI BESOK =================
+$promo_mulai_bg = $connec->query("SELECT fromdate, todate, discountname, COUNT(skubuy) AS jum
+FROM pos_mproductbuyget 
+WHERE fromdate = '" . $tommorow . "'
+group by fromdate, todate, discountname");
+
+foreach ($promo_mulai_bg as $row) {
+
+    $discountmul_arr[] = array(
+        'discountname' => $row["discountname"] . ' (Buy & Get)',
+        'jum' => $row["jum"]
+    );
+
+    $jum_mulai += $row["jum"];
+    $nama_promo_mulai .= '-' . $row["discountname"];
+
+    $text_periode = date("d F Y", strtotime($row['fromdate'])) . " s.d. " . date("d F Y", strtotime($row['todate']));
+    $text_mulai .= $no_mulai . '. ' . $row["discountname"] . " (Buy & Get) Periode " . $text_periode . " <br> ";
+
+    $list_promo = $connec->query("select * from pos_mproductbuyget 
+    where discountname = '" . $row["discountname"] . "' 
+    and fromdate = '" . $tommorow . "'");
+
+    foreach ($list_promo as $row_list) {
+
+        $name = "";
+        $rack = "";
+        $barcode = "";
+        $price = 0;
+
+        $product = $connec->query("select price, rack, name, barcode 
+        from pos_mproduct 
+        where sku = '" . $row_list["skubuy"] . "'");
+
+        foreach ($product as $row_product) {
+            $name = $row_product["name"];
+            $rack = $row_product["rack"];
+            $price = $row_product["price"];
+            $barcode = $row_product["barcode"];
+        }
+
+        $list_discountmul_arr[] = array(
+            'sku' => $row_list["skubuy"],
+            'barcode' => $barcode,
+            'name' => $name . " BUY " . $row_list["qtybuy"] . " GET " . $row_list["qtyget"],
+            'rack' => $rack,
+            'price' => $price,
+            'afterdiscount' => $row_list["priceget"],
+            'discountname' => $row_list["discountname"] . " Buy&Get",
+            'fromdate' => $row_list["fromdate"],
+            'todate' => $row_list["todate"]
+        );
+    }
+
+    $no_mulai++;
+}
+
+
+
+
+
 $json = array(
     'mulai' => $discountmul_arr,
     'berakhir' => $discountber_arr,
