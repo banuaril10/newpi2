@@ -58,7 +58,8 @@ foreach ($connec->query($sql) as $r) {
         "useddate"        => $r['useddate'],
         "percent"         => $r['percent'],
         "status_intransit"=> $r['status_intransit'],
-        "id_location"     => $r['id_location']
+        "id_location"     => $r['id_location'],
+        "nohp"            => $r['nohp']
     ];
 }
 

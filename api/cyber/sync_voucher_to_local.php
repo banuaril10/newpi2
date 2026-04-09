@@ -74,7 +74,8 @@ try {
                     useddate,
                     percent,
                     id_location,
-                    status_intransit
+                    status_intransit,
+                    nohp
                 ) values (
                     '{$key}',
                     '{$r['pos_dsales_key']}',
@@ -87,7 +88,8 @@ try {
                     ".($r['useddate'] ? "'{$r['useddate']}'" : "NULL").",
                     '{$r['percent']}',
                     '{$r['id_location']}',
-                    '1'
+                    '1',
+                    '{$r['nohp']}'
                 )
             ");
             continue;
