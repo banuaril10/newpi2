@@ -113,7 +113,10 @@ foreach ($result as $row) {
             'qtysales' => $rline['qtysales'],
             'price' => $rline['price'],
             'qtysalesout' => $rline['qtysalesout'],
-            'hargabeli' => $rline['hargabeli']
+            'hargabeli' => $rline['hargabeli'],
+            'updatedby' => $rline['updatedby'],
+            'updateddate' => $rline['updateddate']
+
         );
 
     }

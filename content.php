@@ -226,7 +226,45 @@
 							</div>
 							</div>
 							
-							
+							<!-- Modal Otorisasi SPV untuk PI Items -->
+<div class="modal fade" id="modalOtorisasiSpv" tabindex="-1" aria-labelledby="modalOtorisasiSpvLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="modalOtorisasiSpvLabel">🔐 Otorisasi Supervisor Diperlukan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Anda akan membuat <strong>Physical Inventory untuk Items tertentu</strong>. Harap diisi oleh Supervisor yang bertugas.</p>
+        
+        <div class="mb-3">
+            <label>Pilih Supervisor</label>
+            <select id="spv_user" class="form-control selectize">
+                <option value="">-- Pilih Supervisor --</option>
+                <?php 
+                // Query ambil data SPV dari tabel ad_muser
+                $sql_spv = "SELECT ad_muser_key, username FROM ad_muser WHERE description = 'SPV' AND status = '1'";
+                foreach ($connec->query($sql_spv) as $spv) {
+                    echo '<option value="'.$spv['ad_muser_key'].'" data-username="'.$spv['username'].'">'.$spv['username'].'</option>';
+                }
+                ?>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label>Password Supervisor</label>
+            <input type="password" id="spv_password" class="form-control" placeholder="Masukkan password supervisor">
+        </div>
+        
+        <div id="otorisasi_notif" style="color:red; font-size:12px;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" id="btnConfirmOtorisasiSpv" class="btn btn-primary">Validasi & Proses</button>
+      </div>
+    </div>
+  </div>
+</div>
 							
 							<div class="modal fade" id="batal<?php echo $row['m_pi_key']; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
@@ -395,7 +433,7 @@
 
 
 <script type="text/javascript">
-function resetPI(){ 
+function resetPI(){
 	$.ajax({
 		url: "api/action.php?modul=inventory&act=reset_active",
 		type: "GET",
@@ -568,6 +606,106 @@ function ubahStatus(m_pi_key){
 	
 }
 
+
+// Event untuk tombol validasi SPV di modal otorisasi
+$('#btnConfirmOtorisasiSpv').on('click', function() {
+    var spv_user_key = $('#spv_user').val();
+    var spv_password = $('#spv_password').val();
+    var spv_name = $('#spv_user option:selected').text();
+    var formDataSaved = $('#modalOtorisasiSpv').data('formData');
+    
+    // Validasi tidak boleh kosong
+    if(spv_user_key == ""){
+        $('#otorisasi_notif').html("Silakan pilih Supervisor terlebih dahulu!");
+        return false;
+    }
+    
+    if(spv_password == ""){
+        $('#otorisasi_notif').html("Password Supervisor tidak boleh kosong!");
+        return false;
+    }
+    
+    // AJAX untuk validasi password SPV
+    $.ajax({
+        url: "api/action.php?modul=inventory&act=cek_spv_password",
+        type: "POST",
+        data: {
+            spv_user_key: spv_user_key,
+            spv_password: spv_password
+        },
+        dataType: "json",
+        beforeSend: function(){
+            $('#otorisasi_notif').html("<span style='color:blue'>Memeriksa password supervisor...</span>");
+            $('#btnConfirmOtorisasiSpv').prop('disabled', true);
+        },
+        success: function(res){
+            console.log(res);
+            if(res.result == '1'){
+                // Validasi sukses, lanjutkan proses PI Items
+                $('#otorisasi_notif').html("<span style='color:green'>✓ Otorisasi diterima. Memproses PI...</span>");
+                
+                // Siapkan FormData untuk AJAX inputitems
+                var formData = new FormData();
+                formData.append('it', formDataSaved.it);
+                formData.append('sl', formDataSaved.sl);
+                formData.append('kat', formDataSaved.kat);
+                formData.append('sso', formDataSaved.sso);
+                formData.append('spv_user_key', spv_user_key);
+                formData.append('spv_name', spv_name);
+                
+                // Eksekusi AJAX inputitems
+                $.ajax({
+                    url: "api/action.php?modul=inventory&act=inputitems",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(){
+                        $('#notif').html("Proses input header dan line..");
+                        $("#overlay").fadeIn(300);
+                        $('#modalOtorisasiSpv').modal('hide');
+                        $(".modal").modal('hide');
+                    },
+                    success: function(dataResult){
+                        console.log(dataResult);
+                        try {
+                            var dataResultJson = JSON.parse(dataResult);
+                            if(dataResultJson.result=='2'){
+                                $('#notif').html("Proses input ke inventory line");
+                                $("#overlay").fadeOut(300);
+                                location.reload();
+                            }else if(dataResultJson.result=='1'){
+                                $('#notif').html("<font style='color: green'>Berhasil input items!</font>");
+                                $("#overlay").fadeOut(300);
+                                location.reload();
+                            }else {
+                                $('#notif').html(dataResultJson.msg);
+                                $("#overlay").fadeOut(300);
+                            }
+                        } catch(e) {
+                            $('#notif').html("Terjadi kesalahan: " + dataResult);
+                            $("#overlay").fadeOut(300);
+                        }
+                        $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+                    },
+                    error: function(xhr, status, error){
+                        $('#notif').html("Error: " + error);
+                        $("#overlay").fadeOut(300);
+                        $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+                    }
+                });
+            } else {
+                $('#otorisasi_notif').html("❌ Otorisasi gagal! Password supervisor salah atau user tidak valid.");
+                $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+            }
+        },
+        error: function(){
+            $('#otorisasi_notif').html("❌ Terjadi kesalahan saat validasi. Silakan coba lagi.");
+            $('#btnConfirmOtorisasiSpv').prop('disabled', false);
+        }
+    });
+});
+
 $('#butsave').on('click', function() {
 		
 		var it = $('#it').val();
@@ -697,42 +835,72 @@ $('#butsave').on('click', function() {
 				}
 				
 			}else if(kat == '3'){
+
+					var it = $('#it').val();
+					var sl = $('#sl').val();
+					var kat = $('#kat').val();
+					var sso = $('#stats_sales_order').val();
 					
-					$.ajax({
-						url: "api/action.php?modul=inventory&act=inputitems",
-						type: "POST",
-						data : formData,
-						processData: false,
-						contentType: false,
-						beforeSend: function(){
-							$('#notif').html("Proses input header dan line..");
-							$("#overlay").fadeIn(300);
-							//close modal 
-							$(".modal").modal('hide');
-						},
-						success: function(dataResult){
-							console.log(dataResult);
-							var dataResult = JSON.parse(dataResult);
-							if(dataResult.result=='2'){
-								$('#notif').html("Proses input ke inventory line");
-								$( "#butsave" ).prop( "disabled", false );
-								$("#overlay").fadeOut(300);
-								location.reload();
-								// $("#example").load(" #example");
-							}else if(dataResult.result=='1'){
-								$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
-								$("#overlay").fadeOut(300);
-								location.reload();
-								$( "#butsave" ).prop( "disabled", false );
-							}
-							else {
-								$('#notif').html(dataResult.msg);
-								$("#overlay").fadeOut(300);
-								$( "#butsave" ).prop( "disabled", false );
-							}
-							
-						}
+					// Simpan data ke modal untuk diproses nanti
+					$('#modalOtorisasiSpv').data('formData', {
+						it: it,
+						sl: sl,
+						kat: kat,
+						sso: sso
 					});
+					
+					// Reset form otorisasi
+					$('#spv_user').val('');
+					$('#spv_password').val('');
+					$('#otorisasi_notif').html('');
+					
+					// TUTUP MODAL exampleModal TERLEBIH DAHULU
+					$('#exampleModal').modal('hide');
+					
+					// TUNGGU SEBENTAR (opsional, biar animasi selesai)
+					setTimeout(function() {
+						// Tampilkan modal otorisasi
+						$('#modalOtorisasiSpv').modal('show');
+					}, 300);
+
+
+
+					
+					// $.ajax({
+					// 	url: "api/action.php?modul=inventory&act=inputitems",
+					// 	type: "POST",
+					// 	data : formData,
+					// 	processData: false,
+					// 	contentType: false,
+					// 	beforeSend: function(){
+					// 		$('#notif').html("Proses input header dan line..");
+					// 		$("#overlay").fadeIn(300);
+					// 		//close modal 
+					// 		$(".modal").modal('hide');
+					// 	},
+					// 	success: function(dataResult){
+					// 		console.log(dataResult);
+					// 		var dataResult = JSON.parse(dataResult);
+					// 		if(dataResult.result=='2'){
+					// 			$('#notif').html("Proses input ke inventory line");
+					// 			$( "#butsave" ).prop( "disabled", false );
+					// 			$("#overlay").fadeOut(300);
+					// 			location.reload();
+					// 			// $("#example").load(" #example");
+					// 		}else if(dataResult.result=='1'){
+					// 			$('#notif').html("<font style='color: green'>Berhasil input dengan rack!</font>");
+					// 			$("#overlay").fadeOut(300);
+					// 			location.reload();
+					// 			$( "#butsave" ).prop( "disabled", false );
+					// 		}
+					// 		else {
+					// 			$('#notif').html(dataResult.msg);
+					// 			$("#overlay").fadeOut(300);
+					// 			$( "#butsave" ).prop( "disabled", false );
+					// 		}
+							
+					// 	}
+					// });
 				
 			}else if(kat == '4'){
 				
