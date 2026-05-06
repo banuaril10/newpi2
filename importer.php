@@ -31,7 +31,19 @@
                 <div class="sebentar" id="sebentar"></div>
 				
 				<form method="post" enctype="multipart/form-data" action="import.php">
-
+                  <div class="form-group">
+                    <label><b>User Counting</b></label>
+					<select name="user_counting" id="user_counting" class="form-control">
+						<?php
+						$sql_user = "SELECT ad_muser_key, username FROM ad_muser WHERE description='IC'";
+						foreach ($connec->query($sql_user) as $row_user) {
+							echo '<option value="' . $row_user['username'] . '">' . $row_user['username'] . '</option>';
+						}
+						?>
+					</select>
+                  </div> 
+				
+				
                   <div class="form-group">
                     <label><b>Upload File</b></label>
                     <input type="file" name="import" id="import" class="form-control">
@@ -47,7 +59,15 @@
 				<button type="button" class="btn btn-danger" id="prosesall" onclick="prosesAll();" >Process Selected</button>-->
 				
 				<br>
-				<select id="filename">
+
+
+				
+				
+                </form>
+				
+			
+				<hr>
+				Nama File : <select id="filename">
 					<?php $fn = "select filename from inv_temp where date(tanggal) = date(now()) and status = '0' group by filename,status ";
 						$no = 1;
 						foreach ($connec->query($fn) as $rows) { ?>
@@ -59,12 +79,6 @@
 					 </select>
 				
 					 <button class="btn btn-danger" onclick="prosesInv();" id="button-proses" type="button">Proses File</button>
-				
-				
-                </form>
-				
-			
-
 			
 				
 				

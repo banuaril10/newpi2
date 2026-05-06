@@ -1225,7 +1225,27 @@ foreach ($cmd_alter_m_piline as $r) {
 
 
 
+// ALTER TABLE public.inv_temp ADD user_import varchar NULL;
+$cmd_alter_inv_temp = [
+	'ALTER TABLE public.inv_temp ADD COLUMN IF NOT EXISTS user_import varchar NULL;',
+	'ALTER TABLE public.inv_temp ADD COLUMN IF NOT EXISTS user_counting varchar NULL;'
+];
 
+foreach ($cmd_alter_inv_temp as $r) {
+	$connec->exec($r);
+}
+
+
+$cmd_alter_m_piline_counting = [
+	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS imported_by varchar NULL;',
+	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS counting_by_1 varchar NULL;',
+	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS counting_by_2 varchar NULL;',
+	'ALTER TABLE public.m_piline ADD COLUMN IF NOT EXISTS counting_by_3 varchar NULL;'
+];
+
+foreach ($cmd_alter_m_piline_counting as $r) {
+	$connec->exec($r);
+}
 
 ?>
 
