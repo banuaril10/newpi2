@@ -91,7 +91,7 @@ if (!empty($voucher['percent']) && $voucher['percent'] > 0) {
     $voucherAmount = $voucher['voucher_amount'];
 }
 
-$voucherAmount = min($voucherAmount, $totalAmount);
+$voucherAmount = ceil(min($voucherAmount, $totalAmount));  // atau round()
 
 /* =========================
    4️⃣ RESPONSE OK
