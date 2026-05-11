@@ -141,7 +141,7 @@ foreach ($result as $row) {
 
     $j_hasil = json_decode($hasil, true);
 
-    // print_r($j_hasil['data']);
+    //  print_r($j_hasil['data']);
 
     if (!empty($j_hasil['data'])) {
         $connec->query("update m_pi set status = '3' where m_pi_key ='" . $pi_key . "'");
@@ -166,6 +166,6 @@ foreach ($result as $row) {
 
 // var_dump($hasil);
 
-$json = array('result' => '1', 'msg' => 'Berhasil mengirim ' . $no . ' data');
+$json = array('result' => '1', 'msg' => 'Berhasil mengirim ' . $no . ' data', 'keluaran' => print_r($hasil, true), 'data' => $j_hasil['data'], 'duplicate_skus' => $duplicate_skus);
 $json_string = json_encode($json);
 echo $json_string;
