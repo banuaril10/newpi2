@@ -39,6 +39,7 @@
 					<div class="form-group"> 
 					
 					<button type="button" onclick="sync_function();" class="btn btn-primary">Sync</button>
+					<button type="button" onclick="sync_function_undian();" class="btn btn-primary">Sync Modul Undian Struk Kode</button>
 					<br>
 					<br>
 					
@@ -84,7 +85,28 @@ function sync_function(){
 		});
 		
 }
+function sync_function_undian(){
+	
 
+		$.ajax({
+		url: "api/sync_function_undian.php",
+		type: "POST",
+		beforeSend: function(){
+			$("#overlay").fadeIn(300);
+			$('#notif').html("Proses sync..");
+		},
+		success: function(dataResult){
+			console.log(dataResult);
+			var dataResult = JSON.parse(dataResult);
+
+			$('#notif').html("<font style='color: green'>"+dataResult.msg+"</font>");
+			$("#overlay").fadeOut(300);
+			// location.reload();
+			
+		}
+		});
+		
+}
 </script>
 </div>
 <?php include "components/fff.php"; ?>
