@@ -16,6 +16,14 @@
 			<ul class="menu">
 				<li class="sidebar-title">Menu</li>
 
+				<li class="sidebar-item">
+					<a href="sync_pb.php" class='sidebar-link'>
+						<i class="bi bi-cash-stack"></i>
+						<span>Sync Stock Receiving</span>
+					</a>
+				</li>
+
+
 
 				<?php
 				$username = $_SESSION['username'];
