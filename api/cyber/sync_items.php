@@ -1,4 +1,6 @@
 <?php include "../../config/koneksi.php";
+ini_set('memory_limit', '512M');
+
 ini_set('max_execution_time', '300');
 $connec->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $ll = "select * from ad_morg where isactived = 'Y'";
