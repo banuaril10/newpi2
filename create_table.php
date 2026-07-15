@@ -1322,6 +1322,33 @@ foreach ($cmd_alter_qty_outstanding as $r) {
 }
 
 
+// CREATE TABLE pos_settlement (
+//     pos_settlement_key VARCHAR(40) PRIMARY KEY,
+//     pos_dcashierbalance_key VARCHAR(40),
+//     pos_medc_key VARCHAR(40),
+//     amount DECIMAL(15,2)
+// );
+
+// -- Tambahkan index untuk performance
+// CREATE INDEX idx_settlement_dcashier ON pos_settlement(pos_dcashierbalance_key);
+// CREATE INDEX idx_settlement_medc ON pos_settlement(pos_medc_key);
+
+$cmd_create_pos_settlement = [
+	'CREATE TABLE IF NOT EXISTS pos_settlement (
+		pos_settlement_key VARCHAR(40) PRIMARY KEY,
+		pos_dcashierbalance_key VARCHAR(40),
+		pos_medc_key VARCHAR(40),
+		amount DECIMAL(15,2)
+	);',
+	'CREATE INDEX IF NOT EXISTS idx_settlement_dcashier ON pos_settlement(pos_dcashierbalance_key);',
+	'CREATE INDEX IF NOT EXISTS idx_settlement_medc ON pos_settlement(pos_medc_key);'
+];
+
+foreach ($cmd_create_pos_settlement as $r) {
+	$connec->exec($r);
+}
+
+
 
 // 'ALTER TABLE public.m_piline ADD COLUMN qty_outstanding TYPE int default 0;',
 
