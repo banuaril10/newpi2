@@ -13,26 +13,39 @@ include "../../config/koneksi.php";
 
 try {
 
-    $pos_dcashierbalance_key = $_POST['pos_dcashierbalance_key'] ?? '';
     $pos_medc_key = $_POST['pos_medc_key'] ?? '';
     $amount = $_POST['amount'] ?? '';
 
     if (
-        empty($pos_dcashierbalance_key) ||
         empty($pos_medc_key) ||
         $amount === ''
     ) {
         echo json_encode([
             'success' => false,
-            'message' => 'Data tidak lengkap',
-            'debug' => [
-                'pos_dcashierbalance_key' => $pos_dcashierbalance_key,
-                'pos_medc_key' => $pos_medc_key,
-                'amount' => $amount
-            ]
+            'message' => 'Data tidak lengkap'
         ]);
         exit;
     }
+
+    // ambil shop sales terakhir
+    $q = $connec->query("
+        SELECT pos_dshopsales_key
+        FROM pos_dshopsales
+        ORDER BY insertdate DESC
+        LIMIT 1
+    ");
+
+    $row = $q->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Data pos_dshopsales tidak ditemukan'
+        ]);
+        exit;
+    }
+
+    $pos_dshopsales_key = $row['pos_dshopsales_key'];
 
     $pos_settlement_key = uniqid() . '_' . date('YmdHis');
 
@@ -40,16 +53,18 @@ try {
         INSERT INTO pos_settlement
         (
             pos_settlement_key,
-            pos_dcashierbalance_key,
+            pos_dshopsales_key,
             pos_medc_key,
-            amount
+            amount,
+            tanggal
         )
         VALUES
         (
             :pos_settlement_key,
-            :pos_dcashierbalance_key,
+            :pos_dshopsales_key,
             :pos_medc_key,
-            :amount
+            :amount,
+            :tanggal
         )
     ";
 
@@ -57,20 +72,16 @@ try {
 
     $stmt->execute([
         ':pos_settlement_key' => $pos_settlement_key,
-        ':pos_dcashierbalance_key' => $pos_dcashierbalance_key,
+        ':pos_dshopsales_key' => $pos_dshopsales_key,
         ':pos_medc_key' => $pos_medc_key,
-        ':amount' => $amount
+        ':amount' => $amount,
+        ':tanggal' => date('Y-m-d H:i:s')
     ]);
 
     echo json_encode([
         'success' => true,
-        'message' => 'Data settlement berhasil disimpan',
-        'data' => [
-            'pos_settlement_key' => $pos_settlement_key,
-            'pos_dcashierbalance_key' => $pos_dcashierbalance_key,
-            'pos_medc_key' => $pos_medc_key,
-            'amount' => $amount
-        ]
+        'message' => 'Settlement berhasil disimpan',
+        'pos_dshopsales_key' => $pos_dshopsales_key
     ]);
 
 } catch (Exception $e) {
@@ -83,4 +94,3 @@ try {
 }
 
 exit;
-?>
