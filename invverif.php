@@ -619,6 +619,7 @@
 						<tr>
 							<th style="border:1px solid ${warna}; color:${warna};">No</th>
 							<th style="border:1px solid ${warna}; color:${warna};">SKU</th>
+							<th style="border:1px solid ${warna}; color:${warna};">Barcode Int.</th>
 							<th style="border:1px solid ${warna}; color:${warna};">Nama Barang</th>
 							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Qty Count</th>
 							<th style="border:1px solid ${warna}; color:${warna}; text-align:right;">Varian</th>
@@ -635,6 +636,7 @@
 					for (let i = 0; i < panjang; i++) {
 						let data = dataResult[i];
 						let sku = data.sku || '';
+						let barcode = data.barcode || '';
 						let name = data.name || '';
 						let qtyvariant = parseInt(data.qtyvariant || 0);
 						let qtycount = parseInt(data.qtycount || 0);
@@ -650,6 +652,7 @@
 						<tr>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${no}</td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:center;">${sku}</td>
+						<td style="border:1px solid ${warna}; color:${warna};">${barcode}</td>
 						<td style="border:1px solid ${warna}; color:${warna};">${name}</td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtycount}</td>
 						<td style="border:1px solid ${warna}; color:${warna}; text-align:right;">${qtyvariant}</td>
