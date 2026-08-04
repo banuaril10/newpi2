@@ -199,9 +199,9 @@ if(is_array($arr_all)){
 						// Filter by category
 				$kategori = getKategoriFromDesk($row1['desk']);
 
-if($filter_category != '' && $kategori != $filter_category){
-    $show = false;
-}
+				if($filter_category != '' && $kategori != $filter_category){
+					$show = false;
+				}
 						
 						// Filter by search
 						if($filter_search != ''){
@@ -297,7 +297,21 @@ if($filter_category != '' && $kategori != $filter_category){
 							<br>
 							<input type="hidden" id="sku<?php echo $row1['id']; ?>" value="<?php echo $row1['sku']; ?>">
 							<input type="hidden" id="toko<?php echo $row1['id']; ?>" value="<?php echo $toko; ?>">
-							<button class="btn btn-primary" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>');" >Upload</button>
+							<button class="btn btn-primary" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file')" >Upload File</button>
+							
+							<br><br>
+							
+							<!-- Upload untuk file2 -->
+							<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload2<?php echo $row1['id']; ?>" id="fileupload2<?php echo $row1['id']; ?>" class="form-control" />
+							<br>
+							<button class="btn btn-success" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file2')" >Upload File 2</button>
+							
+							<br><br>
+							
+							<!-- Upload untuk file3 -->
+							<input type="file" accept=".jpg, .png, .jpeg, .gif" name="fileupload3<?php echo $row1['id']; ?>" id="fileupload3<?php echo $row1['id']; ?>" class="form-control" />
+							<br>
+							<button class="btn btn-warning" type="button" onclick="uploadImage('<?php echo $row1['id']; ?>', 'file3')" >Upload File 3</button>
 							
 							</form>
 
@@ -347,63 +361,71 @@ $(document).ready( function () {
 } );
 
 
-function uploadImage(id){
+function uploadImage(id, fileType){
 	
-			var vidFileLength = $("#fileupload"+id)[0].files.length;
-			if(vidFileLength === 0){
-				// var fileupload = $('#fileuploads'+id).prop('files')[0];
-				alert("File belum dipilih");
-			}else{
-				// alert("ada");
-				var fileupload = $('#fileupload'+id).prop('files')[0];
-				
-				var sku = $("#sku"+id).val();
-				var toko = $("#toko"+id).val();
-				var alasan = $("#alasan"+id).val();
-				
-				
-				let formData = new FormData();
-				formData.append('fileupload', fileupload);
-				formData.append('id', id);
-				formData.append('sku', sku);
-				formData.append('toko', toko);
-				formData.append('alasan', alasan);
-				
-				$.ajax({
-					xhr: function() {
-					var xhr = new window.XMLHttpRequest();
-					xhr.upload.addEventListener("progress", function(evt) {
-						if (evt.lengthComputable) {
-							var percentComplete = ((evt.loaded / evt.total) * 100);
-							$("#progress-bar"+id).width(percentComplete+'%');
-							$("#progress-bar"+id).html(parseInt(percentComplete)+'%');
-						}
-					}, false);
-					return xhr;
-					},
-					type: 'POST',
-					url: "https://mkt.idolmartidolaku.com/api/upload_sku.php",
-					data: formData,
-					cache: false,
-					processData: false,
-					contentType: false,
-					success: function (msg) {
-						$("#file-load"+id).load(" #file-load"+id);
-						$("#fileupload"+id).val('');
-						
-					},
-					error: function () {
-						$("#notif"+id).html("<font style='color: red'>File Gagal diupload</font>");
-					}
-				});
+	// Tentukan file input berdasarkan tipe
+	var fileInputId = '';
+	if(fileType === 'file'){
+		fileInputId = 'fileupload'+id;
+	} else if(fileType === 'file2'){
+		fileInputId = 'fileupload2'+id;
+	} else if(fileType === 'file3'){
+		fileInputId = 'fileupload3'+id;
+	}
+	
+	var vidFileLength = $("#"+fileInputId)[0].files.length;
+	if(vidFileLength === 0){
+		alert("File belum dipilih");
+	}else{
+		var fileupload = $('#'+fileInputId).prop('files')[0];
+		
+		var sku = $("#sku"+id).val();
+		var toko = $("#toko"+id).val();
+		var alasan = $("#alasan"+id).val();
+		
+		let formData = new FormData();
+		formData.append('fileupload', fileupload);
+		formData.append('id', id);
+		formData.append('sku', sku);
+		formData.append('toko', toko);
+		formData.append('alasan', alasan);
+		formData.append('fileType', fileType); // Kirim tipe file ke server
+		
+		$.ajax({
+			xhr: function() {
+			var xhr = new window.XMLHttpRequest();
+			xhr.upload.addEventListener("progress", function(evt) {
+				if (evt.lengthComputable) {
+					var percentComplete = ((evt.loaded / evt.total) * 100);
+					$("#progress-bar"+id).width(percentComplete+'%');
+					$("#progress-bar"+id).html(parseInt(percentComplete)+'%');
+				}
+			}, false);
+			return xhr;
+			},
+			type: 'POST',
+			url: "https://mkt.idolmartidolaku.com/api/upload_sku_multi.php",
+			data: formData,
+			cache: false,
+			processData: false,
+			contentType: false,
+			success: function (msg) {
+				$("#file-load"+id).load(" #file-load"+id);
+				$("#"+fileInputId).val('');
+				$("#notif"+id).html("<font style='color: green'>File "+fileType+" berhasil diupload</font>");
+				// Refresh halaman setelah 2 detik
+				setTimeout(function(){
+					location.reload();
+				}, 2000);
+			},
+			error: function () {
+				$("#notif"+id).html("<font style='color: red'>File "+fileType+" Gagal diupload</font>");
 			}
-	
+		});
+	}
 }
 
 function syncMaster(){
-	
-
-	
 	$.ajax({
 		url: "api/action.php?modul=inventory&act=sync_inv",
 		type: "GET",
