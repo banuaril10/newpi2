@@ -29,7 +29,7 @@ foreach ($connec->query($cek_brand) as $row) {
 
 // Ambil data dari API untuk diambil kategorinya
 $date_now = date("Y-m-d");
-$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_plano.php?tgl=".$date_now."&toko=".$value;
+$json_url = "https://mkt.idolmartidolaku.com/api/get_sku_plano_multi.php?tgl=".$date_now."&toko=".$value;
 $options = stream_context_create(array('http'=>
 	array(
 	'timeout' => 10
@@ -132,7 +132,7 @@ if(is_array($arr_all)){
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h4>CAPTURE DISPLAY PLANOGRAM</h4>
+				<h4>CAPTURE DISPLAY PLANOGRAM<br>MAKS 3 FOTO PER DISPLAY UNTUK YG LEBIH DARI 1 RACK, JIKA HANYA 1 RACK KOSONGKAN SAJA YG LAINNYA</h4>
 			</div>
 			<div class="card-body">
 			<div class="tables">			
@@ -235,12 +235,22 @@ if(is_array($arr_all)){
 						}
 						
 						$img = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img2 = '<img src="images/no-image.png" style="width: 200px"></img>';
+						$img3 = '<img src="images/no-image.png" style="width: 200px"></img>';
 						$img_sample = '<img src="images/no-image.png" style="width: 400px"></img>';
 
 						if ($row1['image'] != "") {
 							$img = $row1['image'];
 						}
-						
+
+						if ($row1['image2'] != "") {
+							$img2 = $row1['image2'];
+						}
+
+						if ($row1['image3'] != "") {
+							$img3 = $row1['image3'];
+						}
+
 						$img_sample = "";
 						$img_sample2 = "";
 						$img_sample3 = "";
@@ -286,6 +296,8 @@ if(is_array($arr_all)){
 							
 							
 							<div id="file-load<?php echo $row1['id']; ?>"><?php echo $img; ?></div>
+							<div id="file-load2<?php echo $row1['id']; ?>"><?php echo $img2; ?></div>
+							<div id="file-load3<?php echo $row1['id']; ?>"><?php echo $img3; ?></div>
 							
 							</center>
 							<br>
@@ -362,7 +374,6 @@ $(document).ready( function () {
 
 
 function uploadImage(id, fileType){
-	
 	// Tentukan file input berdasarkan tipe
 	var fileInputId = '';
 	if(fileType === 'file'){
@@ -411,6 +422,8 @@ function uploadImage(id, fileType){
 			contentType: false,
 			success: function (msg) {
 				$("#file-load"+id).load(" #file-load"+id);
+				$("#file-load2"+id).load(" #file-load2"+id);
+				$("#file-load3"+id).load(" #file-load3"+id);
 				$("#"+fileInputId).val('');
 				$("#notif"+id).html("<font style='color: green'>File "+fileType+" berhasil diupload</font>");
 				// Refresh halaman setelah 2 detik
