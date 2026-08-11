@@ -1523,10 +1523,44 @@ foreach ($cmd_alter_pos_medc_urutan as $r) {
 }
 
 
+// CREATE TABLE pos_dshopsales_variant_reason (
+//     pos_dshopsales_variant_reason_key BIGSERIAL PRIMARY KEY,
+//     pos_dshopsales_key VARCHAR(100) NOT NULL,
+//     sales_date DATE NOT NULL,
+//     total_variant NUMERIC(18,2) NOT NULL DEFAULT 0,
+//     reason_id INTEGER NOT NULL,
+//     reason_name VARCHAR(255) NOT NULL,
+//     createby VARCHAR(100),
+//     createdate TIMESTAMP DEFAULT NOW()
+// );
+
+// CREATE INDEX idx_dshopsales_variant_reason_date
+// ON pos_dshopsales_variant_reason (sales_date);
+
+// CREATE INDEX idx_dshopsales_variant_reason_key
+// ON pos_dshopsales_variant_reason (pos_dshopsales_key);
 
 
+$cmd_create_pos_dshopsales_variant_reason = [
+	'CREATE TABLE IF NOT EXISTS pos_dshopsales_variant_reason (
+		pos_dshopsales_variant_reason_key BIGSERIAL PRIMARY KEY,
+		pos_dshopsales_key VARCHAR(100) NOT NULL,
+		sales_date DATE NOT NULL,
+		total_variant NUMERIC(18,2) NOT NULL DEFAULT 0,
+		reason_id INTEGER NOT NULL,
+		reason_name VARCHAR(255) NOT NULL,
+		createby VARCHAR(100),
+		createdate TIMESTAMP DEFAULT NOW()
+	);',
+	'CREATE INDEX IF NOT EXISTS idx_dshopsales_variant_reason_date
+	ON pos_dshopsales_variant_reason (sales_date);',
+	'CREATE INDEX IF NOT EXISTS idx_dshopsales_variant_reason_key
+	ON pos_dshopsales_variant_reason (pos_dshopsales_key);'
+];
 
-
+foreach ($cmd_create_pos_dshopsales_variant_reason as $r) {
+	$connec->exec($r);
+}
 
 
 
