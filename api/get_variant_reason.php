@@ -1,30 +1,36 @@
 <?php
 include "../config/koneksi.php";
 
+header('Content-Type: application/json; charset=utf-8');
+
 $data = [
     [
         "id" => 1,
-        "name" => "Uang modal terhitung Cash Drawer saat EOP"
+        "name" => "Telat Settlement"
     ],
     [
         "id" => 2,
-        "name" => "Salah input nominal cash fisik saat EOD"
+        "name" => "Belum Settlement"
     ],
     [
         "id" => 3,
-        "name" => "Salah kembalian"
+        "name" => "Transaksi Pending"
     ],
     [
         "id" => 4,
-        "name" => "Salah akun user saat tarik laporan per kasir"
+        "name" => "Proses Investigasi"
     ],
     [
         "id" => 5,
-        "name" => "Salah metode transaksi cash ke non cash"
+        "name" => "Tidak Keluar Struk, Saldo Customer Terdebet Double"
     ],
     [
         "id" => 6,
-        "name" => "Tidak transaksi di POS"
+        "name" => "Salah Metode Transaksi Non Cash ke Cash"
+    ],
+    [
+        "id" => 7,
+        "name" => "Trouble Jaringan"
     ]
 ];
 
