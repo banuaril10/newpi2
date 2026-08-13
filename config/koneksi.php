@@ -59,4 +59,7 @@ function time_format_pos($date){
 	$hasil_date = date('H:i', strtotime($date));
 	return $hasil_date;
 }
+
+
+
 ?>
