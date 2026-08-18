@@ -2,6 +2,9 @@
 include "../../config/koneksi.php";
 
 header('Content-Type: application/json');
+//show error
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $id_location = '';
 
@@ -19,7 +22,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 
     // Query untuk mendapatkan harga reguler dari tabel pos_mproduct berdasarkan sku/barcode/barcode1-4
     $sqlPrice = "
-        SELECT price, sku, name 
+        SELECT price, sku, UPPER(name) AS name 
         FROM pos_mproduct 
         WHERE isactived = '1'
         AND (
@@ -174,7 +177,7 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
 // ]; tp jgn error klo table ga ada
 
         $insertAudit = "
-            INSERT INTO price_audit (sku, price, discount, insertdate, id_location, scanfrom)
+            INSERT INTO price_audit (sku, price, discount, insertdate, id_location,scanfrom)
             VALUES (:sku, :price, :discount, NOW(), :id_location, :scanfrom)
         ";
         $scanfrom = 'price_checker';
