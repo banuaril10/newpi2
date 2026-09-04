@@ -239,20 +239,21 @@ function loadPlanogram() {
         },
         dataType: 'json',
         success: function(response) {
-            if (response.success && response.data) {
+			console.log(response); // Tambahkan ini untuk debugging response dari API
+            if (response.success && response.image_url) {
                 var html = `
                     <div class="planogram-image-wrapper">
-                        <img src="${response.data.image_url}" 
+                        <img src="${response.image_url}" 
                              alt="Planogram Display" 
                              class="img-clickable"
-                             onclick="openFullscreen('${response.data.image_url}')"
+                             onclick="openFullscreen('${response.image_url}')"
                              onerror="this.onerror=null; this.src='images/no-image.png';">
                     </div>
                     
                     <div class="store-info">
                         <p><i class="bi bi-info-circle"></i> Klik gambar untuk melihat dalam ukuran penuh</p>
-                        <p><strong>📅 Last Updated:</strong> ${response.data.timestamp}</p>
-                        <p><strong>🏪 Store:</strong> ${response.data.store.store_name} (${response.data.store.store_code})</p>
+                        <p><strong>📅 Last Updated:</strong> ${response.timestamp}</p>
+                        <p><strong>🏪 Store:</strong> ${response.store.store_name} (${response.store.store_code})</p>
                     </div>
                 `;
                 $('#planogramContent').html(html);
