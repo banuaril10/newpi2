@@ -250,25 +250,9 @@ function loadPlanogram() {
                              onerror="this.onerror=null; this.src='images/no-image.png';">
                     </div>
                     
-                    <div class="store-info">
-                        <p><i class="bi bi-info-circle"></i> Klik gambar untuk melihat dalam ukuran penuh</p>
-                        <p><strong>📅 Last Updated:</strong> ${response.timestamp}</p>
-                        <p><strong>🏪 Store:</strong> ${response.store.store_name} (${response.store.store_code})</p>
-                    </div>
                 `;
                 $('#planogramContent').html(html);
-            } else {
-                var html = `
-                    <div class="no-image">
-                        <i class="bi bi-image"></i>
-                        <h4>Gambar tidak ditemukan</h4>
-                        <p class="text-muted">Tidak ada planogram yang tersedia untuk store <strong>${currentStore}</strong></p>
-                        <p><small>Pastikan gambar telah diupload di sistem intransit</small></p>
-                        <p class="text-danger">${response.message || ''}</p>
-                    </div>
-                `;
-                $('#planogramContent').html(html);
-            }
+            } 
         },
         error: function(xhr, status, error) {
             var html = `
