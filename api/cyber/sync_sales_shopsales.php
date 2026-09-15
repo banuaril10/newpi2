@@ -49,6 +49,18 @@ if ($tanggal != "now") {
     $list_posdshopsales = "select * from pos_dshopsales where status_intransit is null and date(insertdate) = date(now())";
 }
 
+        // ALTER TABLE public.pos_dshopsales ADD vouchercashamount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN vouchercashamount SET STORAGE MAIN;
+
+        // ALTER TABLE public.pos_dshopsales ADD voucherdebitamount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN voucherdebitamount SET STORAGE MAIN;
+
+        // ALTER TABLE public.pos_dshopsales ADD vouchercreditamount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN vouchercreditamount SET STORAGE MAIN;
+
+        // ALTER TABLE public.pos_dshopsales ADD voucheramount numeric DEFAULT 0 NULL;
+        // ALTER TABLE public.pos_dshopsales ALTER COLUMN voucheramount SET STORAGE MAIN;
+
 foreach ($connec->query($list_posdshopsales) as $row5) {
     $jj_posdshopsales[] = array(
         "pos_dshopsales_key" => $row5['pos_dshopsales_key'],
@@ -86,7 +98,11 @@ foreach ($connec->query($list_posdshopsales) as $row5) {
         "ppobamount" => $row5['ppobamount'],
         "ppobcashamount" => $row5['ppobcashamount'],
         "ppobdebitamount" => $row5['ppobdebitamount'],
-        "ppobcreditamount" => $row5['ppobcreditamount']
+        "ppobcreditamount" => $row5['ppobcreditamount'],
+        "vouchercashamount" => $row5['vouchercashamount'],
+        "voucherdebitamount" => $row5['voucherdebitamount'],
+        "vouchercreditamount" => $row5['vouchercreditamount'],
+        "voucheramount" => $row5['voucheramount']
     );
 }
 
