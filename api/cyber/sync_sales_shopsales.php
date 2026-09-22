@@ -140,7 +140,16 @@ if ($tanggal != "now") {
         WHERE DATE(pds.insertdate) = '".$tanggal."'
         AND ps.status_intransit = '0'
     ";
-} else {
+} else if ($tanggal == "all") {
+    $list_possettlement = "
+        SELECT ps.*
+        FROM pos_settlement ps
+        INNER JOIN pos_dshopsales pds
+            ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
+        WHERE pds.status_intransit IS NULL
+        AND ps.status_intransit = '0'
+    ";
+}else {
     $list_possettlement = "
         SELECT ps.*
         FROM pos_settlement ps
