@@ -1635,5 +1635,38 @@ foreach ($cmd_alter_pos_settlement_unique as $r) {
 	$connec->exec($r);
 }
 
+
+// create table m_piline_change 
+// (
+// 	m_piline_key varchar(40),
+// 	sku varchar(20),
+// 	ad_org_id varchar(10),
+// 	insertby varchar(100),
+// 	qtybefore int,
+// 	qtyafter int,
+// 	updateddate timestamp
+// )
+
+$create_m_piline_change = [
+	'CREATE TABLE IF NOT EXISTS m_piline_change (
+		m_piline_change_key varchar(40) NOT NULL,
+		m_piline_key varchar(40) NOT NULL,
+		sku varchar(20) NULL,
+		ad_org_id varchar(10) NULL,
+		insertby varchar(100) NULL,
+		qtybefore int NULL,
+		qtyafter int NULL,
+		updateddate timestamp NULL,
+		status_intransit varchar(2) NULL,
+		CONSTRAINT m_piline_change_pkey PRIMARY KEY (m_piline_change_key)
+	);','CREATE INDEX IF NOT EXISTS idx_m_piline_change_m_piline_key ON m_piline_change (m_piline_key);'
+];
+
+foreach ($create_m_piline_change as $r) {
+	$connec->exec($r);
+}
+
+
+
 ?>
 
