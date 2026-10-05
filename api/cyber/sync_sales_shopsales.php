@@ -129,47 +129,211 @@ if (!empty($jj_posdshopsales)) {
 
 
 
+// ============================================================
+// REPAIR POS_SETTLEMENT YANG POS_DSHOPSALES_KEY-NYA TIDAK ADA
+// ============================================================
+
+$repairSettlement = "
+    SELECT
+        ps.pos_settlement_key,
+        ps.pos_dshopsales_key AS old_pos_dshopsales_key,
+        ps.pos_medc_key,
+        ps.amount,
+        ps.salesdate,
+        ps.tanggal
+    FROM pos_settlement ps
+    LEFT JOIN pos_dshopsales pds
+        ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
+    WHERE pds.pos_dshopsales_key IS NULL
+";
+
+// Filter repair berdasarkan parameter tanggal
+if ($tanggal == "now") {
+    $repairSettlement .= "
+        AND DATE(COALESCE(ps.salesdate, ps.tanggal)) = DATE(NOW())
+    ";
+} else if ($tanggal != "all") {
+    $repairSettlement .= "
+        AND DATE(COALESCE(ps.salesdate, ps.tanggal)) = :tanggal
+    ";
+}
+
+$stmtRepair = $connec->prepare($repairSettlement);
+
+if ($tanggal != "now" && $tanggal != "all") {
+    $stmtRepair->bindValue(':tanggal', $tanggal);
+}
+
+$stmtRepair->execute();
+
+$repairRows = $stmtRepair->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($repairRows as $repair) {
+
+    $settlementKey = $repair['pos_settlement_key'];
+    $oldKey        = $repair['old_pos_dshopsales_key'];
+    $posMedcKey    = $repair['pos_medc_key'];
+    $salesDate     = $repair['salesdate'];
+    $tanggalSettle = $repair['tanggal'];
+
+    /*
+     * Cari pos_dshopsales yang benar.
+     *
+     * Prioritas:
+     * - tanggal sales sama
+     * - status DONE
+     * - closedate paling dekat dengan tanggal settlement
+     *
+     * Contoh:
+     *
+     * settlement:
+     * tanggal = 2026-10-04 21:46:41
+     *
+     * pos_dshopsales:
+     * closedate = 2026-10-04 21:46:38
+     *
+     * Maka ini kandidat yang sangat kuat.
+     */
+    $findShopSales = $connec->prepare("
+        SELECT
+            pos_dshopsales_key,
+            salesdate,
+            closedate,
+            insertdate
+        FROM pos_dshopsales
+        WHERE DATE(salesdate) = DATE(:salesdate)
+        AND status = 'DONE'
+        ORDER BY ABS(
+            EXTRACT(
+                EPOCH FROM (
+                    COALESCE(closedate, insertdate) - CAST(:tanggal_settlement AS timestamp)
+                )
+            )
+        ) ASC
+        LIMIT 1
+    ");
+
+    $findShopSales->execute([
+        ':salesdate'          => $salesDate,
+        ':tanggal_settlement' => $tanggalSettle
+    ]);
+
+    $shopSales = $findShopSales->fetch(PDO::FETCH_ASSOC);
+
+    // Kalau tidak ditemukan pasangan pos_dshopsales, jangan diapa-apakan
+    if (!$shopSales) {
+        continue;
+    }
+
+    $newKey = $shopSales['pos_dshopsales_key'];
+
+    /*
+     * Jangan sampai ada:
+     *
+     * new pos_dshopsales_key + pos_medc_key
+     *
+     * yang sama.
+     *
+     * Contoh:
+     * 5B12345678910123123HGUHWS + 6
+     *
+     * hanya boleh 1 row.
+     */
+    $checkDuplicate = $connec->prepare("
+        SELECT pos_settlement_key
+        FROM pos_settlement
+        WHERE pos_dshopsales_key = :new_key
+        AND pos_medc_key = :pos_medc_key
+        AND pos_settlement_key <> :pos_settlement_key
+        LIMIT 1
+    ");
+
+    $checkDuplicate->execute([
+        ':new_key'            => $newKey,
+        ':pos_medc_key'       => $posMedcKey,
+        ':pos_settlement_key' => $settlementKey
+    ]);
+
+    $duplicate = $checkDuplicate->fetch(PDO::FETCH_ASSOC);
+
+    if ($duplicate) {
+        /*
+         * SUDAH ADA settlement dengan:
+         *
+         * pos_dshopsales_key = $newKey
+         * pos_medc_key       = $posMedcKey
+         *
+         * Jadi JANGAN update row ini supaya tidak duplicate.
+         */
+        continue;
+    }
+
+    // Update key settlement ke pos_dshopsales yang benar
+    $updateSettlement = $connec->prepare("
+        UPDATE pos_settlement
+        SET pos_dshopsales_key = :new_key
+        WHERE pos_settlement_key = :pos_settlement_key
+    ");
+
+    $updateSettlement->execute([
+        ':new_key'            => $newKey,
+        ':pos_settlement_key' => $settlementKey
+    ]);
+}
+
+
+// ============================================================
+// SYNC POS_SETTLEMENT
+// ============================================================
+
 $jj_possettlement = array();
 
-if ($tanggal != "now") {
+
+if ($tanggal == "all") {
+
     $list_possettlement = "
         SELECT ps.*
         FROM pos_settlement ps
         INNER JOIN pos_dshopsales pds
             ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
-        WHERE DATE(pds.insertdate) = '".$tanggal."'
+        WHERE ps.status_intransit = '0'
+    ";
+
+} else if ($tanggal == "now") {
+
+    $list_possettlement = "
+        SELECT ps.*
+        FROM pos_settlement ps
+        INNER JOIN pos_dshopsales pds
+            ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
+        WHERE DATE(pds.insertdate) = DATE(NOW())
         AND ps.status_intransit = '0'
     ";
-} else if ($tanggal == "all") {
+
+} else {
+
     $list_possettlement = "
         SELECT ps.*
         FROM pos_settlement ps
         INNER JOIN pos_dshopsales pds
             ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
-        WHERE pds.status_intransit IS NULL
-        AND ps.status_intransit = '0'
-    ";
-}else {
-    $list_possettlement = "
-        SELECT ps.*
-        FROM pos_settlement ps
-        INNER JOIN pos_dshopsales pds
-            ON pds.pos_dshopsales_key = ps.pos_dshopsales_key
-        WHERE pds.status_intransit IS NULL
-        AND DATE(pds.insertdate) = DATE(NOW())
+        WHERE DATE(pds.insertdate) = " . $connec->quote($tanggal) . "
         AND ps.status_intransit = '0'
     ";
 }
 
+
 foreach ($connec->query($list_possettlement) as $row) {
+
     $jj_possettlement[] = array(
         "pos_settlement_key" => $row['pos_settlement_key'],
         "pos_dshopsales_key" => $row['pos_dshopsales_key'],
-        "pos_medc_key" => $row['pos_medc_key'],
-        "amount" => $row['amount'],
-        "tanggal" => $row['tanggal']
+        "pos_medc_key"       => $row['pos_medc_key'],
+        "amount"             => $row['amount'],
+        "tanggal"            => $row['tanggal']
     );
 }
+
 
 if (!empty($jj_possettlement)) {
 
@@ -183,7 +347,7 @@ if (!empty($jj_possettlement)) {
 
     $postData = array(
         "possettlement" => $array_possettlement_json,
-        "idstore" => $idstore
+        "idstore"       => $idstore
     );
 
     $fields_string = http_build_query($postData);
@@ -191,30 +355,43 @@ if (!empty($jj_possettlement)) {
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $url,
+        CURLOPT_URL            => $url,
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
+        CURLOPT_ENCODING       => '',
+        CURLOPT_MAXREDIRS      => 10,
+        CURLOPT_TIMEOUT        => 0,
         CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS => $fields_string,
+        CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST  => 'POST',
+        CURLOPT_POSTFIELDS     => $fields_string,
     ));
 
     $hasil_possettlement = curl_exec($curl);
 
     curl_close($curl);
 
-    // Update status_intransit menjadi 1 setelah berhasil dikirim
+
+    // ========================================================
+    // UPDATE STATUS SETTLEMENT YANG BERHASIL DITERIMA SERVER
+    // ========================================================
+
     if ($hasil_possettlement !== false) {
+
         $response = json_decode($hasil_possettlement, true);
-        
-        // Cek apakah response berupa array dan tidak kosong (berarti berhasil)
+
         if (is_array($response) && !empty($response)) {
+
+            $updateStatusSettlement = $connec->prepare("
+                UPDATE pos_settlement
+                SET status_intransit = '1'
+                WHERE pos_settlement_key = :pos_settlement_key
+            ");
+
             foreach ($response as $key) {
-                $updateQuery = "UPDATE pos_settlement SET status_intransit = '1' WHERE pos_settlement_key = '" . $key . "'";
-                $connec->query($updateQuery);
+
+                $updateStatusSettlement->execute([
+                    ':pos_settlement_key' => $key
+                ]);
             }
         }
     }
