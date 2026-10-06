@@ -20,6 +20,8 @@ use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 $html = $_POST['html'];
 // $data = file_get_contents('http://localhost/pi/api/cek_printer.php');
 // echo $data;
+$html = str_replace("Total Transaksi Cash", "Total Trans. Cash", $html);
+
 
 $ip_printer = $_POST['ip_printer'];
 

@@ -6,6 +6,11 @@ header("Access-Control-Allow-Headers: Content-Type");
 //change font size to small
 	$html = chr(27) . chr(33) . chr(1); // ESC ! 1 to change font size to small
 	$html .= $_POST['html'];
+
+	//ubah Total Transaksi Cash jadi Total Trans. Cas
+	$html = str_replace("Total Transaksi Cash", "Total Trans. Cash", $html);
+
+
 	$html .= '\r\n'; 
 	$html .= '\r\n'; 
 	$html .= '\r\n'; 
