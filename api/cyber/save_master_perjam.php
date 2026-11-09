@@ -28,6 +28,25 @@ if (!is_array($rows) || empty($rows)) {
     exit;
 }
 
+
+//validasi klo input kosong
+foreach ($rows as $index => $r) {
+    $jam = trim((string)($r['jam'] ?? ''));
+    if ($jam === '') {
+        echo json_encode(['status'=>'FAILED','message'=>"Jam pada baris ke-".($index+1)." kosong"]);
+        exit;
+    }
+}
+//validasi klo realisasi kosong
+foreach ($rows as $index => $r) {
+    $real = trim((string)($r['realisasi'] ?? ''));
+    if ($real === '') {
+        echo json_encode(['status'=>'FAILED','message'=>"Realisasi pada baris ke-".($index+1)." kosong"]);
+        exit;
+    }
+}
+
+
 try {
     $connec->beginTransaction();
 
