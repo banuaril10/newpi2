@@ -148,23 +148,23 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
             $response = [
                 'sku' => $sku,
                 'name' => $name,
-                'regular_price' => $regularPrice . "\n Sales Terakhir : " . $tgl_sales,
+                'regular_price' => $regularPrice,
                 'discount' => $discount['discount'],    
                 'discounted_price' => $discountedPrice,
                 'valid_from' => $discount['fromdate'],
                 'valid_to' => $discount['todate'],
-                'promo_headers' => $promo_headers // ✅ tambahan
+                'promo_headers' => $promo_headers . "\nSales Terakhir : " . $tgl_sales,
             ];
         } else {
             $response = [
                 'sku' => $sku,
                 'name' => $name,
-                'regular_price' => $regularPrice . "\n Sales Terakhir : " . $tgl_sales,
+                'regular_price' => $regularPrice,
                 'discount' => null,
                 'discounted_price' => null,
                 'valid_from' => null,
                 'valid_to' => null,
-                'promo_headers' => $promo_headers // ✅ tetap muncul meski kosong
+                'promo_headers' => $promo_headers . "\nSales Terakhir : " . $tgl_sales,
             ];
         }
 
