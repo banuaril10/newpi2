@@ -146,25 +146,25 @@ if (isset($_GET['sku']) || isset($_GET['barcode'])) {
         if ($discount) {
             $discountedPrice = $regularPrice - $discount['discount'];
             $response = [
-                'sku' => $sku,
+                'sku' => $sku . "\nSales Terakhir : " . $tgl_sales,
                 'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => $discount['discount'],    
                 'discounted_price' => $discountedPrice,
                 'valid_from' => $discount['fromdate'],
                 'valid_to' => $discount['todate'],
-                'promo_headers' => $promo_headers . "\nSales Terakhir : " . $tgl_sales,
+                'promo_headers' => $promo_headers
             ];
         } else {
             $response = [
-                'sku' => $sku,
+                'sku' => $sku . "\nSales Terakhir : " . $tgl_sales,
                 'name' => $name,
                 'regular_price' => $regularPrice,
                 'discount' => null,
                 'discounted_price' => null,
                 'valid_from' => null,
                 'valid_to' => null,
-                'promo_headers' => $promo_headers . "\nSales Terakhir : " . $tgl_sales,
+                'promo_headers' => $promo_headers
             ];
         }
 
